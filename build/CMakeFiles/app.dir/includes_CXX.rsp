@@ -1,0 +1,1 @@
+-IE:/GitStore/MyEngine/MyEngine/include -I"E:/lib_c/glfw-3.4/include" -IE:/lib_c/glad/include -I"E:/lib_c/assimp-master/include" -I"E:/lib_c/assimp-master/build_mingw64/include"

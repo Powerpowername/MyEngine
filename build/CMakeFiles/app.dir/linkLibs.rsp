@@ -1,0 +1,1 @@
+ "E:/lib_c/glfw-3.4/build_mingw/src/libglfw3.a" "E:/lib_c/assimp-master/build_mingw64/lib/libassimp.dll.a" -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32 
