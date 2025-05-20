@@ -141,4 +141,30 @@ void Transform::OnGUI()
 	ImGui::DragFloat((gameObject->name + "_Yaw").c_str(), (float*)&Yaw, 0.01f, -10, 10);
 	ImGui::DragFloat((gameObject->name + "_Pitch").c_str(), (float*)&Pitch, 0.01f, -10, 10);
 }
+
+void Transform::Update()
+{
+	Forward.x = cos(Pitch)*sin(Yaw);
+	Forward.y = sin(Pitch);
+	Forward.z = cos(Pitch)*cos(Yaw);
+
+	Right = normalize(cross(Forward, WorldUp));
+	Up = normalize(cross(Forward, Right));
+}
+Transform::Transform(vec3 pos, vec3 rotation, vec3 scanle) :
+	position(pos),
+	rotation(rotation),
+	scale(scanle)
+{
+	name += "Transform";
+	Forward.x = cos(Pitch)*sin(Yaw);
+	Forward.y = sin(Pitch);
+	Forward.z = cos(Pitch)*cos(Yaw);
+
+	Right = normalize(cross(Forward, WorldUp));
+	Up = normalize(cross(Right, Forward));
+}
+Transform::~Transform()
+{
+}
 #pragma region

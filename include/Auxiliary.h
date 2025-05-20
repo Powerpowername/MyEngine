@@ -135,8 +135,8 @@ public:
     mat4 GetModelMaterix(mat4 world = mat4(1.0f))const;//获取对象model矩阵，主要是用来将对象转换到世界坐标系用的
 
     virtual void OnGUI() override;
-    virtual void Update() override;//更新
-    Transform(vec3 pos = vec3(0, 0, 0), vec3 rotation = vec3(0, 0, 0), vec3 scanle = vec3(1, 1, 1));
+    virtual void Update() override;//更新对象自身的坐标系
+    Transform(vec3 pos = vec3(0, 0, 0), vec3 rotation = vec3(0, 0, 0), vec3 scale = vec3(1, 1, 1));
     virtual ~Transform() override;
 };
 #pragma endregion
@@ -165,9 +165,9 @@ public:
     void OnGUI()override;
 
     template<typename T>
-	T* AddComponentStart();
+	T* AddComponentStart();//这个stat可能需要调整，因为现在我已经删除了组件的所有Start函数
 	template<typename T>
-	T * AddComponentNoStart();
+	T * AddComponentNoStart();//NoStart版本的我感觉可能不需要
 	template<typename T>
 	T* AddComponentStart(MonoBehavior* component);
 	template<typename T>

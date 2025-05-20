@@ -1,4 +1,4 @@
-#include"All.h"
+#include"Auxiliary.h"
 #include"Save.h"
 
 /* 全局变量声明区域 */
