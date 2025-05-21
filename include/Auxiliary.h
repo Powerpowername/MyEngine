@@ -16,11 +16,13 @@
 #include "glm/gtc/matrix_transform.hpp"
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"
+#include "json.hpp"
 using glm::vec2;using glm::vec3;using glm::vec4;using glm::mat3;using glm::mat4;
 using glm::radians;
 using std::vector;
 using std::list;
 using std::string;
+using nlohmann::json;
 #pragma region 前向声明
 class Object;
 class MonoBehavior;
@@ -31,6 +33,12 @@ class Transform;
 class Input;
 class Setting;
 class AbstractLight;
+class LightDirectional;
+class LightPoint;
+class LightSpot;
+class SkyboxRender;
+class ModelRender;
+class Shader;
 #pragma endregion
 
 #pragma region 外部变量
@@ -110,32 +118,28 @@ public:
 #pragma endregion
 
 #pragma region Transform:MonoBehavior
-//现在的代码思路给我的感觉是Transform必须是最后一个更新的
-//不是最后一个更新的会差一帧，影响应该不大
 class Transform : public MonoBehavior
 {
 public:
-    //Transform::Update()修改
+    //欧拉角，与位移属性由CameraMove::Update修改，其他对象，按需修改
+	vec3 position = vec3(0, 0, 0);//对象的位置
+	vec3 rotation = vec3(0, 0, 0);//旋转角度，分别对应x，y，z，暂时是针对光源的变化
+	vec3 scale = vec3(1, 1, 1);//对象的缩放比列
+    vec3 WorldUp = vec3(0, 1.0f, 0);
+	float Pitch = .0f;
+	float Yaw = .0f;
+    //对象自身坐标系由Transform::Update()修改
     vec3 Forward;
     vec3 Right;
     vec3 Up;
 
-public:
-    //由Camera::Update()修改，其他操作对象，按需修改
-	vec3 position = vec3(0, 0, 0);//对象的位置
-	vec3 rotation = vec3(0, 0, 0);//旋转角度，x为轴的旋转角度，以此类推
-	vec3 scale = vec3(1, 1, 1);//对象的缩放比列
 
-    //由CameraMove::Update()修改，其他操作对象，按需修改
-    vec3 WorldUp = vec3(0, 1.0f, 0);
-	float Pitch = .0f;
-	float Yaw = .0f;
 
 	void Translate(vec3 movement);//位移
-    mat4 GetModelMaterix(mat4 world = mat4(1.0f))const;//获取对象model矩阵，主要是用来将对象转换到世界坐标系用的
+    mat4 GetModelMaterix(mat4 world = mat4(1.0f))const;//获取对象的世界坐标
 
-    virtual void OnGUI() override;
-    virtual void Update() override;//更新对象自身的坐标系
+    void OnGUI() override;
+    void Update() override;
     Transform(vec3 pos = vec3(0, 0, 0), vec3 rotation = vec3(0, 0, 0), vec3 scale = vec3(1, 1, 1));
     virtual ~Transform() override;
 };
@@ -144,18 +148,20 @@ public:
 #pragma region GameObject:Object
 class GameObject : public Object
 {
+private:
+    static int idS;
 public:
     int id;//全局唯一ID
 	enum Type
 	{
-		Empty,
-		Cameras,
-		Directional,
-		Spot,
-		Point,
-		Box,
-		Model
-	};
+		GameObject_Empty,
+		GameObject_Camera,
+		GameObject_Directional,
+		GameObject_Spot,
+		GameObject_Point,
+		GameObject_SkyBox,
+		GameObject_Model
+	} type;
     GameObject* Parent;//暂定保留
     list<MonoBehavior*>* scripts;//控制的行为脚本
 
@@ -165,18 +171,16 @@ public:
     void OnGUI()override;
 
     template<typename T>
-	T* AddComponentStart();//这个stat可能需要调整，因为现在我已经删除了组件的所有Start函数
+	T* AddComponent();
 	template<typename T>
-	T * AddComponentNoStart();//NoStart版本的我感觉可能不需要
-	template<typename T>
-	T* AddComponentStart(MonoBehavior* component);
+	T* AddComponent(MonoBehavior* component);//添加现有组件
 	template<typename T>
 	T* GetComponent()const;
 	template<typename T>
 	void RemoveComponent();
 
     GameObject(string name, Type type);
-	GameObject(string name, string modelName, string shaderSign);
+	GameObject(string name, string modelName, string shaderSign);//模型对象的专属构造，后续在看看
 	~GameObject();
 };
 #pragma endregion
@@ -197,7 +201,7 @@ class Input
 {
 public:
 	static bool* lastKey;
-	static bool* Key;
+	static bool* Key;//可以用于是否持续按下
 	static bool* keyDown;
 	static bool* keyUp;
 	static glm::vec2 mouseMentDelta;
@@ -206,7 +210,7 @@ public:
 	static bool GetKeyUp(int key);
 	static void GetInput();
 	static void ClearInputEveryFrame();
-	static void InitInput();
+	static void InitInput();//应为我这边暂时不准备构造Input的实列，所以就没有显示声明Input的构造函数
 };
 #pragma endregion
 
@@ -214,19 +218,106 @@ public:
 class Setting
 {
 public:
+    //窗口属性从全局变量变为Setting的属性
+    static glm::vec2 pWindowSize;//真正的窗口
+    //工作目录
+    static string workDir;
+
     const static string settingDir;//暂定为shader的配置目录等，后面改
-    static Camera* MainCamera;
+    // static Camera* MainCamera;
+    static GameObject* MainCamera;
 	static std::vector<AbstractLight*>* lights;
 	static std::list<GameObject*>* gameObjects;
-	static vec2 windowSize;
+	// static vec2 windowSize;//暂定认为是渲染窗口
 	static float deltaTime;
 
     
 	static bool lockMouse;
 
-	static int LightCount(AbstractLight::LightType type);
+	static int LightCount(AbstractLight::LightType type);//返回指定光源的数量
 
 
 	static void InitSettings();
 };
+#pragma endregion
+
+#pragma region AbstractLight:MonoBehavior
+class AbstractLight : public MonoBehavior
+{
+public:
+	Transform* transform;
+	virtual string Sign()const = 0;//返回光的类型
+	vec3 direction;
+	vec3 color;
+	void virtual FromJson(const json& j);
+	void virtual ToJson(json& j)const;
+
+public:
+	enum class LightType//添加了class的枚举类型就不能隐式转换为整数了
+	{
+		Directional,
+		Spot,
+		Point
+	};
+
+	float strength = 1.0f;//光强
+	virtual LightType Type() const = 0;
+	AbstractLight();
+	virtual ~AbstractLight() override;
+	void OnGUI() override;
+	void Update()override;
+    virtual void SetShader(Shader* shader, int index);
+	friend void to_json(json& j, const AbstractLight& l);
+	friend void from_json(const json& j, AbstractLight& l);
+};
+
+#pragma endregion
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#pragma region json
+//添加json对glm适配的模板
+namespace nlohmann
+{
+	template<>
+	struct adl_serializer<glm::vec3>
+	{
+		static void to_json(json& j, const glm::vec3 & v)
+		{
+			j = json{
+				{"x",v.x},
+			{"y",v.y},
+			{"z",v.z}
+			};
+		}
+		static void from_json(const json& j, glm::vec3 & v)
+		{
+			v = glm::vec3(
+				j.at("x").get<float>(),
+				j.at("y").get<float>(),
+				j.at("z").get<float>()
+			);
+		}
+	};
+}
 #pragma endregion

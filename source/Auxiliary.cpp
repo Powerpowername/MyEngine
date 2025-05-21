@@ -30,7 +30,7 @@ Camera::Camera()
     transform = gameObject->transform();//GameObject在他继承得MonoBehavior中
 	transform->Pitch = radians(15.0f);
 	transform->Yaw = radians(180.0f);
-	viewPort = vec4(0, 0, pWindowSize->x, pWindowSize->y);//暂时不修改，看看后期有没有优化的办法，放到Setting里是不是更好
+	viewPort = vec4(0, 0, Setting::pWindowSize.x, Setting::pWindowSize.y);//暂时不修改，看看后期有没有优化的办法，放到Setting里是不是更好
 }
 
 void Camera::Update()
@@ -114,9 +114,7 @@ CameraMove::~CameraMove()
 void Transform::Translate(vec3 movement)
 {
 }
-#pragma endregion
 
-#pragma region Transform : MonoBehavior
 void Transform::Translate(vec3 movement)
 {
     position += movement;
@@ -151,10 +149,11 @@ void Transform::Update()
 	Right = normalize(cross(Forward, WorldUp));
 	Up = normalize(cross(Forward, Right));
 }
-Transform::Transform(vec3 pos, vec3 rotation, vec3 scanle) :
+
+Transform::Transform(vec3 pos, vec3 rotation, vec3 scale) :
 	position(pos),
 	rotation(rotation),
-	scale(scanle)
+	scale(scale)
 {
 	name += "Transform";
 	Forward.x = cos(Pitch)*sin(Yaw);
@@ -167,4 +166,199 @@ Transform::Transform(vec3 pos, vec3 rotation, vec3 scanle) :
 Transform::~Transform()
 {
 }
+#pragma endregion
+
+#pragma region GameObject : Object
+template<typename T>
+T* GameObject::AddComponent()
+{
+	auto mb = (MonoBehavior*)new T();//指向的是行为脚本
+	mb->gameObject = this;
+	scripts->push_back(mb);
+	return (T*)mb;//没人接收也没关系，由scripts管理声明周期
+}
+template <typename T>
+T* GameObject::AddComponent(MonoBehavior *component)
+{
+	component->gameObject = this;
+	scripts->push_back(component);
+	return (T*) component;
+}
+template <typename T>
+T* GameObject::GetComponent() const
+{
+	for(auto mb : *scripts)
+		if(typeid(*mb) == typeid(T))
+			return (T*)mb;
+	return nullptr;
+}
+
+template<typename T>
+void  GameObject::RemoveComponent()
+{
+	for (auto x : *scripts)
+		if(typeid(*x)==typeid(T))
+			scripts->remove(x);
+}
+
+Transform * GameObject::transform() const
+{
+	return GetComponent<Transform>();
+}
+
+void GameObject::OnGUI()
+{
+	ImGui::Checkbox("Enable",(bool*)&enable);//后期考虑在每一个组件或者对象后面加一个delete属性，用来删除对象或组件
+	if (this->type == GameObject_Camera)//只有摄像机才有下面的操作
+	{
+		if (ImGui::Button("Go to here"))
+		{
+			Setting::MainCamera = this;
+		}
+	}
+}
+GameObject::GameObject(string name, string modelName, string shaderSign) :Object("GameObject_" + name)
+{
+	this->id = idS++;
+	this->type = GameObject_Model;
+
+	Setting::gameObjects->push_back(this);
+	scripts = new std::list<MonoBehavior*>();
+	AddComponent<Transform>();
+	auto modelRender = AddComponent<ModelRender>();
+	modelRender->modelName = modelName;
+}
+int GameObject::idS = 0;
+GameObject::GameObject(string name, Type type) :Object("GameObject_" + name)
+{
+	
+	this->id = idS++;
+	Setting::gameObjects->push_back(this);
+	scripts = new std::list<MonoBehavior*>();
+	AddComponent<Transform>();
+	this->type = type;
+	switch(type)
+	{
+	case GameObject_Camera:
+		AddComponent<Camera>();//相机对象添加相机组件
+		if(!Setting::MainCamera)//无主相机就添加主相机
+		{
+			Setting::MainCamera = this;
+			AddComponent<CameraMove>();
+		}
+		break;
+	case GameObject_Directional:
+		AddComponent<LightDirectional>();
+		break;
+	case GameObject_Spot:
+		AddComponent<LightPoint>();
+		break;
+	case GameObject_Point:
+		AddComponent<LightSpot>();
+		break;
+	case GameObject_SkyBox:
+		AddComponent<SkyboxRender>();
+		break;
+	case GameObject_Model:
+		AddComponent<ModelRender>();
+		break;
+	case GameObject_Empty:
+		break;
+	default:
+		break;
+	}
+
+}
+GameObject::~GameObject()//释放对象scripts的所有操作，并最终释放scripts自身
+{
+	for(auto x : *scripts)
+		delete x;
+	delete scripts;
+}
+#pragma endregion
+
 #pragma region
+bool* Input::keyDown = new bool[KEYS];
+bool* Input::Key = new bool[KEYS];
+bool* Input::lastKey = new bool[KEYS];//上一帧按键状态
+bool* Input::keyUp = new bool[KEYS];
+
+glm::vec2 Input::mouseMentDelta = glm::vec2(0,0);//鼠标移动增量
+
+bool Input::GetKey(int key)
+{
+	return Key[key];
+}
+
+bool Input::GetKeyUp(int key)
+{
+	return keyUp[key];
+}
+
+bool Input::GetKeyDown(int key)
+{
+	return keyDown[key];
+}
+
+void Input::GetInput()//这边目前只能看出一帧内按键是否按下，持续按下的情况我现在看来是只会被认为按下一次，后续都被认为是没按下
+{
+	for(int i = 0;i < KEYS;i++)
+	{
+		if (Key[i] && !lastKey[i])//上一帧没按下，当前帧按下
+			keyDown[i] = true;
+		if (!Key[i] && lastKey[i])//上一帧按下，当前没帧按下
+			keyUp[i] = true;
+	}
+}
+
+void Input::ClearInputEveryFrame()
+{
+	memcpy(lastKey,Key,sizeof(bool)*KEYS);
+	memset(Key,0,sizeof(bool)*KEYS);
+	memset(keyDown, 0, sizeof(bool)*KEYS);
+	memset(keyUp, 0, sizeof(bool)*KEYS);
+	mouseMentDelta = vec2(0, 0);
+}
+
+void Input::InitInput()
+{
+	memset(Key, 0, sizeof(bool)*KEYS);
+	memset(keyDown, 0, sizeof(bool)*KEYS);
+	memset(keyUp, 0, sizeof(bool)*KEYS);
+	memset(lastKey, 0, sizeof(bool)*KEYS);
+}
+#pragma endregion
+
+#pragma region Setting
+std::vector<AbstractLight*>* Setting::lights = nullptr;
+std::list<GameObject*>* Setting::gameObjects = nullptr;
+vec2 Setting::pWindowSize;
+string Setting::workDir = "E:\\GitStore\\MyEngine\\MyEngine";
+string const Setting::settingDir = workDir + "\\settings";
+GameObject* Setting::MainCamera = nullptr;
+// vec2 Setting::windowSize = vec2(1200, 1000);
+float Setting::deltaTime = 0.02f;//不是应该是0吗？
+bool Setting::lockMouse = false;
+
+int Setting::LightCount(AbstractLight::LightType type)
+{
+	int n = 0;
+	for (auto x : *lights)
+		if (x->Type() == type)
+			n++;
+	return n;
+
+}
+
+void Setting::InitSettings()
+{
+	lights = new std::vector<AbstractLight*>();
+	gameObjects = new std::list<GameObject*>();
+}
+#pragma endregion
+
+#pragma region AbstractLight:MonoBehavior
+
+#pragma endregion
+
+
