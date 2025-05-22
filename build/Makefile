@@ -152,29 +152,29 @@ E_/lib_c/glad/src/glad.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\app.dir\build.make CMakeFiles/app.dir/E_/lib_c/glad/src/glad.c.s
 .PHONY : E_/lib_c/glad/src/glad.c.s
 
-source/All.obj: source/All.cpp.obj
-.PHONY : source/All.obj
+source/Auxiliary.obj: source/Auxiliary.cpp.obj
+.PHONY : source/Auxiliary.obj
 
 # target to build an object file
-source/All.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\app.dir\build.make CMakeFiles/app.dir/source/All.cpp.obj
-.PHONY : source/All.cpp.obj
+source/Auxiliary.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\app.dir\build.make CMakeFiles/app.dir/source/Auxiliary.cpp.obj
+.PHONY : source/Auxiliary.cpp.obj
 
-source/All.i: source/All.cpp.i
-.PHONY : source/All.i
+source/Auxiliary.i: source/Auxiliary.cpp.i
+.PHONY : source/Auxiliary.i
 
 # target to preprocess a source file
-source/All.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\app.dir\build.make CMakeFiles/app.dir/source/All.cpp.i
-.PHONY : source/All.cpp.i
+source/Auxiliary.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\app.dir\build.make CMakeFiles/app.dir/source/Auxiliary.cpp.i
+.PHONY : source/Auxiliary.cpp.i
 
-source/All.s: source/All.cpp.s
-.PHONY : source/All.s
+source/Auxiliary.s: source/Auxiliary.cpp.s
+.PHONY : source/Auxiliary.s
 
 # target to generate assembly for a file
-source/All.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\app.dir\build.make CMakeFiles/app.dir/source/All.cpp.s
-.PHONY : source/All.cpp.s
+source/Auxiliary.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\app.dir\build.make CMakeFiles/app.dir/source/Auxiliary.cpp.s
+.PHONY : source/Auxiliary.cpp.s
 
 source/imgui.obj: source/imgui.cpp.obj
 .PHONY : source/imgui.obj
@@ -356,9 +356,9 @@ help:
 	@echo ... E_/lib_c/glad/src/glad.obj
 	@echo ... E_/lib_c/glad/src/glad.i
 	@echo ... E_/lib_c/glad/src/glad.s
-	@echo ... source/All.obj
-	@echo ... source/All.i
-	@echo ... source/All.s
+	@echo ... source/Auxiliary.obj
+	@echo ... source/Auxiliary.i
+	@echo ... source/Auxiliary.s
 	@echo ... source/imgui.obj
 	@echo ... source/imgui.i
 	@echo ... source/imgui.s

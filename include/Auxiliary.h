@@ -14,9 +14,15 @@
 #include "imgui.h"
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
+#include "glm/gtx/rotate_vector.hpp"
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"
 #include "json.hpp"
+#include<fstream>
+#include<sstream>
+#include "imgui.h"
+#include "imgui_impl_glfw.h"
+#include "imgui_impl_opengl3.h"
 using glm::vec2;using glm::vec3;using glm::vec4;using glm::mat3;using glm::mat4;
 using glm::radians;
 using std::vector;
@@ -45,6 +51,9 @@ class Shader;
 extern GLFWwindow* window;
 #pragma endregion
 
+#pragma region 宏
+#define GameObjectNum 10
+#pragma endregion
 
 #pragma region Object
 class Object
@@ -89,13 +98,12 @@ public:
     mat4 viewMat;
     mat4 projMat;
 
-
-
     //function
-    Camera();
+    Camera(GameObject* Parent);
     virtual ~Camera() override;
     virtual void Update() override;
     virtual void OnGUI() override;
+	void Start();
 };
 #pragma endregion
 
@@ -112,7 +120,7 @@ public:
     //function
     virtual void Update() override;
 	virtual void OnGUI() override;
-	CameraMove();
+	CameraMove(GameObject* Parent);
 	virtual ~CameraMove()override;
 };
 #pragma endregion
@@ -140,7 +148,7 @@ public:
 
     void OnGUI() override;
     void Update() override;
-    Transform(vec3 pos = vec3(0, 0, 0), vec3 rotation = vec3(0, 0, 0), vec3 scale = vec3(1, 1, 1));
+    Transform(GameObject* Parent);
     virtual ~Transform() override;
 };
 #pragma endregion
@@ -214,32 +222,7 @@ public:
 };
 #pragma endregion
 
-#pragma region Setting
-class Setting
-{
-public:
-    //窗口属性从全局变量变为Setting的属性
-    static glm::vec2 pWindowSize;//真正的窗口
-    //工作目录
-    static string workDir;
 
-    const static string settingDir;//暂定为shader的配置目录等，后面改
-    // static Camera* MainCamera;
-    static GameObject* MainCamera;
-	static std::vector<AbstractLight*>* lights;
-	static std::list<GameObject*>* gameObjects;
-	// static vec2 windowSize;//暂定认为是渲染窗口
-	static float deltaTime;
-
-    
-	static bool lockMouse;
-
-	static int LightCount(AbstractLight::LightType type);//返回指定光源的数量
-
-
-	static void InitSettings();
-};
-#pragma endregion
 
 #pragma region AbstractLight:MonoBehavior
 class AbstractLight : public MonoBehavior
@@ -247,7 +230,7 @@ class AbstractLight : public MonoBehavior
 public:
 	Transform* transform;
 	virtual string Sign()const = 0;//返回光的类型
-	vec3 direction;
+	vec3 direction;//光源的方向是从光源在世界坐标系的z轴正方向开始Update()，函数可以看出是每次都是从这个方向开始变换
 	vec3 color;
 	void virtual FromJson(const json& j);
 	void virtual ToJson(json& j)const;
@@ -266,7 +249,7 @@ public:
 	virtual ~AbstractLight() override;
 	void OnGUI() override;
 	void Update()override;
-    virtual void SetShader(Shader* shader, int index);
+    virtual void SetShader(Shader* shader, int index);//需要知道光源在着色器的uniform的什么位置才好设置
 	friend void to_json(json& j, const AbstractLight& l);
 	friend void from_json(const json& j, AbstractLight& l);
 };
@@ -287,10 +270,77 @@ public:
 
 
 
+#pragma region Shader:Object
+class Shader : public Object
+{
+public:
+    unsigned int ID;
+    const int maxImage = 4;
+
+    int currentImages = 0;
+	std::string vertexString;
+	std::string fragmentString;
+	const char* vertexSource;
+	const char* fragmentSource;
+
+    //function
+    Shader(string shaderName,string shaderPath, const char* geometryPath = nullptr);
+    void use();
+    void AddLight(AbstractLight* light);
+    void OnGUI() override;
+	void setBool(const std::string & name, bool value) const;
+	void setInt(const std::string & name, int value) const;
+	void setFloat(const std::string & name, float value) const;
+	void setVec2(const std::string & name, const glm::vec2 & value) const;
+	void setVec2(const std::string & name, float x, float y) const;
+	void setVec3(const std::string & name, const glm::vec3 & value) const;
+	void setVec3(const std::string & name, float x, float y, float z) const;
+	void setVec4(const std::string & name, const glm::vec4 & value) const;
+	void setVec4(const std::string & name, float x, float y, float z, float w);
+	void setMat2(const std::string & name, const glm::mat2 & mat) const;
+	void setMat3(const std::string & name, const glm::mat3 & mat) const;
+	void setMat4(const std::string & name, const glm::mat4 & mat) const;
+
+private:
+    void checkCompileErrors(GLuint shader, std::string type);
+    int Light_num = 0;
+};
 
 
+#pragma endreigon
 
 
+#pragma region Setting
+class Setting
+{
+public:
+    //窗口属性从全局变量变为Setting的属性
+    static glm::vec2 pWindowSize;//真正的窗口尺寸
+    static GLFWwindow* window;
+    static mat4 modelMat;
+    static mat4 viewMat;
+    static mat4 projMat;
+    //工作目录
+    static string workDir;
+
+
+    const static string settingDir;//暂定为shader的配置目录等，后面改
+    // static Camera* MainCamera;
+    static GameObject* MainCamera;
+	// static std::vector<AbstractLight*>* lights;
+	static std::list<GameObject*> gameObjects[GameObjectNum];//这边我准备将他划分位指向不同链表的指针
+	// static vec2 windowSize;//暂定认为是渲染窗口
+	static float deltaTime;
+
+    
+	static bool lockMouse;
+
+	static int LightCount(AbstractLight::LightType type);//返回指定光源的数量
+
+
+	// static void InitSettings();
+};
+#pragma endregion
 
 
 

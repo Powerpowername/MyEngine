@@ -1,6 +1,6 @@
-CMakeFiles/app.dir/source/All.cpp.obj: \
- E:\GitStore\MyEngine\MyEngine\source\All.cpp \
- E:/GitStore/MyEngine/MyEngine/include/All.h \
+CMakeFiles/app.dir/source/Auxiliary.cpp.obj: \
+ E:\GitStore\MyEngine\MyEngine\source\Auxiliary.cpp \
+ E:/GitStore/MyEngine/MyEngine/include/Auxiliary.h \
  E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/iostream \
  E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/requires_hosted.h \
  E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/x86_64-w64-mingw32/bits/c++config.h \
@@ -134,23 +134,26 @@ CMakeFiles/app.dir/source/All.cpp.obj: \
  E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/ostream.tcc \
  E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/istream \
  E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/istream.tcc \
- E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/fstream \
- E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/codecvt.h \
- E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/x86_64-w64-mingw32/bits/basic_file.h \
- E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/x86_64-w64-mingw32/bits/c++io.h \
- E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/fstream.tcc \
- E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/sstream \
- E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/sstream.tcc \
- E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/vector \
- E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/stl_uninitialized.h \
- E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/stl_vector.h \
- E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/stl_bvector.h \
- E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/vector.tcc \
  E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/list \
  E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/stl_list.h \
  E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/allocated_ptr.h \
  E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/ext/aligned_buffer.h \
  E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/list.tcc \
+ E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/vector \
+ E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/stl_uninitialized.h \
+ E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/stl_vector.h \
+ E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/stl_bvector.h \
+ E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/vector.tcc \
+ E:/GitStore/MyEngine/MyEngine/include/imgui.h \
+ E:/GitStore/MyEngine/MyEngine/include/imconfig.h \
+ E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/float.h \
+ E:/Compiler/mingw64/x86_64-w64-mingw32/include/float.h \
+ E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/stdarg.h \
+ E:/Compiler/mingw64/x86_64-w64-mingw32/include/stdarg.h \
+ E:/Compiler/mingw64/x86_64-w64-mingw32/include/_mingw_stdarg.h \
+ E:/Compiler/mingw64/x86_64-w64-mingw32/include/string.h \
+ E:/Compiler/mingw64/x86_64-w64-mingw32/include/sec_api/string_s.h \
+ E:/Compiler/mingw64/x86_64-w64-mingw32/include/assert.h \
  E:/GitStore/MyEngine/MyEngine/include/glm/glm.hpp \
  E:/GitStore/MyEngine/MyEngine/include/glm/detail/_fixes.hpp \
  E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/cmath \
@@ -171,15 +174,12 @@ CMakeFiles/app.dir/source/All.cpp.obj: \
  E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/tr1/riemann_zeta.tcc \
  E:/GitStore/MyEngine/MyEngine/include/glm/detail/setup.hpp \
  E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/cassert \
- E:/Compiler/mingw64/x86_64-w64-mingw32/include/assert.h \
  E:/GitStore/MyEngine/MyEngine/include/glm/simd/platform.h \
  E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/cstdint \
  E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/stdint.h \
  E:/Compiler/mingw64/x86_64-w64-mingw32/include/stdint.h \
  E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/climits \
  E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/cfloat \
- E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/float.h \
- E:/Compiler/mingw64/x86_64-w64-mingw32/include/float.h \
  E:/GitStore/MyEngine/MyEngine/include/glm/fwd.hpp \
  E:/GitStore/MyEngine/MyEngine/include/glm/detail/qualifier.hpp \
  E:/GitStore/MyEngine/MyEngine/include/glm/detail/setup.hpp \
@@ -333,65 +333,10 @@ CMakeFiles/app.dir/source/All.cpp.obj: \
  E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_relational.inl \
  E:/GitStore/MyEngine/MyEngine/include/glm/detail/type_float.hpp \
  E:/GitStore/MyEngine/MyEngine/include/glm/gtx/rotate_vector.inl \
- E:/GitStore/MyEngine/MyEngine/include/glm/gtc/type_ptr.hpp \
- E:/GitStore/MyEngine/MyEngine/include/glm/gtc/quaternion.hpp \
- E:/GitStore/MyEngine/MyEngine/include/glm/ext/quaternion_common.hpp \
- E:/GitStore/MyEngine/MyEngine/include/glm/ext/quaternion_geometric.hpp \
- E:/GitStore/MyEngine/MyEngine/include/glm/ext/quaternion_geometric.inl \
- E:/GitStore/MyEngine/MyEngine/include/glm/ext/quaternion_common.inl \
- E:/GitStore/MyEngine/MyEngine/include/glm/ext/quaternion_float.hpp \
- E:/GitStore/MyEngine/MyEngine/include/glm/detail/type_quat.hpp \
- E:/GitStore/MyEngine/MyEngine/include/glm/ext/quaternion_relational.hpp \
- E:/GitStore/MyEngine/MyEngine/include/glm/ext/quaternion_relational.inl \
- E:/GitStore/MyEngine/MyEngine/include/glm/detail/type_quat.inl \
- E:/GitStore/MyEngine/MyEngine/include/glm/ext/quaternion_float_precision.hpp \
- E:/GitStore/MyEngine/MyEngine/include/glm/ext/quaternion_double.hpp \
- E:/GitStore/MyEngine/MyEngine/include/glm/ext/quaternion_double_precision.hpp \
- E:/GitStore/MyEngine/MyEngine/include/glm/ext/quaternion_trigonometric.hpp \
- E:/GitStore/MyEngine/MyEngine/include/glm/ext/quaternion_trigonometric.inl \
- E:/GitStore/MyEngine/MyEngine/include/glm/ext/quaternion_transform.hpp \
- E:/GitStore/MyEngine/MyEngine/include/glm/ext/quaternion_transform.inl \
- E:/GitStore/MyEngine/MyEngine/include/glm/gtc/quaternion.inl \
- E:/GitStore/MyEngine/MyEngine/include/glm/gtc/vec1.hpp \
- E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_bool1.hpp \
- E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_bool1_precision.hpp \
- E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_float1.hpp \
- E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_float1_precision.hpp \
- E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_double1.hpp \
- E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_double1_precision.hpp \
- E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_int1.hpp \
- E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_int1_sized.hpp \
- E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_uint1.hpp \
- E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_uint1_sized.hpp \
- E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/cstring \
- E:/Compiler/mingw64/x86_64-w64-mingw32/include/string.h \
- E:/Compiler/mingw64/x86_64-w64-mingw32/include/sec_api/string_s.h \
- E:/GitStore/MyEngine/MyEngine/include/glm/gtc/type_ptr.inl \
  E:/lib_c/glad/include/glad/glad.h \
  E:/lib_c/glad/include/KHR/khrplatform.h \
  E:/lib_c/glfw-3.4/include/GLFW/glfw3.h \
- E:/GitStore/MyEngine/MyEngine/include/imgui.h \
- E:/GitStore/MyEngine/MyEngine/include/imconfig.h \
- E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/stdarg.h \
- E:/Compiler/mingw64/x86_64-w64-mingw32/include/stdarg.h \
- E:/Compiler/mingw64/x86_64-w64-mingw32/include/_mingw_stdarg.h \
- E:/GitStore/MyEngine/MyEngine/include/imgui_impl_glfw.h \
- E:/GitStore/MyEngine/MyEngine/include/imgui_impl_opengl3.h \
- E:/lib_c/assimp-master/include/assimp/Importer.hpp \
- E:/lib_c/assimp-master/include/assimp/types.h \
- E:/Compiler/mingw64/x86_64-w64-mingw32/include/sys/types.h \
- E:/lib_c/assimp-master/include/assimp/defs.h \
- E:/lib_c/assimp-master/build_mingw64/include/assimp/config.h \
- E:/lib_c/assimp-master/include/assimp/vector2.h \
- E:/lib_c/assimp-master/include/assimp/vector3.h \
- E:/lib_c/assimp-master/include/assimp/color4.h \
- E:/lib_c/assimp-master/include/assimp/matrix3x3.h \
- E:/lib_c/assimp-master/include/assimp/matrix4x4.h \
- E:/lib_c/assimp-master/include/assimp/quaternion.h \
- E:/lib_c/assimp-master/include/assimp/vector2.inl \
- E:/lib_c/assimp-master/include/assimp/vector3.inl \
- E:/lib_c/assimp-master/include/assimp/color4.inl \
- E:/lib_c/assimp-master/include/assimp/matrix3x3.inl \
+ E:/GitStore/MyEngine/MyEngine/include/json.hpp \
  E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/algorithm \
  E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/stl_algo.h \
  E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/algorithmfwd.h \
@@ -400,35 +345,16 @@ CMakeFiles/app.dir/source/All.cpp.obj: \
  E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/stl_tempbuf.h \
  E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/pstl/glue_algorithm_defs.h \
  E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/pstl/execution_defs.h \
- E:/lib_c/assimp-master/include/assimp/matrix4x4.inl \
- E:/lib_c/assimp-master/include/assimp/MathFunctions.h \
- E:/lib_c/assimp-master/include/assimp/quaternion.inl \
- E:/lib_c/assimp-master/include/assimp/scene.h \
- E:/lib_c/assimp-master/include/assimp/texture.h \
- E:/lib_c/assimp-master/include/assimp/Compiler/pushpack1.h \
- E:/lib_c/assimp-master/include/assimp/Compiler/poppack1.h \
- E:/lib_c/assimp-master/include/assimp/mesh.h \
- E:/lib_c/assimp-master/include/assimp/aabb.h \
- E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/unordered_set \
- E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/unordered_set.h \
- E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/hashtable.h \
- E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/hashtable_policy.h \
- E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/enable_special_members.h \
- E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/node_handle.h \
- E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/erase_if.h \
- E:/lib_c/assimp-master/include/assimp/light.h \
- E:/lib_c/assimp-master/include/assimp/camera.h \
- E:/lib_c/assimp-master/include/assimp/material.h \
- E:/lib_c/assimp-master/include/assimp/material.inl \
- E:/lib_c/assimp-master/include/assimp/anim.h \
- E:/lib_c/assimp-master/include/assimp/metadata.h \
- E:/lib_c/assimp-master/include/assimp/postprocess.h \
- E:/GitStore/MyEngine/MyEngine/include/json.hpp \
  E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/ciso646 \
  E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/functional \
  E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/std_function.h \
  E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/unordered_map \
  E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/unordered_map.h \
+ E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/hashtable.h \
+ E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/hashtable_policy.h \
+ E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/enable_special_members.h \
+ E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/node_handle.h \
+ E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/erase_if.h \
  E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/array \
  E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/compare \
  E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/iterator \
@@ -466,4 +392,14 @@ CMakeFiles/app.dir/source/All.cpp.obj: \
  E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/gslice.h \
  E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/gslice_array.h \
  E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/mask_array.h \
- E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/indirect_array.h
+ E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/indirect_array.h \
+ E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/cstring \
+ E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/fstream \
+ E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/codecvt.h \
+ E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/x86_64-w64-mingw32/bits/basic_file.h \
+ E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/x86_64-w64-mingw32/bits/c++io.h \
+ E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/fstream.tcc \
+ E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/sstream \
+ E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/sstream.tcc \
+ E:/GitStore/MyEngine/MyEngine/include/imgui_impl_glfw.h \
+ E:/GitStore/MyEngine/MyEngine/include/imgui_impl_opengl3.h

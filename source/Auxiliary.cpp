@@ -23,16 +23,26 @@ void MonoBehavior::OnGUI()
     ImGui::Checkbox("Enable",(bool*)&enable);
 }
 
-Camera::Camera()
+Camera::Camera(GameObject* Parent)
 {
     name += "Camera";
-
+	this->gameObject = Parent;
     transform = gameObject->transform();//GameObject在他继承得MonoBehavior中
+	// std::cout<<"Camera"<<std::endl;
+	
 	transform->Pitch = radians(15.0f);
 	transform->Yaw = radians(180.0f);
 	viewPort = vec4(0, 0, Setting::pWindowSize.x, Setting::pWindowSize.y);//暂时不修改，看看后期有没有优化的办法，放到Setting里是不是更好
 }
 
+Camera::~Camera()
+{
+}
+
+void Camera::Start()
+{
+	
+}
 void Camera::Update()
 {
     glViewport(viewPort.x, viewPort.y, viewPort.z, viewPort.w);//渲染的窗口
@@ -49,8 +59,9 @@ void Camera::OnGUI()
 	ImGui::DragFloat(("far" + std::to_string(gameObject->id)).c_str(), (float*)&far, 1.0f, 0, 1000);
 }
 
-CameraMove::CameraMove()
+CameraMove::CameraMove(GameObject* Parent)
 {
+	this->gameObject = Parent;
 	name += "CameraMove";
     transform = gameObject->transform();
 }
@@ -83,14 +94,11 @@ void CameraMove::Update()
 	{
 		Setting::lockMouse = !Setting::lockMouse;
 		if (Setting::lockMouse)
-			glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+			glfwSetInputMode(Setting::window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 		else
-			glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+			glfwSetInputMode(Setting::window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 	}
-}
 
-void CameraMove::Update()
-{
     //没有锁定鼠标就返回，只有锁定鼠标后才能更改Camera的Pitch和Yaw
     if (!Setting::lockMouse)
         return;
@@ -111,16 +119,13 @@ CameraMove::~CameraMove()
 {
 }
 #pragma region Transform:MonoBehavior
-void Transform::Translate(vec3 movement)
-{
-}
 
 void Transform::Translate(vec3 movement)
 {
     position += movement;
 }
 
-mat4 Transform::GetModelMaterix(mat4 world = mat4(1.0f)) const
+mat4 Transform::GetModelMaterix(mat4 world) const
 {
     auto model = glm::translate(world,position);
     model = glm::scale(model,scale);
@@ -150,11 +155,9 @@ void Transform::Update()
 	Up = normalize(cross(Forward, Right));
 }
 
-Transform::Transform(vec3 pos, vec3 rotation, vec3 scale) :
-	position(pos),
-	rotation(rotation),
-	scale(scale)
+Transform::Transform(GameObject* Parent)
 {
+	this->gameObject = Parent;
 	name += "Transform";
 	Forward.x = cos(Pitch)*sin(Yaw);
 	Forward.y = sin(Pitch);
@@ -172,9 +175,11 @@ Transform::~Transform()
 template<typename T>
 T* GameObject::AddComponent()
 {
-	auto mb = (MonoBehavior*)new T();//指向的是行为脚本
-	mb->gameObject = this;
+
+	auto mb = (MonoBehavior*)new T(this);//指向的是行为脚本
+	// mb->gameObject = this;
 	scripts->push_back(mb);
+
 	return (T*)mb;//没人接收也没关系，由scripts管理声明周期
 }
 template <typename T>
@@ -219,21 +224,20 @@ void GameObject::OnGUI()
 }
 GameObject::GameObject(string name, string modelName, string shaderSign) :Object("GameObject_" + name)
 {
-	this->id = idS++;
-	this->type = GameObject_Model;
+	// this->id = idS++;
+	// this->type = GameObject_Model;
 
-	Setting::gameObjects->push_back(this);
-	scripts = new std::list<MonoBehavior*>();
-	AddComponent<Transform>();
-	auto modelRender = AddComponent<ModelRender>();
-	modelRender->modelName = modelName;
+	// Setting::gameObjects->push_back(this);
+	// scripts = new std::list<MonoBehavior*>();
+	// AddComponent<Transform>();
+	// auto modelRender = AddComponent<ModelRender>();
+	// modelRender->modelName = modelName;
 }
 int GameObject::idS = 0;
 GameObject::GameObject(string name, Type type) :Object("GameObject_" + name)
 {
 	
 	this->id = idS++;
-	Setting::gameObjects->push_back(this);
 	scripts = new std::list<MonoBehavior*>();
 	AddComponent<Transform>();
 	this->type = type;
@@ -244,24 +248,33 @@ GameObject::GameObject(string name, Type type) :Object("GameObject_" + name)
 		if(!Setting::MainCamera)//无主相机就添加主相机
 		{
 			Setting::MainCamera = this;
-			AddComponent<CameraMove>();
+			// std::cout<<"sk1"<<std::endl;
 		}
+		AddComponent<CameraMove>();
+		// std::cout<<"sk2"<<std::endl;
+		Setting::gameObjects[GameObject_Camera].push_back(this);//0为摄像机所管理的对象
+		// std::cout<<"sk3"<<std::endl;
 		break;
-	case GameObject_Directional:
-		AddComponent<LightDirectional>();
-		break;
-	case GameObject_Spot:
-		AddComponent<LightPoint>();
-		break;
-	case GameObject_Point:
-		AddComponent<LightSpot>();
-		break;
-	case GameObject_SkyBox:
-		AddComponent<SkyboxRender>();
-		break;
-	case GameObject_Model:
-		AddComponent<ModelRender>();
-		break;
+	// case GameObject_Directional:
+	// 	AddComponent<LightDirectional>();
+	// 	Setting::gameObjects[GameObject_Directional].push_back(this);
+	// 	break;
+	// case GameObject_Spot:
+	// 	AddComponent<LightPoint>();
+	// 	Setting::gameObjects[GameObject_Spot].push_back(this);
+	// 	break;
+	// case GameObject_Point:
+	// 	AddComponent<LightSpot>();
+	// 	Setting::gameObjects[GameObject_Point].push_back(this);
+	// 	break;
+	// case GameObject_SkyBox:
+	// 	AddComponent<SkyboxRender>();
+	// 	Setting::gameObjects[GameObject_SkyBox].push_back(this);
+	// 	break;
+	// case GameObject_Model:
+	// 	AddComponent<ModelRender>();
+	// 	Setting::gameObjects[GameObject_Model].push_back(this);
+	// 	break;
 	case GameObject_Empty:
 		break;
 	default:
@@ -330,9 +343,13 @@ void Input::InitInput()
 #pragma endregion
 
 #pragma region Setting
-std::vector<AbstractLight*>* Setting::lights = nullptr;
-std::list<GameObject*>* Setting::gameObjects = nullptr;
-vec2 Setting::pWindowSize;
+// std::vector<AbstractLight*>* Setting::lights = nullptr;
+std::list<GameObject*> Setting::gameObjects[GameObjectNum];
+vec2 Setting::pWindowSize = vec2(1200, 1000);
+GLFWwindow* Setting::window =nullptr;
+mat4 Setting::modelMat;
+mat4 Setting::viewMat;
+mat4 Setting::projMat;
 string Setting::workDir = "E:\\GitStore\\MyEngine\\MyEngine";
 string const Setting::settingDir = workDir + "\\settings";
 GameObject* Setting::MainCamera = nullptr;
@@ -342,23 +359,267 @@ bool Setting::lockMouse = false;
 
 int Setting::LightCount(AbstractLight::LightType type)
 {
-	int n = 0;
-	for (auto x : *lights)
-		if (x->Type() == type)
-			n++;
-	return n;
-
+	if(type == AbstractLight::LightType::Directional)
+		return gameObjects[GameObject::GameObject_Directional].size();
+	if(type == AbstractLight::LightType::Spot)
+		return gameObjects[GameObject::GameObject_Spot].size();
+	if(type == AbstractLight::LightType::Point)
+		return gameObjects[GameObject::GameObject_Point].size();
 }
 
-void Setting::InitSettings()
-{
-	lights = new std::vector<AbstractLight*>();
-	gameObjects = new std::list<GameObject*>();
-}
+// void Setting::InitSettings()//似乎用不上了
+// {
+// 	// lights = new std::vector<AbstractLight*>();
+// 	// gameObjects = new std::list<GameObject*>(10);
+// }
 #pragma endregion
 
 #pragma region AbstractLight:MonoBehavior
+void AbstractLight::Update()
+{
+	direction = vec3(0,0,1.0f);
+	direction = glm::rotateZ(direction, transform->rotation.z);
+	direction = glm::rotateX(direction, transform->rotation.x);
+	direction = glm::rotateY(direction, transform->rotation.y);
+	direction *= -1;
+}
+
+void AbstractLight::ToJson(json & j)const
+{
+	j = json{
+	{"direction",direction},
+	{"color",color},
+	{"strength",strength}
+	};
+}
+
+void AbstractLight::FromJson(const json & j)
+{
+	color = j.at("color").get<vec3>();
+	direction = j.at("direction").get<vec3>();
+	strength = j.at("strength").get<float>();
+}
+
+AbstractLight::AbstractLight() : color(vec3(1,1,1))
+{
+	transform = gameObject->transform();
+	// Setting::lights->push_back(this);
+}
+
+AbstractLight::~AbstractLight()
+{
+
+}
+
+void AbstractLight::OnGUI() 
+{
+	MonoBehavior::OnGUI();
+	ImGui::SliderFloat("DirStrength", (float*)&strength, 0.0f, 10.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
+	ImGui::DragFloat3("DirAngles", (float*)&transform->rotation, 0.1f, 0, 2 * 3.1415926535f);
+	ImGui::ColorEdit3("LightColor", (float*)&color); // Edit 3 floats representing a color
+}
+
+void AbstractLight::SetShader(Shader* shader, int index)
+{
+	shader->setBool(Sign() + "[" + std::to_string(index) + "]." + "flag", true);
+	shader->setVec3(Sign() + "[" + std::to_string(index) + "]." + "color", this->color*strength);
+	shader->setVec3(Sign() + "[" + std::to_string(index) + "]." + "pos", transform->position);
+	shader->setVec3(Sign() + "[" + std::to_string(index) + "]." + "dirToLight", this->direction);
+}
+
+void to_json(json & j, const AbstractLight & l)
+{
+	l.ToJson(j);
+}
+
+void from_json(const json & j, AbstractLight & l)
+{
+	l.FromJson(j);
+}
 
 #pragma endregion
 
+#pragma region Shader:Object
+Shader::Shader(string shaderName,string shaderPath, const char* geometryPath) :Object("Shader_" + shaderName)
+{
+	std::cout << "Shader Name: " << shaderPath << std::endl;
+	// 1. retrieve the vertex/fragment source code from filePath
+	std::string vertexCode;
+	std::string fragmentCode;
+	std::string geometryCode;
+	std::ifstream vShaderFile;
+	std::ifstream fShaderFile;
+	std::ifstream gShaderFile;
+	// ensure ifstream objects can throw exceptions:
+	vShaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
+	fShaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
+	gShaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
 
+	try
+	{
+		// open files
+		vShaderFile.open(shaderPath + ".vert");
+		fShaderFile.open(shaderPath + ".frag");
+		std::stringstream vShaderStream, fShaderStream;
+		// read file's buffer contents into streams
+		vShaderStream << vShaderFile.rdbuf();
+		fShaderStream << fShaderFile.rdbuf();
+		// close file handlers
+		vShaderFile.close();
+		fShaderFile.close();
+		// convert stream into string
+		vertexCode = vShaderStream.str();
+		fragmentCode = fShaderStream.str();
+		// if geometry shader path is present, also load a geometry shader
+		if (geometryPath != nullptr)
+		{
+			gShaderFile.open(geometryPath);
+			std::stringstream gShaderStream;
+			gShaderStream << gShaderFile.rdbuf();
+			gShaderFile.close();
+			geometryCode = gShaderStream.str();
+		}
+	}
+	catch (std::ifstream::failure e)
+	{
+		std::cout << "ERROR::SHADER::FILE_NOT_SUCCESFULLY_READ" << std::endl;
+	}
+
+	const char* vShaderCode = vertexCode.c_str();
+	const char * fShaderCode = fragmentCode.c_str();
+
+	// 2. compile shaders
+	unsigned int vertex, fragment;
+	// vertex shader
+	vertex = glCreateShader(GL_VERTEX_SHADER);
+	glShaderSource(vertex, 1, &vShaderCode, NULL);
+	glCompileShader(vertex);
+	checkCompileErrors(vertex, "VERTEX");
+	// fragment Shader
+	fragment = glCreateShader(GL_FRAGMENT_SHADER);
+	glShaderSource(fragment, 1, &fShaderCode, NULL);
+	glCompileShader(fragment);
+	checkCompileErrors(fragment, "FRAGMENT");
+	// if geometry shader is given, compile geometry shader
+	unsigned int geometry;
+	if (geometryPath != nullptr)
+	{
+		const char * gShaderCode = geometryCode.c_str();
+		geometry = glCreateShader(GL_GEOMETRY_SHADER);
+		glShaderSource(geometry, 1, &gShaderCode, NULL);
+		glCompileShader(geometry);
+		checkCompileErrors(geometry, "GEOMETRY");
+	}
+	// shader Program
+	ID = glCreateProgram();
+	glAttachShader(ID, vertex);
+	glAttachShader(ID, fragment);
+	if (geometryPath != nullptr)
+		glAttachShader(ID, geometry);
+	glLinkProgram(ID);
+	checkCompileErrors(ID, "PROGRAM");
+	// delete the shaders as they're linked into our program now and no longer necessery
+	glDeleteShader(vertex);
+	glDeleteShader(fragment);
+	if (geometryPath != nullptr)
+		glDeleteShader(geometry);
+
+}
+
+void Shader::AddLight(AbstractLight* light)
+{
+	light->SetShader(this,Setting::LightCount(light->Type()) - 1);//这个只会将最后的光源加入到Shader中，所以说是需要注意更新的
+}
+
+void Shader::OnGUI()
+{
+	if(ImGui::TreeNode(name.c_str()))
+	{
+		ImGui::Text("name: %s", name.c_str());
+		ImGui::TreePop();
+		ImGui::Spacing();
+	}
+}
+
+void Shader::use()
+{
+	glUseProgram(ID);
+}
+void Shader::setBool(const std::string &name, bool value) const
+{
+	glUniform1i(glGetUniformLocation(ID, name.c_str()), (int)value);
+}
+void Shader::setInt(const std::string &name, int value) const
+{
+	glUniform1i(glGetUniformLocation(ID, name.c_str()), value);
+}
+void Shader::setFloat(const std::string &name, float value) const
+{
+	glUniform1f(glGetUniformLocation(ID, name.c_str()), value);
+}
+void Shader::setVec2(const std::string &name, const glm::vec2 &value) const
+{
+	glUniform2fv(glGetUniformLocation(ID, name.c_str()), 1, &value[0]);
+}
+void Shader::setVec2(const std::string &name, float x, float y) const
+{
+	glUniform2f(glGetUniformLocation(ID, name.c_str()), x, y);
+}
+void Shader::setVec3(const std::string &name, const glm::vec3 &value) const
+{
+	glUniform3fv(glGetUniformLocation(ID, name.c_str()), 1, &value[0]);
+}
+void Shader::setVec3(const std::string &name, float x, float y, float z) const
+{
+	glUniform3f(glGetUniformLocation(ID, name.c_str()), x, y, z);
+}
+void Shader::setVec4(const std::string &name, const glm::vec4 &value) const
+{
+	glUniform4fv(glGetUniformLocation(ID, name.c_str()), 1, &value[0]);
+}
+void Shader::setVec4(const std::string &name, float x, float y, float z, float w)
+{
+	glUniform4f(glGetUniformLocation(ID, name.c_str()), x, y, z, w);
+}
+void Shader::setMat2(const std::string &name, const glm::mat2 &mat) const
+{
+	glUniformMatrix2fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, &mat[0][0]);
+}
+void Shader::setMat3(const std::string &name, const glm::mat3 &mat) const
+{
+	glUniformMatrix3fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, &mat[0][0]);
+}
+void Shader::setMat4(const std::string &name, const glm::mat4 &mat) const
+{
+	glUniformMatrix4fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, &mat[0][0]);
+}
+
+
+void Shader::checkCompileErrors(GLuint shader, std::string type)
+{
+	GLint success;
+	GLchar infoLog[1024];
+	if (type != "PROGRAM")
+	{
+		glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
+		if (!success)
+		{
+			glGetShaderInfoLog(shader, 1024, NULL, infoLog);
+			std::cout << "ERROR::SHADER_COMPILATION_ERROR of type: " << type << "\n" << infoLog << "\n -- --------------------------------------------------- -- " << std::endl;
+		}
+	}
+	else
+	{
+		glGetProgramiv(shader, GL_LINK_STATUS, &success);
+		if (!success)
+		{
+			glGetProgramInfoLog(shader, 1024, NULL, infoLog);
+			std::cout << "ERROR::PROGRAM_LINKING_ERROR of type: " << type << "\n" << infoLog << "\n -- --------------------------------------------------- -- " << std::endl;
+		}
+	}
+}
+#pragma endregion
+
+#pragma region 
+
+#pragma endregion

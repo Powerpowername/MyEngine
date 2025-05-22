@@ -1,8 +1,8 @@
 file(REMOVE_RECURSE
   "CMakeFiles/app.dir/E_/lib_c/glad/src/glad.c.obj"
   "CMakeFiles/app.dir/E_/lib_c/glad/src/glad.c.obj.d"
-  "CMakeFiles/app.dir/source/All.cpp.obj"
-  "CMakeFiles/app.dir/source/All.cpp.obj.d"
+  "CMakeFiles/app.dir/source/Auxiliary.cpp.obj"
+  "CMakeFiles/app.dir/source/Auxiliary.cpp.obj.d"
   "CMakeFiles/app.dir/source/imgui.cpp.obj"
   "CMakeFiles/app.dir/source/imgui.cpp.obj.d"
   "CMakeFiles/app.dir/source/imgui_draw.cpp.obj"

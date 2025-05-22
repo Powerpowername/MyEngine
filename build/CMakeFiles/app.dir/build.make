@@ -71,20 +71,20 @@ include CMakeFiles/app.dir/flags.make
 CMakeFiles/app.dir/codegen:
 .PHONY : CMakeFiles/app.dir/codegen
 
-CMakeFiles/app.dir/source/All.cpp.obj: CMakeFiles/app.dir/flags.make
-CMakeFiles/app.dir/source/All.cpp.obj: CMakeFiles/app.dir/includes_CXX.rsp
-CMakeFiles/app.dir/source/All.cpp.obj: E:/GitStore/MyEngine/MyEngine/source/All.cpp
-CMakeFiles/app.dir/source/All.cpp.obj: CMakeFiles/app.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=E:\GitStore\MyEngine\MyEngine\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/app.dir/source/All.cpp.obj"
-	E:\Compiler\mingw64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/app.dir/source/All.cpp.obj -MF CMakeFiles\app.dir\source\All.cpp.obj.d -o CMakeFiles\app.dir\source\All.cpp.obj -c E:\GitStore\MyEngine\MyEngine\source\All.cpp
+CMakeFiles/app.dir/source/Auxiliary.cpp.obj: CMakeFiles/app.dir/flags.make
+CMakeFiles/app.dir/source/Auxiliary.cpp.obj: CMakeFiles/app.dir/includes_CXX.rsp
+CMakeFiles/app.dir/source/Auxiliary.cpp.obj: E:/GitStore/MyEngine/MyEngine/source/Auxiliary.cpp
+CMakeFiles/app.dir/source/Auxiliary.cpp.obj: CMakeFiles/app.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=E:\GitStore\MyEngine\MyEngine\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/app.dir/source/Auxiliary.cpp.obj"
+	E:\Compiler\mingw64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/app.dir/source/Auxiliary.cpp.obj -MF CMakeFiles\app.dir\source\Auxiliary.cpp.obj.d -o CMakeFiles\app.dir\source\Auxiliary.cpp.obj -c E:\GitStore\MyEngine\MyEngine\source\Auxiliary.cpp
 
-CMakeFiles/app.dir/source/All.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/app.dir/source/All.cpp.i"
-	E:\Compiler\mingw64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E E:\GitStore\MyEngine\MyEngine\source\All.cpp > CMakeFiles\app.dir\source\All.cpp.i
+CMakeFiles/app.dir/source/Auxiliary.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/app.dir/source/Auxiliary.cpp.i"
+	E:\Compiler\mingw64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E E:\GitStore\MyEngine\MyEngine\source\Auxiliary.cpp > CMakeFiles\app.dir\source\Auxiliary.cpp.i
 
-CMakeFiles/app.dir/source/All.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/app.dir/source/All.cpp.s"
-	E:\Compiler\mingw64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S E:\GitStore\MyEngine\MyEngine\source\All.cpp -o CMakeFiles\app.dir\source\All.cpp.s
+CMakeFiles/app.dir/source/Auxiliary.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/app.dir/source/Auxiliary.cpp.s"
+	E:\Compiler\mingw64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S E:\GitStore\MyEngine\MyEngine\source\Auxiliary.cpp -o CMakeFiles\app.dir\source\Auxiliary.cpp.s
 
 CMakeFiles/app.dir/source/imgui.cpp.obj: CMakeFiles/app.dir/flags.make
 CMakeFiles/app.dir/source/imgui.cpp.obj: CMakeFiles/app.dir/includes_CXX.rsp
@@ -208,7 +208,7 @@ CMakeFiles/app.dir/E_/lib_c/glad/src/glad.c.s: cmake_force
 
 # Object files for target app
 app_OBJECTS = \
-"CMakeFiles/app.dir/source/All.cpp.obj" \
+"CMakeFiles/app.dir/source/Auxiliary.cpp.obj" \
 "CMakeFiles/app.dir/source/imgui.cpp.obj" \
 "CMakeFiles/app.dir/source/imgui_draw.cpp.obj" \
 "CMakeFiles/app.dir/source/imgui_impl_glfw.cpp.obj" \
@@ -221,7 +221,7 @@ app_OBJECTS = \
 # External object files for target app
 app_EXTERNAL_OBJECTS =
 
-bin/app.exe: CMakeFiles/app.dir/source/All.cpp.obj
+bin/app.exe: CMakeFiles/app.dir/source/Auxiliary.cpp.obj
 bin/app.exe: CMakeFiles/app.dir/source/imgui.cpp.obj
 bin/app.exe: CMakeFiles/app.dir/source/imgui_draw.cpp.obj
 bin/app.exe: CMakeFiles/app.dir/source/imgui_impl_glfw.cpp.obj

@@ -279,7 +279,7 @@ CMakeFiles/app.dir/E_/lib_c/glad/src/glad.c.obj: E:/lib_c/glad/src/glad.c \
   E:/lib_c/glad/include/KHR/khrplatform.h \
   E:/lib_c/glad/include/glad/glad.h
 
-CMakeFiles/app.dir/source/All.cpp.obj: E:/GitStore/MyEngine/MyEngine/source/All.cpp \
+CMakeFiles/app.dir/source/Auxiliary.cpp.obj: E:/GitStore/MyEngine/MyEngine/source/Auxiliary.cpp \
   E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/algorithm \
   E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/array \
   E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/backward/auto_ptr.h \
@@ -379,7 +379,6 @@ CMakeFiles/app.dir/source/All.cpp.obj: E:/GitStore/MyEngine/MyEngine/source/All.
   E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/uniform_int_dist.h \
   E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/unique_ptr.h \
   E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/unordered_map.h \
-  E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/unordered_set.h \
   E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/uses_allocator.h \
   E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/uses_allocator_args.h \
   E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/utility.h \
@@ -460,7 +459,6 @@ CMakeFiles/app.dir/source/All.cpp.obj: E:/GitStore/MyEngine/MyEngine/source/All.
   E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/type_traits \
   E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/typeinfo \
   E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/unordered_map \
-  E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/unordered_set \
   E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/utility \
   E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/valarray \
   E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/vector \
@@ -516,11 +514,10 @@ CMakeFiles/app.dir/source/All.cpp.obj: E:/GitStore/MyEngine/MyEngine/source/All.
   E:/Compiler/mingw64/x86_64-w64-mingw32/include/string.h \
   E:/Compiler/mingw64/x86_64-w64-mingw32/include/swprintf.inl \
   E:/Compiler/mingw64/x86_64-w64-mingw32/include/sys/timeb.h \
-  E:/Compiler/mingw64/x86_64-w64-mingw32/include/sys/types.h \
   E:/Compiler/mingw64/x86_64-w64-mingw32/include/vadefs.h \
   E:/Compiler/mingw64/x86_64-w64-mingw32/include/wchar.h \
   E:/Compiler/mingw64/x86_64-w64-mingw32/include/wctype.h \
-  E:/GitStore/MyEngine/MyEngine/include/All.h \
+  E:/GitStore/MyEngine/MyEngine/include/Auxiliary.h \
   E:/GitStore/MyEngine/MyEngine/include/glm/common.hpp \
   E:/GitStore/MyEngine/MyEngine/include/glm/detail/_fixes.hpp \
   E:/GitStore/MyEngine/MyEngine/include/glm/detail/_vectorize.hpp \
@@ -557,8 +554,6 @@ CMakeFiles/app.dir/source/All.cpp.obj: E:/GitStore/MyEngine/MyEngine/source/All.
   E:/GitStore/MyEngine/MyEngine/include/glm/detail/type_mat4x3.inl \
   E:/GitStore/MyEngine/MyEngine/include/glm/detail/type_mat4x4.hpp \
   E:/GitStore/MyEngine/MyEngine/include/glm/detail/type_mat4x4.inl \
-  E:/GitStore/MyEngine/MyEngine/include/glm/detail/type_quat.hpp \
-  E:/GitStore/MyEngine/MyEngine/include/glm/detail/type_quat.inl \
   E:/GitStore/MyEngine/MyEngine/include/glm/detail/type_vec1.hpp \
   E:/GitStore/MyEngine/MyEngine/include/glm/detail/type_vec1.inl \
   E:/GitStore/MyEngine/MyEngine/include/glm/detail/type_vec2.hpp \
@@ -610,50 +605,28 @@ CMakeFiles/app.dir/source/All.cpp.obj: E:/GitStore/MyEngine/MyEngine/source/All.
   E:/GitStore/MyEngine/MyEngine/include/glm/ext/matrix_projection.inl \
   E:/GitStore/MyEngine/MyEngine/include/glm/ext/matrix_transform.hpp \
   E:/GitStore/MyEngine/MyEngine/include/glm/ext/matrix_transform.inl \
-  E:/GitStore/MyEngine/MyEngine/include/glm/ext/quaternion_common.hpp \
-  E:/GitStore/MyEngine/MyEngine/include/glm/ext/quaternion_common.inl \
-  E:/GitStore/MyEngine/MyEngine/include/glm/ext/quaternion_double.hpp \
-  E:/GitStore/MyEngine/MyEngine/include/glm/ext/quaternion_double_precision.hpp \
-  E:/GitStore/MyEngine/MyEngine/include/glm/ext/quaternion_float.hpp \
-  E:/GitStore/MyEngine/MyEngine/include/glm/ext/quaternion_float_precision.hpp \
-  E:/GitStore/MyEngine/MyEngine/include/glm/ext/quaternion_geometric.hpp \
-  E:/GitStore/MyEngine/MyEngine/include/glm/ext/quaternion_geometric.inl \
-  E:/GitStore/MyEngine/MyEngine/include/glm/ext/quaternion_relational.hpp \
-  E:/GitStore/MyEngine/MyEngine/include/glm/ext/quaternion_relational.inl \
-  E:/GitStore/MyEngine/MyEngine/include/glm/ext/quaternion_transform.hpp \
-  E:/GitStore/MyEngine/MyEngine/include/glm/ext/quaternion_transform.inl \
-  E:/GitStore/MyEngine/MyEngine/include/glm/ext/quaternion_trigonometric.hpp \
-  E:/GitStore/MyEngine/MyEngine/include/glm/ext/quaternion_trigonometric.inl \
   E:/GitStore/MyEngine/MyEngine/include/glm/ext/scalar_constants.hpp \
   E:/GitStore/MyEngine/MyEngine/include/glm/ext/scalar_constants.inl \
   E:/GitStore/MyEngine/MyEngine/include/glm/ext/scalar_int_sized.hpp \
   E:/GitStore/MyEngine/MyEngine/include/glm/ext/scalar_uint_sized.hpp \
-  E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_bool1.hpp \
-  E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_bool1_precision.hpp \
   E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_bool2.hpp \
   E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_bool2_precision.hpp \
   E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_bool3.hpp \
   E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_bool3_precision.hpp \
   E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_bool4.hpp \
   E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_bool4_precision.hpp \
-  E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_double1.hpp \
-  E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_double1_precision.hpp \
   E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_double2.hpp \
   E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_double2_precision.hpp \
   E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_double3.hpp \
   E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_double3_precision.hpp \
   E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_double4.hpp \
   E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_double4_precision.hpp \
-  E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_float1.hpp \
-  E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_float1_precision.hpp \
   E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_float2.hpp \
   E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_float2_precision.hpp \
   E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_float3.hpp \
   E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_float3_precision.hpp \
   E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_float4.hpp \
   E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_float4_precision.hpp \
-  E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_int1.hpp \
-  E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_int1_sized.hpp \
   E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_int2.hpp \
   E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_int2_sized.hpp \
   E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_int3.hpp \
@@ -662,8 +635,6 @@ CMakeFiles/app.dir/source/All.cpp.obj: E:/GitStore/MyEngine/MyEngine/source/All.
   E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_int4_sized.hpp \
   E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_relational.hpp \
   E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_relational.inl \
-  E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_uint1.hpp \
-  E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_uint1_sized.hpp \
   E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_uint2.hpp \
   E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_uint2_sized.hpp \
   E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_uint3.hpp \
@@ -679,11 +650,6 @@ CMakeFiles/app.dir/source/All.cpp.obj: E:/GitStore/MyEngine/MyEngine/source/All.
   E:/GitStore/MyEngine/MyEngine/include/glm/gtc/epsilon.inl \
   E:/GitStore/MyEngine/MyEngine/include/glm/gtc/matrix_transform.hpp \
   E:/GitStore/MyEngine/MyEngine/include/glm/gtc/matrix_transform.inl \
-  E:/GitStore/MyEngine/MyEngine/include/glm/gtc/quaternion.hpp \
-  E:/GitStore/MyEngine/MyEngine/include/glm/gtc/quaternion.inl \
-  E:/GitStore/MyEngine/MyEngine/include/glm/gtc/type_ptr.hpp \
-  E:/GitStore/MyEngine/MyEngine/include/glm/gtc/type_ptr.inl \
-  E:/GitStore/MyEngine/MyEngine/include/glm/gtc/vec1.hpp \
   E:/GitStore/MyEngine/MyEngine/include/glm/gtx/rotate_vector.hpp \
   E:/GitStore/MyEngine/MyEngine/include/glm/gtx/rotate_vector.inl \
   E:/GitStore/MyEngine/MyEngine/include/glm/gtx/transform.hpp \
@@ -711,36 +677,6 @@ CMakeFiles/app.dir/source/All.cpp.obj: E:/GitStore/MyEngine/MyEngine/source/All.
   E:/GitStore/MyEngine/MyEngine/include/imgui_impl_glfw.h \
   E:/GitStore/MyEngine/MyEngine/include/imgui_impl_opengl3.h \
   E:/GitStore/MyEngine/MyEngine/include/json.hpp \
-  E:/lib_c/assimp-master/build_mingw64/include/assimp/config.h \
-  E:/lib_c/assimp-master/include/assimp/Compiler/poppack1.h \
-  E:/lib_c/assimp-master/include/assimp/Compiler/pushpack1.h \
-  E:/lib_c/assimp-master/include/assimp/Importer.hpp \
-  E:/lib_c/assimp-master/include/assimp/MathFunctions.h \
-  E:/lib_c/assimp-master/include/assimp/aabb.h \
-  E:/lib_c/assimp-master/include/assimp/anim.h \
-  E:/lib_c/assimp-master/include/assimp/camera.h \
-  E:/lib_c/assimp-master/include/assimp/color4.h \
-  E:/lib_c/assimp-master/include/assimp/color4.inl \
-  E:/lib_c/assimp-master/include/assimp/defs.h \
-  E:/lib_c/assimp-master/include/assimp/light.h \
-  E:/lib_c/assimp-master/include/assimp/material.h \
-  E:/lib_c/assimp-master/include/assimp/material.inl \
-  E:/lib_c/assimp-master/include/assimp/matrix3x3.h \
-  E:/lib_c/assimp-master/include/assimp/matrix3x3.inl \
-  E:/lib_c/assimp-master/include/assimp/matrix4x4.h \
-  E:/lib_c/assimp-master/include/assimp/matrix4x4.inl \
-  E:/lib_c/assimp-master/include/assimp/mesh.h \
-  E:/lib_c/assimp-master/include/assimp/metadata.h \
-  E:/lib_c/assimp-master/include/assimp/postprocess.h \
-  E:/lib_c/assimp-master/include/assimp/quaternion.h \
-  E:/lib_c/assimp-master/include/assimp/quaternion.inl \
-  E:/lib_c/assimp-master/include/assimp/scene.h \
-  E:/lib_c/assimp-master/include/assimp/texture.h \
-  E:/lib_c/assimp-master/include/assimp/types.h \
-  E:/lib_c/assimp-master/include/assimp/vector2.h \
-  E:/lib_c/assimp-master/include/assimp/vector2.inl \
-  E:/lib_c/assimp-master/include/assimp/vector3.h \
-  E:/lib_c/assimp-master/include/assimp/vector3.inl \
   E:/lib_c/glad/include/KHR/khrplatform.h \
   E:/lib_c/glad/include/glad/glad.h \
   E:/lib_c/glfw-3.4/include/GLFW/glfw3.h
@@ -2215,7 +2151,6 @@ CMakeFiles/app.dir/source/main.cpp.obj: E:/GitStore/MyEngine/MyEngine/source/mai
   E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/uniform_int_dist.h \
   E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/unique_ptr.h \
   E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/unordered_map.h \
-  E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/unordered_set.h \
   E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/uses_allocator.h \
   E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/uses_allocator_args.h \
   E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/utility.h \
@@ -2297,7 +2232,6 @@ CMakeFiles/app.dir/source/main.cpp.obj: E:/GitStore/MyEngine/MyEngine/source/mai
   E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/type_traits \
   E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/typeinfo \
   E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/unordered_map \
-  E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/unordered_set \
   E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/utility \
   E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/valarray \
   E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/vector \
@@ -2408,11 +2342,10 @@ CMakeFiles/app.dir/source/main.cpp.obj: E:/GitStore/MyEngine/MyEngine/source/mai
   E:/Compiler/mingw64/x86_64-w64-mingw32/include/string.h \
   E:/Compiler/mingw64/x86_64-w64-mingw32/include/swprintf.inl \
   E:/Compiler/mingw64/x86_64-w64-mingw32/include/sys/timeb.h \
-  E:/Compiler/mingw64/x86_64-w64-mingw32/include/sys/types.h \
   E:/Compiler/mingw64/x86_64-w64-mingw32/include/vadefs.h \
   E:/Compiler/mingw64/x86_64-w64-mingw32/include/wchar.h \
   E:/Compiler/mingw64/x86_64-w64-mingw32/include/wctype.h \
-  E:/GitStore/MyEngine/MyEngine/include/All.h \
+  E:/GitStore/MyEngine/MyEngine/include/Auxiliary.h \
   E:/GitStore/MyEngine/MyEngine/include/Save.h \
   E:/GitStore/MyEngine/MyEngine/include/glm/common.hpp \
   E:/GitStore/MyEngine/MyEngine/include/glm/detail/_fixes.hpp \
@@ -2450,8 +2383,6 @@ CMakeFiles/app.dir/source/main.cpp.obj: E:/GitStore/MyEngine/MyEngine/source/mai
   E:/GitStore/MyEngine/MyEngine/include/glm/detail/type_mat4x3.inl \
   E:/GitStore/MyEngine/MyEngine/include/glm/detail/type_mat4x4.hpp \
   E:/GitStore/MyEngine/MyEngine/include/glm/detail/type_mat4x4.inl \
-  E:/GitStore/MyEngine/MyEngine/include/glm/detail/type_quat.hpp \
-  E:/GitStore/MyEngine/MyEngine/include/glm/detail/type_quat.inl \
   E:/GitStore/MyEngine/MyEngine/include/glm/detail/type_vec1.hpp \
   E:/GitStore/MyEngine/MyEngine/include/glm/detail/type_vec1.inl \
   E:/GitStore/MyEngine/MyEngine/include/glm/detail/type_vec2.hpp \
@@ -2503,50 +2434,28 @@ CMakeFiles/app.dir/source/main.cpp.obj: E:/GitStore/MyEngine/MyEngine/source/mai
   E:/GitStore/MyEngine/MyEngine/include/glm/ext/matrix_projection.inl \
   E:/GitStore/MyEngine/MyEngine/include/glm/ext/matrix_transform.hpp \
   E:/GitStore/MyEngine/MyEngine/include/glm/ext/matrix_transform.inl \
-  E:/GitStore/MyEngine/MyEngine/include/glm/ext/quaternion_common.hpp \
-  E:/GitStore/MyEngine/MyEngine/include/glm/ext/quaternion_common.inl \
-  E:/GitStore/MyEngine/MyEngine/include/glm/ext/quaternion_double.hpp \
-  E:/GitStore/MyEngine/MyEngine/include/glm/ext/quaternion_double_precision.hpp \
-  E:/GitStore/MyEngine/MyEngine/include/glm/ext/quaternion_float.hpp \
-  E:/GitStore/MyEngine/MyEngine/include/glm/ext/quaternion_float_precision.hpp \
-  E:/GitStore/MyEngine/MyEngine/include/glm/ext/quaternion_geometric.hpp \
-  E:/GitStore/MyEngine/MyEngine/include/glm/ext/quaternion_geometric.inl \
-  E:/GitStore/MyEngine/MyEngine/include/glm/ext/quaternion_relational.hpp \
-  E:/GitStore/MyEngine/MyEngine/include/glm/ext/quaternion_relational.inl \
-  E:/GitStore/MyEngine/MyEngine/include/glm/ext/quaternion_transform.hpp \
-  E:/GitStore/MyEngine/MyEngine/include/glm/ext/quaternion_transform.inl \
-  E:/GitStore/MyEngine/MyEngine/include/glm/ext/quaternion_trigonometric.hpp \
-  E:/GitStore/MyEngine/MyEngine/include/glm/ext/quaternion_trigonometric.inl \
   E:/GitStore/MyEngine/MyEngine/include/glm/ext/scalar_constants.hpp \
   E:/GitStore/MyEngine/MyEngine/include/glm/ext/scalar_constants.inl \
   E:/GitStore/MyEngine/MyEngine/include/glm/ext/scalar_int_sized.hpp \
   E:/GitStore/MyEngine/MyEngine/include/glm/ext/scalar_uint_sized.hpp \
-  E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_bool1.hpp \
-  E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_bool1_precision.hpp \
   E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_bool2.hpp \
   E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_bool2_precision.hpp \
   E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_bool3.hpp \
   E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_bool3_precision.hpp \
   E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_bool4.hpp \
   E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_bool4_precision.hpp \
-  E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_double1.hpp \
-  E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_double1_precision.hpp \
   E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_double2.hpp \
   E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_double2_precision.hpp \
   E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_double3.hpp \
   E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_double3_precision.hpp \
   E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_double4.hpp \
   E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_double4_precision.hpp \
-  E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_float1.hpp \
-  E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_float1_precision.hpp \
   E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_float2.hpp \
   E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_float2_precision.hpp \
   E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_float3.hpp \
   E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_float3_precision.hpp \
   E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_float4.hpp \
   E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_float4_precision.hpp \
-  E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_int1.hpp \
-  E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_int1_sized.hpp \
   E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_int2.hpp \
   E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_int2_sized.hpp \
   E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_int3.hpp \
@@ -2555,8 +2464,6 @@ CMakeFiles/app.dir/source/main.cpp.obj: E:/GitStore/MyEngine/MyEngine/source/mai
   E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_int4_sized.hpp \
   E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_relational.hpp \
   E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_relational.inl \
-  E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_uint1.hpp \
-  E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_uint1_sized.hpp \
   E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_uint2.hpp \
   E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_uint2_sized.hpp \
   E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_uint3.hpp \
@@ -2572,11 +2479,6 @@ CMakeFiles/app.dir/source/main.cpp.obj: E:/GitStore/MyEngine/MyEngine/source/mai
   E:/GitStore/MyEngine/MyEngine/include/glm/gtc/epsilon.inl \
   E:/GitStore/MyEngine/MyEngine/include/glm/gtc/matrix_transform.hpp \
   E:/GitStore/MyEngine/MyEngine/include/glm/gtc/matrix_transform.inl \
-  E:/GitStore/MyEngine/MyEngine/include/glm/gtc/quaternion.hpp \
-  E:/GitStore/MyEngine/MyEngine/include/glm/gtc/quaternion.inl \
-  E:/GitStore/MyEngine/MyEngine/include/glm/gtc/type_ptr.hpp \
-  E:/GitStore/MyEngine/MyEngine/include/glm/gtc/type_ptr.inl \
-  E:/GitStore/MyEngine/MyEngine/include/glm/gtc/vec1.hpp \
   E:/GitStore/MyEngine/MyEngine/include/glm/gtx/rotate_vector.hpp \
   E:/GitStore/MyEngine/MyEngine/include/glm/gtx/rotate_vector.inl \
   E:/GitStore/MyEngine/MyEngine/include/glm/gtx/transform.hpp \
@@ -2607,36 +2509,6 @@ CMakeFiles/app.dir/source/main.cpp.obj: E:/GitStore/MyEngine/MyEngine/source/mai
   E:/GitStore/MyEngine/MyEngine/include/json.hpp \
   E:/GitStore/MyEngine/MyEngine/include/stb_image.h \
   E:/GitStore/MyEngine/MyEngine/include/stb_image_write.h \
-  E:/lib_c/assimp-master/build_mingw64/include/assimp/config.h \
-  E:/lib_c/assimp-master/include/assimp/Compiler/poppack1.h \
-  E:/lib_c/assimp-master/include/assimp/Compiler/pushpack1.h \
-  E:/lib_c/assimp-master/include/assimp/Importer.hpp \
-  E:/lib_c/assimp-master/include/assimp/MathFunctions.h \
-  E:/lib_c/assimp-master/include/assimp/aabb.h \
-  E:/lib_c/assimp-master/include/assimp/anim.h \
-  E:/lib_c/assimp-master/include/assimp/camera.h \
-  E:/lib_c/assimp-master/include/assimp/color4.h \
-  E:/lib_c/assimp-master/include/assimp/color4.inl \
-  E:/lib_c/assimp-master/include/assimp/defs.h \
-  E:/lib_c/assimp-master/include/assimp/light.h \
-  E:/lib_c/assimp-master/include/assimp/material.h \
-  E:/lib_c/assimp-master/include/assimp/material.inl \
-  E:/lib_c/assimp-master/include/assimp/matrix3x3.h \
-  E:/lib_c/assimp-master/include/assimp/matrix3x3.inl \
-  E:/lib_c/assimp-master/include/assimp/matrix4x4.h \
-  E:/lib_c/assimp-master/include/assimp/matrix4x4.inl \
-  E:/lib_c/assimp-master/include/assimp/mesh.h \
-  E:/lib_c/assimp-master/include/assimp/metadata.h \
-  E:/lib_c/assimp-master/include/assimp/postprocess.h \
-  E:/lib_c/assimp-master/include/assimp/quaternion.h \
-  E:/lib_c/assimp-master/include/assimp/quaternion.inl \
-  E:/lib_c/assimp-master/include/assimp/scene.h \
-  E:/lib_c/assimp-master/include/assimp/texture.h \
-  E:/lib_c/assimp-master/include/assimp/types.h \
-  E:/lib_c/assimp-master/include/assimp/vector2.h \
-  E:/lib_c/assimp-master/include/assimp/vector2.inl \
-  E:/lib_c/assimp-master/include/assimp/vector3.h \
-  E:/lib_c/assimp-master/include/assimp/vector3.inl \
   E:/lib_c/glad/include/KHR/khrplatform.h \
   E:/lib_c/glad/include/glad/glad.h \
   E:/lib_c/glfw-3.4/include/GLFW/glfw3.h
@@ -2681,8 +2553,6 @@ E:/GitStore/MyEngine/MyEngine/include/glm/ext/matrix_float3x2_precision.hpp:
 E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/limits.h:
 
 E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx512ifmaintrin.h:
-
-E:/lib_c/assimp-master/include/assimp/light.h:
 
 E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/localefwd.h:
 
@@ -2737,8 +2607,6 @@ E:/GitStore/MyEngine/MyEngine/include/glm/ext/matrix_double4x4.hpp:
 E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx5124vnniwintrin.h:
 
 E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx512bf16intrin.h:
-
-E:/lib_c/assimp-master/include/assimp/vector3.h:
 
 E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/clwbintrin.h:
 
@@ -2796,8 +2664,6 @@ E:/Compiler/mingw64/x86_64-w64-mingw32/include/bemapiset.h:
 
 E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx512fp16vlintrin.h:
 
-E:/lib_c/assimp-master/include/assimp/color4.h:
-
 E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx512pfintrin.h:
 
 E:/Compiler/mingw64/x86_64-w64-mingw32/include/winnetwk.h:
@@ -2830,8 +2696,6 @@ E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/node_hand
 
 E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/bmiintrin.h:
 
-E:/GitStore/MyEngine/MyEngine/include/glm/ext/quaternion_double.hpp:
-
 E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx512vp2intersectintrin.h:
 
 E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/float.h:
@@ -2847,8 +2711,6 @@ E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avxvnniintrin.h:
 E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/locale_facets.h:
 
 E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avxifmaintrin.h:
-
-E:/GitStore/MyEngine/MyEngine/include/glm/ext/quaternion_relational.inl:
 
 E:/Compiler/mingw64/x86_64-w64-mingw32/include/oaidl.h:
 
@@ -2894,11 +2756,7 @@ E:/Compiler/mingw64/x86_64-w64-mingw32/include/locale.h:
 
 E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/clflushoptintrin.h:
 
-E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_bool1.hpp:
-
 E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/immintrin.h:
-
-E:/GitStore/MyEngine/MyEngine/include/glm/ext/quaternion_geometric.inl:
 
 E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/cmpccxaddintrin.h:
 
@@ -2935,8 +2793,6 @@ E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/fmaintrin.h:
 E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/fxsrintrin.h:
 
 E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/cstdlib:
-
-E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_float1_precision.hpp:
 
 E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/gfniintrin.h:
 
@@ -3080,8 +2936,6 @@ E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/xopintrin.h:
 
 E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/xtestintrin.h:
 
-E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/unordered_set.h:
-
 E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/xsavecintrin.h:
 
 E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/xsavesintrin.h:
@@ -3091,10 +2945,6 @@ E:/Compiler/mingw64/x86_64-w64-mingw32/include/_bsd_types.h:
 E:/Compiler/mingw64/x86_64-w64-mingw32/include/_mingw_stat64.h:
 
 E:/Compiler/mingw64/x86_64-w64-mingw32/include/_mingw.h:
-
-E:/Compiler/mingw64/x86_64-w64-mingw32/include/sys/types.h:
-
-E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_uint1.hpp:
 
 E:/Compiler/mingw64/x86_64-w64-mingw32/include/_mingw_mac.h:
 
@@ -3141,8 +2991,6 @@ E:/GitStore/MyEngine/MyEngine/include/glm/detail/compute_vector_relational.hpp:
 E:/GitStore/MyEngine/MyEngine/include/glm/ext/matrix_float3x2.hpp:
 
 E:/Compiler/mingw64/x86_64-w64-mingw32/include/corecrt_stdio_config.h:
-
-E:/GitStore/MyEngine/MyEngine/include/glm/gtc/vec1.hpp:
 
 E:/Compiler/mingw64/x86_64-w64-mingw32/include/corecrt_wstdlib.h:
 
@@ -3272,8 +3120,6 @@ E:/GitStore/MyEngine/MyEngine/include/glm/detail/type_mat3x4.inl:
 
 E:/Compiler/mingw64/x86_64-w64-mingw32/include/nb30.h:
 
-E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_bool1_precision.hpp:
-
 E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/nested_exception.h:
 
 E:/Compiler/mingw64/x86_64-w64-mingw32/include/ncrypt.h:
@@ -3307,8 +3153,6 @@ E:/Compiler/mingw64/x86_64-w64-mingw32/include/psdk_inc/_ip_mreq1.h:
 E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/valarray:
 
 E:/GitStore/MyEngine/MyEngine/include/glm/detail/_fixes.hpp:
-
-E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_double1.hpp:
 
 E:/Compiler/mingw64/x86_64-w64-mingw32/include/psdk_inc/_ip_types.h:
 
@@ -3362,8 +3206,6 @@ E:/Compiler/mingw64/x86_64-w64-mingw32/include/winbase.h:
 
 E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/forward_list.h:
 
-E:/GitStore/MyEngine/MyEngine/include/glm/ext/quaternion_common.inl:
-
 E:/Compiler/mingw64/x86_64-w64-mingw32/include/rpcndr.h:
 
 E:/Compiler/mingw64/x86_64-w64-mingw32/include/sec_api/stdio_s.h:
@@ -3371,8 +3213,6 @@ E:/Compiler/mingw64/x86_64-w64-mingw32/include/sec_api/stdio_s.h:
 E:/GitStore/MyEngine/MyEngine/include/glm/detail/type_mat4x2.inl:
 
 E:/Compiler/mingw64/x86_64-w64-mingw32/include/rpcnterr.h:
-
-E:/lib_c/assimp-master/include/assimp/camera.h:
 
 E:/GitStore/MyEngine/MyEngine/include/glm/ext/matrix_float4x2_precision.hpp:
 
@@ -3408,11 +3248,9 @@ E:/Compiler/mingw64/x86_64-w64-mingw32/include/shellapi.h:
 
 E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/valarray_after.h:
 
-E:/GitStore/MyEngine/MyEngine/include/glm/ext/quaternion_trigonometric.inl:
+E:/Compiler/mingw64/x86_64-w64-mingw32/include/stddef.h:
 
 E:/GitStore/MyEngine/MyEngine/include/glm/detail/type_mat3x2.hpp:
-
-E:/Compiler/mingw64/x86_64-w64-mingw32/include/stddef.h:
 
 E:/GitStore/MyEngine/MyEngine/include/glm/mat4x2.hpp:
 
@@ -3428,8 +3266,6 @@ E:/Compiler/mingw64/x86_64-w64-mingw32/include/string.h:
 
 E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/debug/assertions.h:
 
-E:/GitStore/MyEngine/MyEngine/include/glm/ext/quaternion_transform.hpp:
-
 E:/Compiler/mingw64/x86_64-w64-mingw32/include/stringapiset.h:
 
 E:/Compiler/mingw64/x86_64-w64-mingw32/include/swprintf.inl:
@@ -3443,8 +3279,6 @@ E:/Compiler/mingw64/x86_64-w64-mingw32/include/systemtopologyapi.h:
 E:/GitStore/MyEngine/MyEngine/include/glm/gtc/constants.hpp:
 
 E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/stl_algo.h:
-
-E:/GitStore/MyEngine/MyEngine/include/glm/gtc/type_ptr.hpp:
 
 E:/Compiler/mingw64/x86_64-w64-mingw32/include/threadpoolapiset.h:
 
@@ -3514,8 +3348,6 @@ E:/Compiler/mingw64/x86_64-w64-mingw32/include/winscard.h:
 
 E:/Compiler/mingw64/x86_64-w64-mingw32/include/winuser.h:
 
-E:/lib_c/assimp-master/include/assimp/texture.h:
-
 E:/Compiler/mingw64/x86_64-w64-mingw32/include/winver.h:
 
 E:/Compiler/mingw64/x86_64-w64-mingw32/include/wnnc.h:
@@ -3532,7 +3364,11 @@ E:/Compiler/mingw64/x86_64-w64-mingw32/include/wtypes.h:
 
 E:/lib_c/glad/include/KHR/khrplatform.h:
 
-E:/GitStore/MyEngine/MyEngine/source/All.cpp:
+E:/GitStore/MyEngine/MyEngine/source/Auxiliary.cpp:
+
+E:/GitStore/MyEngine/MyEngine/include/glm/detail/func_geometric.inl:
+
+E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/clocale:
 
 E:/Compiler/mingw64/x86_64-w64-mingw32/include/math.h:
 
@@ -3577,8 +3413,6 @@ E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/exception
 E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/forward_list.tcc:
 
 E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/version.h:
-
-E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_int1.hpp:
 
 E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/functexcept.h:
 
@@ -3642,9 +3476,9 @@ E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/sstream.t
 
 E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/std_abs.h:
 
-E:/GitStore/MyEngine/MyEngine/include/glm/detail/type_mat3x2.inl:
-
 E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/cerrno:
+
+E:/GitStore/MyEngine/MyEngine/include/glm/detail/type_mat3x2.inl:
 
 E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/std_function.h:
 
@@ -3662,9 +3496,9 @@ E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/stl_list.
 
 E:/GitStore/MyEngine/MyEngine/include/glm/detail/type_vec3.inl:
 
-E:/GitStore/MyEngine/MyEngine/include/glm/detail/type_mat3x3.hpp:
-
 E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/stl_map.h:
+
+E:/GitStore/MyEngine/MyEngine/include/glm/detail/type_mat3x3.hpp:
 
 E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/stl_tempbuf.h:
 
@@ -3692,8 +3526,6 @@ E:/GitStore/MyEngine/MyEngine/include/glm/gtc/constants.inl:
 
 E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/valarray_array.tcc:
 
-E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_float1.hpp:
-
 E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/valarray_before.h:
 
 E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/ext/concurrence.h:
@@ -3704,15 +3536,9 @@ E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/ext/atomicity.
 
 E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/vector.tcc:
 
-E:/GitStore/MyEngine/MyEngine/include/glm/gtc/quaternion.hpp:
-
 E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/cassert:
 
 E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/pstl/execution_defs.h:
-
-E:/GitStore/MyEngine/MyEngine/include/glm/detail/func_geometric.inl:
-
-E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/clocale:
 
 E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/concepts:
 
@@ -3736,11 +3562,7 @@ E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/debug/debug.h:
 
 E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/ext/aligned_buffer.h:
 
-E:/lib_c/assimp-master/include/assimp/MathFunctions.h:
-
 E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/ext/string_conversions.h:
-
-E:/lib_c/assimp-master/include/assimp/Compiler/poppack1.h:
 
 E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/functional:
 
@@ -3776,27 +3598,15 @@ E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/tr1/hypergeome
 
 E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/tr1/modified_bessel_func.tcc:
 
-E:/GitStore/MyEngine/MyEngine/include/glm/ext/quaternion_common.hpp:
-
 E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/tr1/poly_laguerre.tcc:
 
 E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/type_traits:
-
-E:/GitStore/MyEngine/MyEngine/include/glm/detail/type_mat2x2.hpp:
-
-E:/lib_c/assimp-master/include/assimp/material.h:
-
-E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_uint3.hpp:
-
-E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/unordered_set:
 
 E:/GitStore/MyEngine/MyEngine/include/glm/detail/type_mat3x4.hpp:
 
 E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/x86_64-w64-mingw32/bits/basic_file.h:
 
 E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/x86_64-w64-mingw32/bits/c++config.h:
-
-E:/lib_c/assimp-master/include/assimp/material.inl:
 
 E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/x86_64-w64-mingw32/bits/c++locale.h:
 
@@ -3820,7 +3630,7 @@ E:/Compiler/mingw64/x86_64-w64-mingw32/include/sec_api/sys/timeb_s.h:
 
 E:/Compiler/mingw64/x86_64-w64-mingw32/include/wchar.h:
 
-E:/GitStore/MyEngine/MyEngine/include/All.h:
+E:/GitStore/MyEngine/MyEngine/include/Auxiliary.h:
 
 E:/GitStore/MyEngine/MyEngine/include/glm/common.hpp:
 
@@ -3832,8 +3642,6 @@ E:/GitStore/MyEngine/MyEngine/include/glm/detail/func_exponential.inl:
 
 E:/GitStore/MyEngine/MyEngine/include/glm/detail/func_integer.inl:
 
-E:/GitStore/MyEngine/MyEngine/include/glm/ext/quaternion_float_precision.hpp:
-
 E:/GitStore/MyEngine/MyEngine/include/glm/ext/matrix_float4x4.hpp:
 
 E:/GitStore/MyEngine/MyEngine/include/glm/detail/qualifier.hpp:
@@ -3841,6 +3649,8 @@ E:/GitStore/MyEngine/MyEngine/include/glm/detail/qualifier.hpp:
 E:/GitStore/MyEngine/MyEngine/include/glm/detail/type_half.hpp:
 
 E:/GitStore/MyEngine/MyEngine/include/glm/detail/type_half.inl:
+
+E:/GitStore/MyEngine/MyEngine/include/glm/detail/type_mat2x2.hpp:
 
 E:/GitStore/MyEngine/MyEngine/include/glm/detail/type_mat3x3.inl:
 
@@ -3853,10 +3663,6 @@ E:/GitStore/MyEngine/MyEngine/include/glm/detail/type_mat4x3.inl:
 E:/GitStore/MyEngine/MyEngine/include/glm/detail/type_mat4x4.hpp:
 
 E:/GitStore/MyEngine/MyEngine/include/glm/detail/type_mat4x4.inl:
-
-E:/GitStore/MyEngine/MyEngine/include/glm/detail/type_quat.hpp:
-
-E:/GitStore/MyEngine/MyEngine/include/glm/detail/type_quat.inl:
 
 E:/GitStore/MyEngine/MyEngine/include/glm/detail/type_vec1.hpp:
 
@@ -3934,18 +3740,6 @@ E:/GitStore/MyEngine/MyEngine/include/glm/ext/matrix_transform.hpp:
 
 E:/GitStore/MyEngine/MyEngine/include/glm/ext/matrix_transform.inl:
 
-E:/GitStore/MyEngine/MyEngine/include/glm/ext/quaternion_double_precision.hpp:
-
-E:/GitStore/MyEngine/MyEngine/include/glm/ext/quaternion_float.hpp:
-
-E:/GitStore/MyEngine/MyEngine/include/glm/ext/quaternion_geometric.hpp:
-
-E:/GitStore/MyEngine/MyEngine/include/glm/ext/quaternion_relational.hpp:
-
-E:/GitStore/MyEngine/MyEngine/include/glm/ext/quaternion_transform.inl:
-
-E:/GitStore/MyEngine/MyEngine/include/glm/ext/quaternion_trigonometric.hpp:
-
 E:/GitStore/MyEngine/MyEngine/include/glm/mat3x3.hpp:
 
 E:/GitStore/MyEngine/MyEngine/include/glm/ext/scalar_constants.hpp:
@@ -3964,8 +3758,6 @@ E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_bool4.hpp:
 
 E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_bool4_precision.hpp:
 
-E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_double1_precision.hpp:
-
 E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_double2.hpp:
 
 E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_double2_precision.hpp:
@@ -3976,8 +3768,6 @@ E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_double4_precision.hpp:
 
 E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_float2.hpp:
 
-E:/lib_c/assimp-master/include/assimp/quaternion.inl:
-
 E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_int4_sized.hpp:
 
 E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_float3.hpp:
@@ -3985,8 +3775,6 @@ E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_float3.hpp:
 E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_float3_precision.hpp:
 
 E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_float4_precision.hpp:
-
-E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_int1_sized.hpp:
 
 E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_int2_sized.hpp:
 
@@ -3996,7 +3784,7 @@ E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_relational.hpp:
 
 E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_relational.inl:
 
-E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_uint1_sized.hpp:
+E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_uint3.hpp:
 
 E:/GitStore/MyEngine/MyEngine/include/glm/gtc/epsilon.hpp:
 
@@ -4007,10 +3795,6 @@ E:/GitStore/MyEngine/MyEngine/include/glm/glm.hpp:
 E:/GitStore/MyEngine/MyEngine/include/glm/gtc/epsilon.inl:
 
 E:/GitStore/MyEngine/MyEngine/include/glm/gtc/matrix_transform.hpp:
-
-E:/GitStore/MyEngine/MyEngine/include/glm/gtc/quaternion.inl:
-
-E:/GitStore/MyEngine/MyEngine/include/glm/gtc/type_ptr.inl:
 
 E:/GitStore/MyEngine/MyEngine/include/glm/gtx/transform.inl:
 
@@ -4029,46 +3813,6 @@ E:/GitStore/MyEngine/MyEngine/include/glm/vec3.hpp:
 E:/GitStore/MyEngine/MyEngine/include/glm/vec4.hpp:
 
 E:/GitStore/MyEngine/MyEngine/include/glm/vector_relational.hpp:
-
-E:/lib_c/assimp-master/build_mingw64/include/assimp/config.h:
-
-E:/lib_c/assimp-master/include/assimp/Compiler/pushpack1.h:
-
-E:/lib_c/assimp-master/include/assimp/Importer.hpp:
-
-E:/lib_c/assimp-master/include/assimp/aabb.h:
-
-E:/lib_c/assimp-master/include/assimp/anim.h:
-
-E:/lib_c/assimp-master/include/assimp/color4.inl:
-
-E:/lib_c/assimp-master/include/assimp/defs.h:
-
-E:/lib_c/assimp-master/include/assimp/matrix3x3.h:
-
-E:/lib_c/assimp-master/include/assimp/matrix3x3.inl:
-
-E:/lib_c/assimp-master/include/assimp/matrix4x4.h:
-
-E:/lib_c/assimp-master/include/assimp/matrix4x4.inl:
-
-E:/lib_c/assimp-master/include/assimp/mesh.h:
-
-E:/lib_c/assimp-master/include/assimp/metadata.h:
-
-E:/lib_c/assimp-master/include/assimp/postprocess.h:
-
-E:/lib_c/assimp-master/include/assimp/quaternion.h:
-
-E:/lib_c/assimp-master/include/assimp/scene.h:
-
-E:/lib_c/assimp-master/include/assimp/types.h:
-
-E:/lib_c/assimp-master/include/assimp/vector2.h:
-
-E:/lib_c/assimp-master/include/assimp/vector2.inl:
-
-E:/lib_c/assimp-master/include/assimp/vector3.inl:
 
 E:/lib_c/glfw-3.4/include/GLFW/glfw3.h:
 
