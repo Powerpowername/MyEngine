@@ -277,23 +277,23 @@ int main(int argc, char* argv[])
 		// // 重置选中状态
 		// if (!camein) selected = nullptr;
 
-		// /* 游戏逻辑更新 */
-		// #pragma region MainLoop_Update
-		// if (glfwGetTime() - lastTime >= Setting::deltaTime)
-		// {
-		// 	Input::GetInput();  // 更新输入状态
+		/* 游戏逻辑更新 */
+		#pragma region MainLoop_Update
+		if (glfwGetTime() - lastTime >= Setting::deltaTime)
+		{
+			Input::GetInput();  // 更新输入状态
 			
-		// 	// 遍历更新所有组件
-		// 	for (auto go : *Setting::gameObjects)
-		// 		if (go->enable)
-		// 			for (auto mb : *(go->scripts))
-		// 				if (mb->enable)
-		// 					mb->Update(); // 常规更新逻辑
+			// 遍历更新所有组件
+			for (auto go : *Setting::gameObjects)
+				if (go->enable)
+					for (auto mb : *(go->scripts))
+						if (mb->enable)
+							mb->Update(); // 常规更新逻辑
 			
-		// 	Input::ClearInputEveryFrame(); // 清空本帧输入
-		// 	lastTime = glfwGetTime();      // 更新时间戳
-		// }
-		// #pragma endregion
+			Input::ClearInputEveryFrame(); // 清空本帧输入
+			lastTime = glfwGetTime();      // 更新时间戳
+		}
+		#pragma endregion
 
 		/* ImGui渲染 */
 		#pragma region RenderImGui
