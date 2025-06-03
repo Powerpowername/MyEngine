@@ -256,11 +256,64 @@ public:
 
 #pragma endregion
 
+#pragma region LightDirectional:AbstractLight
+class LightDirectional : public AbstractLight
+{
+public:
+	string Sign() const override;
+	LightDirectional(GameObject* Parent);
+	virtual ~LightDirectional() override;
+	// void Start() override;
+
+	// LightType Type() const override;
+
+	
+	// friend void to_json(json& j, const LightDirectional& l);
+	// friend void from_json(const json& j, LightDirectional& l);
+};
+
+#pragma endregion
+
+#pragma region LightPoint:AbstractLight
+
+class LightPoint :public AbstractLight
+{
+public:
+	float constant = 1.0f;
+	float linear = 5.0f;
+	float quadratic = 0.32f;
+
+	LightPoint(GameObject* Parent);
+	virtual ~LightPoint() override;
+
+	string Sign() const override;
+	void SetShader(Shader* shader,int index) override;
+	void OnGUI()override;
+	void FromJson(const json& j)override;
+	void ToJson(json& j)const override;
+	// LightType Type()const override;
+};
+
+#pragma endregion 
+class LightSpot :public LightPoint
+{
+public:
+	float cosPhyInner = 0.9f;//内圈
+	float cosPhyOuter = 0.85f;//外圈
+
+	void OnGUI()override;
+	LightSpot(GameObject* Parent);
+	virtual ~LightSpot()override;
+	void FromJson(const json& j)override;
+	void ToJson(json& j)const override;
+	string Sign()const override;
+	void SetShader(Shader* shader, int index)override;	 
+};
+
+#pragma region 
 
 
-
-
-
+#pragma endregion class LightSpot :public LightPoint
 
 
 
@@ -370,4 +423,8 @@ namespace nlohmann
 		}
 	};
 }
+#pragma endregion
+
+#pragma region 测试
+void RenderBox(Shader shader,unsigned int quadVAO,unsigned int quadVBO);
 #pragma endregion

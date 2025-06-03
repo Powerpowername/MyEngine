@@ -1,34 +1,35 @@
 #version 330 core
-layout(location = 0) in vec3 aPos;
-layout(location = 1) in vec3 aNormal;
-layout(location = 2) in vec2 aTexcood;
-layout(location = 3) in vec3 tangent;
-layout(location = 4) in vec3 bitangent;//副切线，用来计算TBN矩阵，法线贴图使用时会需要他
+layout (location = 0) in vec3 position;
+layout (location = 1) in vec3 normal;
+layout (location = 2) in vec2 texCoords;
+layout (location = 3) in vec3 tangent;
+layout (location = 4) in vec3 bitangent;
 
-uniform mat4 uniform mat4 modelMat; 
-uniform mat4 viewMat;
-uniform mat4 projMat;
+out VS_OUT {
+    vec2 TexCoords;
+    // vec3 LightPos;//不需要在这里知道
+    vec3 ViewPos;
+    vec3 FragPos;
+    mat3 TBN;
+} vs_out;
 
+uniform mat4 projection;
+uniform mat4 view;
+uniform mat4 model;
 
-/*
-顶点着色器一般输出
-顶点数据，纹理坐标
-*/
+uniform vec3 viewPos;
 
-//out vec4 vertexColor;
-out vec2 TexCoord;
-out vec3 fragPos;//世界坐标系下模型的坐标，方便后续光照计算的
-out vec3 Normal;
-out mat3 tbn;
-
-void mian()
+void main()
 {
-	gl_Position = projMat*viewMat*modelMat*vec4(aPos,1.0f);//*transform;
-    fragPos = (modelMat*vec4(aPos.xyz,1.0f)).xyz;
+    gl_Position = projection * view * model * vec4(position,1.0f);
 
-    Normal=mat3(transpose(inverse(modelMat)))*aNormal;//防止法向量变形
-    vec3 T = normalize(vec3(modelMat * vec4(tangent,   0.0)));
-	vec3 B = normalize(vec3(modelMat * vec4(bitangent, 0.0)));
-	vec3 N = normalize(vec3(modelMat * vec4(aNormal,    0.0)));
-    tbn = mat3(T, B, N);
+    vs_out.FragPos = vec3(model * vec4(position, 1.0));   
+    vs_out.TexCoords = texCoords;
+    mat3 normalMatrix = transpose(inverse(mat3(model)));//避免向量在转换到世界坐标系时变形
+    vec3 T = normalize(normalMatrix * tangent);
+    vec3 B = normalize(normalMatrix * bitangent);
+    vec3 N = normalize(normalMatrix * normal);    
+    
+    vs_out.TBN = transpose(mat3(T, B, N));  
+    vs_out.ViewPos = viewPos;
 }

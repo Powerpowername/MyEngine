@@ -40,7 +40,7 @@ int main(int argc, char* argv[])
 	// 配置OpenGL上下文版本（3.0）
 	const char* glsl_version = "#version 130";
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	
 	// 创建窗口对象（尺寸来自Setting::windowSize）
 	Setting::window = glfwCreateWindow(Setting::pWindowSize.x, Setting::pWindowSize.y, "nothing here", NULL, NULL);
@@ -93,6 +93,7 @@ int main(int argc, char* argv[])
 	ScreenshotMaker sm;
 	// 当前选中游戏对象指针（用于编辑器交互）
 	static GameObject* selected = nullptr;
+	Shader shader("shader_","E:/GitStore/MyEngine/MyEngine/shaderSource/box/box");
 
 	/* 主游戏循环 */
 	while (!glfwWindowShouldClose(Setting::window))
@@ -120,6 +121,11 @@ int main(int argc, char* argv[])
 #pragma endregion
 		ImGui::Begin("MyEngine");
 #pragma region Camera
+		if (ImGui::BeginMenu("GameObject"))
+		{
+
+			ImGui::EndMenu();
+		}
 
 		// ImGui::BeginMenu("GameObject");
 		// {
@@ -139,6 +145,11 @@ int main(int argc, char* argv[])
 		}
 #pragma endregion
 		ImGui::End();
+		GLuint quadVAO;
+		GLuint quadVBO;
+		if(Setting::MainCamera != nullptr)
+			shader.setVec3("viewPos",Setting::MainCamera->transform()->position);
+		RenderBox(shader,quadVAO,quadVBO);
 		// std::cout<<"sk"<<std::endl;
 		// /* 多相机渲染逻辑 */
 		// #pragma region MultCameraRender
@@ -277,8 +288,8 @@ int main(int argc, char* argv[])
 		// // 重置选中状态
 		// if (!camein) selected = nullptr;
 
-		/* 游戏逻辑更新 */
-		#pragma region MainLoop_Update
+		// /* 游戏逻辑更新 */
+		// #pragma region MainLoop_Update
 		if (glfwGetTime() - lastTime >= Setting::deltaTime)
 		{
 			Input::GetInput();  // 更新输入状态
@@ -293,7 +304,7 @@ int main(int argc, char* argv[])
 			Input::ClearInputEveryFrame(); // 清空本帧输入
 			lastTime = glfwGetTime();      // 更新时间戳
 		}
-		#pragma endregion
+		// #pragma endregion
 
 		/* ImGui渲染 */
 		#pragma region RenderImGui
