@@ -279,7 +279,9 @@ CMakeFiles/app.dir/E_/lib_c/glad/src/glad.c.obj: E:/lib_c/glad/src/glad.c \
   E:/lib_c/glad/include/KHR/khrplatform.h \
   E:/lib_c/glad/include/glad/glad.h
 
-CMakeFiles/app.dir/source/Auxiliary.cpp.obj: E:/GitStore/MyEngine/MyEngine/source/Auxiliary.cpp \
+CMakeFiles/app.dir/source/Auxiliary.cpp.obj: E:/GitStore/MyEngine/MyEngine/source/Auxiliary.cpp
+
+CMakeFiles/app.dir/source/base.cpp.obj: E:/GitStore/MyEngine/MyEngine/source/base.cpp \
   E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/algorithm \
   E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/array \
   E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/backward/auto_ptr.h \
@@ -517,7 +519,7 @@ CMakeFiles/app.dir/source/Auxiliary.cpp.obj: E:/GitStore/MyEngine/MyEngine/sourc
   E:/Compiler/mingw64/x86_64-w64-mingw32/include/vadefs.h \
   E:/Compiler/mingw64/x86_64-w64-mingw32/include/wchar.h \
   E:/Compiler/mingw64/x86_64-w64-mingw32/include/wctype.h \
-  E:/GitStore/MyEngine/MyEngine/include/Auxiliary.h \
+  E:/GitStore/MyEngine/MyEngine/include/base.h \
   E:/GitStore/MyEngine/MyEngine/include/glm/common.hpp \
   E:/GitStore/MyEngine/MyEngine/include/glm/detail/_fixes.hpp \
   E:/GitStore/MyEngine/MyEngine/include/glm/detail/_vectorize.hpp \
@@ -2345,8 +2347,8 @@ CMakeFiles/app.dir/source/main.cpp.obj: E:/GitStore/MyEngine/MyEngine/source/mai
   E:/Compiler/mingw64/x86_64-w64-mingw32/include/vadefs.h \
   E:/Compiler/mingw64/x86_64-w64-mingw32/include/wchar.h \
   E:/Compiler/mingw64/x86_64-w64-mingw32/include/wctype.h \
-  E:/GitStore/MyEngine/MyEngine/include/Auxiliary.h \
   E:/GitStore/MyEngine/MyEngine/include/Save.h \
+  E:/GitStore/MyEngine/MyEngine/include/base.h \
   E:/GitStore/MyEngine/MyEngine/include/glm/common.hpp \
   E:/GitStore/MyEngine/MyEngine/include/glm/detail/_fixes.hpp \
   E:/GitStore/MyEngine/MyEngine/include/glm/detail/_vectorize.hpp \
@@ -2741,6 +2743,8 @@ E:/Compiler/mingw64/x86_64-w64-mingw32/include/fileapi.h:
 E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/f16cintrin.h:
 
 E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/bmi2intrin.h:
+
+E:/GitStore/MyEngine/MyEngine/source/base.cpp:
 
 E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/ia32intrin.h:
 
@@ -3168,6 +3172,8 @@ E:/Compiler/mingw64/x86_64-w64-mingw32/include/psdk_inc/_wsa_errnos.h:
 
 E:/Compiler/mingw64/x86_64-w64-mingw32/include/psdk_inc/_wsadata.h:
 
+E:/GitStore/MyEngine/MyEngine/include/base.h:
+
 E:/Compiler/mingw64/x86_64-w64-mingw32/include/psdk_inc/_xmitfile.h:
 
 E:/Compiler/mingw64/x86_64-w64-mingw32/include/psdk_inc/intrin-impl.h:
@@ -3496,9 +3502,9 @@ E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/stl_list.
 
 E:/GitStore/MyEngine/MyEngine/include/glm/detail/type_vec3.inl:
 
-E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/stl_map.h:
-
 E:/GitStore/MyEngine/MyEngine/include/glm/detail/type_mat3x3.hpp:
+
+E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/stl_map.h:
 
 E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/stl_tempbuf.h:
 
@@ -3629,8 +3635,6 @@ E:/Compiler/mingw64/x86_64-w64-mingw32/include/float.h:
 E:/Compiler/mingw64/x86_64-w64-mingw32/include/sec_api/sys/timeb_s.h:
 
 E:/Compiler/mingw64/x86_64-w64-mingw32/include/wchar.h:
-
-E:/GitStore/MyEngine/MyEngine/include/Auxiliary.h:
 
 E:/GitStore/MyEngine/MyEngine/include/glm/common.hpp:
 

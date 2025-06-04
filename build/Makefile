@@ -176,6 +176,30 @@ source/Auxiliary.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\app.dir\build.make CMakeFiles/app.dir/source/Auxiliary.cpp.s
 .PHONY : source/Auxiliary.cpp.s
 
+source/base.obj: source/base.cpp.obj
+.PHONY : source/base.obj
+
+# target to build an object file
+source/base.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\app.dir\build.make CMakeFiles/app.dir/source/base.cpp.obj
+.PHONY : source/base.cpp.obj
+
+source/base.i: source/base.cpp.i
+.PHONY : source/base.i
+
+# target to preprocess a source file
+source/base.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\app.dir\build.make CMakeFiles/app.dir/source/base.cpp.i
+.PHONY : source/base.cpp.i
+
+source/base.s: source/base.cpp.s
+.PHONY : source/base.s
+
+# target to generate assembly for a file
+source/base.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\app.dir\build.make CMakeFiles/app.dir/source/base.cpp.s
+.PHONY : source/base.cpp.s
+
 source/imgui.obj: source/imgui.cpp.obj
 .PHONY : source/imgui.obj
 
@@ -359,6 +383,9 @@ help:
 	@echo ... source/Auxiliary.obj
 	@echo ... source/Auxiliary.i
 	@echo ... source/Auxiliary.s
+	@echo ... source/base.obj
+	@echo ... source/base.i
+	@echo ... source/base.s
 	@echo ... source/imgui.obj
 	@echo ... source/imgui.i
 	@echo ... source/imgui.s

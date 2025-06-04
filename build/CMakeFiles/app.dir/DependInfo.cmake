@@ -10,6 +10,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "E:/lib_c/glad/src/glad.c" "CMakeFiles/app.dir/E_/lib_c/glad/src/glad.c.obj" "gcc" "CMakeFiles/app.dir/E_/lib_c/glad/src/glad.c.obj.d"
   "E:/GitStore/MyEngine/MyEngine/source/Auxiliary.cpp" "CMakeFiles/app.dir/source/Auxiliary.cpp.obj" "gcc" "CMakeFiles/app.dir/source/Auxiliary.cpp.obj.d"
+  "E:/GitStore/MyEngine/MyEngine/source/base.cpp" "CMakeFiles/app.dir/source/base.cpp.obj" "gcc" "CMakeFiles/app.dir/source/base.cpp.obj.d"
   "E:/GitStore/MyEngine/MyEngine/source/imgui.cpp" "CMakeFiles/app.dir/source/imgui.cpp.obj" "gcc" "CMakeFiles/app.dir/source/imgui.cpp.obj.d"
   "E:/GitStore/MyEngine/MyEngine/source/imgui_draw.cpp" "CMakeFiles/app.dir/source/imgui_draw.cpp.obj" "gcc" "CMakeFiles/app.dir/source/imgui_draw.cpp.obj.d"
   "E:/GitStore/MyEngine/MyEngine/source/imgui_impl_glfw.cpp" "CMakeFiles/app.dir/source/imgui_impl_glfw.cpp.obj" "gcc" "CMakeFiles/app.dir/source/imgui_impl_glfw.cpp.obj.d"

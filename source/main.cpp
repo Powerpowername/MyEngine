@@ -1,4 +1,4 @@
-#include"Auxiliary.h"
+#include"base.h"
 #include"Save.h"
 
 /* 函数前置声明 */
@@ -33,7 +33,6 @@ int main(int argc, char* argv[])
 	// 设置错误回调函数
 	glfwSetErrorCallback(glfw_error_callback);
 
-	// 初始化GLFW库
 	if (!glfwInit())
 		return 1;
 	
@@ -92,13 +91,20 @@ int main(int argc, char* argv[])
 	// 截图工具实例化
 	ScreenshotMaker sm;
 	// 当前选中游戏对象指针（用于编辑器交互）
-	static GameObject* selected = nullptr;
+	static Object* selected = nullptr;
 	Shader shader("shader_","E:/GitStore/MyEngine/MyEngine/shaderSource/box/box");
+	
+	//放入主摄像机
+	std::list<Object*> cameras;
+	Camera MainCamera("MainCamera");
+	cameras.push_back(&MainCamera);
 
-	/* 主游戏循环 */
+	Setting::GloabContorl.push_back(cameras);
+	Setting::MainCamera = static_cast<Camera*>(*(cameras.begin()));//此处(*(cameras.begin()))要加括号，因为static_cast的优先级高于*
+
 	while (!glfwWindowShouldClose(Setting::window))
 	{
-		// 用于计算帧间隔的时间戳
+
 		static float lastTime = 0;
 
 		/* 帧开始准备 */
@@ -129,26 +135,30 @@ int main(int argc, char* argv[])
 
 		// ImGui::BeginMenu("GameObject");
 		// {
-			if(ImGui::Button("addCamera"))
+			if(ImGui::Button("camera"))
 			{
-				new GameObject("NewCamera", GameObject::GameObject_Camera);
+				// new GameObject("NewCamera", GameObject::GameObject_Camera);
 			}
+				Setting::MainCamera->OnGUI();
+
 		// }
 		// ImGui::EndMenu();
-		for(auto cameraTemp : Setting::gameObjects[GameObject::GameObject_Camera])
-		{
-			for(auto cameraTempScript : *(cameraTemp->scripts))
-			{
-				cameraTempScript->OnGUI();
-				cameraTempScript->Update();
-			}
-		}
+		// for(auto cameraTemp : Setting::gameObjects[GameObject::GameObject_Camera])
+		// {
+		// 	for(auto cameraTempScript : *(cameraTemp->scripts))
+		// 	{
+		// 		cameraTempScript->OnGUI();
+		// 		cameraTempScript->Update();
+		// 	}
+		// }
+		
 #pragma endregion
 		ImGui::End();
 		GLuint quadVAO;
 		GLuint quadVBO;
 		if(Setting::MainCamera != nullptr)
-			shader.setVec3("viewPos",Setting::MainCamera->transform()->position);
+			shader.setVec3("viewPos",Setting::MainCamera->transform->position);
+		shader.use();
 		RenderBox(shader,quadVAO,quadVBO);
 		// std::cout<<"sk"<<std::endl;
 		// /* 多相机渲染逻辑 */
@@ -295,12 +305,12 @@ int main(int argc, char* argv[])
 			Input::GetInput();  // 更新输入状态
 			
 			// 遍历更新所有组件
-			for (auto go : *Setting::gameObjects)
-				if (go->enable)
-					for (auto mb : *(go->scripts))
-						if (mb->enable)
-							mb->Update(); // 常规更新逻辑
-			
+			// for (auto go : *Setting::gameObjects)
+			// 	if (go->enable)
+			// 		for (auto mb : *(go->scripts))
+			// 			if (mb->enable)
+			// 				mb->Update(); // 常规更新逻辑
+			Setting::MainCamera->Update();
 			Input::ClearInputEveryFrame(); // 清空本帧输入
 			lastTime = glfwGetTime();      // 更新时间戳
 		}
@@ -400,7 +410,7 @@ void OnSize(GLFWwindow* window, int width, int height)
 	Setting::pWindowSize = vec2(width, height); // 更新窗口尺寸
 	
 	// 重新计算投影矩阵（60度FOV，0.1-100可视范围）
-	Setting::projMat = glm::perspective(radians(60.0f), (float)width/height, 0.1f, 100.0f);
+	// Setting::projMat = glm::perspective(radians(60.0f), (float)width/height, 0.1f, 100.0f);
 	glViewport(0, 0, width, height); // 重置视口
 }
 #pragma endregion
