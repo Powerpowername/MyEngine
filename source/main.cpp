@@ -1,29 +1,12 @@
 #include"base.h"
 #include"Save.h"
-
-/* 函数前置声明 */
-#pragma region 函数声明
-// 加载立方体贴图（6个面的纹理路径）
-unsigned int loadCubemap(vector<std::string> faces);
-// 键盘输入处理回调
+static void glfw_error_callback(int error, const char* description);
 void KeyBoardCallBack(GLFWwindow* window);
-// 鼠标移动处理回调
 void MouseCallBack(GLFWwindow* window, double xPos, double yPos);
-// 窗口尺寸变化回调
-void OnSize(GLFWwindow* window, int width, int height);
-// GLFW错误回调（打印错误信息）
-static void glfw_error_callback(int error, const char* description)
-{
-	fprintf(stderr, "Glfw Error %d: %s\n", error, description);
-}
-// 从文件加载2D纹理
-unsigned int TextureFromFile(string filename);
-// 带目录路径的纹理加载（支持gamma校正）
-unsigned int TextureFromFile(const char *path, const string &directory, bool gamma);
-// 核心纹理加载方法（指定内部格式和纹理单元）
-unsigned int LoadIamgeToGPU(const char* filename, GLint internalFormat, GLenum format, int textureSlot);
-#pragma endregion
-
+void framebuffer_size_callback(GLFWwindow* window, int width, int height);
+// void renderQuad();
+static GLuint quadVAO = 0;
+static GLuint quadVBO = 0;
 int main(int argc, char* argv[])
 {
 	Setting::workDir = argv[0];  // 获取可执行文件路径作为工作目录
@@ -75,9 +58,11 @@ int main(int argc, char* argv[])
 	// 设置鼠标移动回调
 	// glfwSetCursorPosCallback(window, MouseCallBack);
 	// 设置窗口尺寸变化回调
-	glfwSetFramebufferSizeCallback(Setting::window, OnSize);
+	glfwSetFramebufferSizeCallback(Setting::window, framebuffer_size_callback);
 	// 初始视口设置（左下角原点，全窗口尺寸）
 	glViewport(0, 0, Setting::pWindowSize.x, Setting::pWindowSize.y);
+
+
 	// 启用深度测试（3D空间遮挡关系）
 	glEnable(GL_DEPTH_TEST);
 	#pragma endregion
@@ -93,10 +78,25 @@ int main(int argc, char* argv[])
 	// 当前选中游戏对象指针（用于编辑器交互）
 	static Object* selected = nullptr;
 	Shader shader("shader_","E:/GitStore/MyEngine/MyEngine/shaderSource/box/box");
-	
+
+	//配置shader的图像资源
+	unsigned int diffuseMap = loadTexture("E:\\LearnOpenGL-master\\resources\\textures\\bricks2.jpg",false);
+    unsigned int normalMap = loadTexture("E:\\LearnOpenGL-master\\resources\\textures\\bricks2_normal.jpg",false);
+	shader.use();
+	shader.setInt("material.texture_diffuse0",0);
+	shader.setInt("material.texture_normal0",1);
+	glm::vec3 lightPos(0.0f,1.0f,0.3f);
+
+	//配置光源数据
+	shader.setBool("lightDirectional[0].flag",1);
+	shader.setVec3("lightDirectional[0].color",vec3(0,0,0));
+	shader.setVec3("lightDirectional[0].pos",lightPos);
+	shader.setVec3("lightDirectional[0].dirToLight",vec3(0,0,-1));
+	shader.setFloat("material.shininess", 32.0f);
 	//放入主摄像机
 	std::list<Object*> cameras;
 	Camera MainCamera("MainCamera");
+	MainCamera.viewPort = vec4(0,0,Setting::pWindowSize);
 	cameras.push_back(&MainCamera);
 
 	Setting::GloabContorl.push_back(cameras);
@@ -106,9 +106,6 @@ int main(int argc, char* argv[])
 	{
 
 		static float lastTime = 0;
-
-		/* 帧开始准备 */
-#pragma region Others
 		// 清屏颜色设置（ImGui可调参数）
 		static ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 		glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
@@ -116,17 +113,17 @@ int main(int argc, char* argv[])
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		// 处理键盘输入状态
 		KeyBoardCallBack(Setting::window);
-#pragma endregion
+
 
 		/* ImGui帧初始化 */
-#pragma region Init_ImGui
+
 		glfwPollEvents();                     // 处理窗口事件
 		ImGui_ImplOpenGL3_NewFrame();         // 开始新ImGui帧
 		ImGui_ImplGlfw_NewFrame();            // 处理ImGui输入
 		ImGui::NewFrame();                    // 创建新帧
-#pragma endregion
+
 		ImGui::Begin("MyEngine");
-#pragma region Camera
+
 		if (ImGui::BeginMenu("GameObject"))
 		{
 
@@ -152,151 +149,27 @@ int main(int argc, char* argv[])
 		// 	}
 		// }
 		
-#pragma endregion
+
 		ImGui::End();
-		GLuint quadVAO;
-		GLuint quadVBO;
-		if(Setting::MainCamera != nullptr)
-			shader.setVec3("viewPos",Setting::MainCamera->transform->position);
+
 		shader.use();
+
+		if(Setting::MainCamera != nullptr)
+		{
+			shader.setVec3("viewPos",Setting::MainCamera->transform->position);
+			shader.setMat4("view",Setting::MainCamera->viewMat);
+			shader.setMat4("projection",Setting::MainCamera->projMat);
+		}
+		glm::mat4 model = glm::mat4(1);
+		shader.setMat4("model",model);
+
+		glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, diffuseMap);
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_2D, normalMap);
 		RenderBox(shader,quadVAO,quadVBO);
-		// std::cout<<"sk"<<std::endl;
-		// /* 多相机渲染逻辑 */
-		// #pragma region MultCameraRender
-		// vector<Camera*> cameras;
-		// // 遍历所有游戏对象收集有效相机
-		// for (auto go : *Setting::gameObjects)
-		// 	if (go->enable)
-		// 		for (auto mb : *(go->scripts))
-		// 			if (typeid(*mb) == typeid(Camera) && mb->enable)
-		// 				cameras.push_back((Camera*)mb);
 
-		// // 每个相机单独渲染场景
-		// for (auto camera : cameras)
-		// {
-		// 	camera->Update();  // 更新相机矩阵
 
-		// 	/* 组件实际更新（在相机更新后） */
-		// 	#pragma region MainLoop_RealUpdate
-		// 	for (auto go : *Setting::gameObjects)
-		// 		if (go->enable)
-		// 			for (auto mb : *(go->scripts))
-		// 				if (mb->enable)
-		// 					mb->RealUpdate(); // 执行需要相机参数的更新
-		// 	#pragma endregion
-		// }
-		// #pragma endregion
-
-		// /* ImGui界面绘制 */
-		// #pragma region DrawImGui
-		// ImGui::Begin("Inspector");  // 创建属性面板窗口
-
-		// /* 顶部菜单栏 */
-		// #pragma region Menu
-		// if (ImGui::BeginMenu("GameObject"))
-		// {
-		// 	// 删除选中对象逻辑
-		// 	if (ImGui::MenuItem("DeleteGameObject"))
-		// 		if (selected)
-		// 		{
-		// 			Setting::gameObjects->remove(selected);
-		// 			delete selected;
-		// 			selected = nullptr;
-		// 		}
-		// 	// 创建各类游戏对象
-		// 	if (ImGui::MenuItem("CreateEmpty")) 
-		// 		new GameObject("NewEmpty", GameObject::Empty);
-			
-		// 	if (ImGui::MenuItem("CreateCamera", NULL, true))
-		// 		new GameObject("NewCamera", GameObject::Cameras);
-			
-		// 	if (ImGui::MenuItem("CreateSkybox", NULL, true))
-		// 		new GameObject("NewSkyBox", GameObject::Box);
-			
-		// 	// 光源创建子菜单
-		// 	if (ImGui::BeginMenu("Light")) {
-		// 		if (ImGui::MenuItem("CreateDirectional")) 
-		// 			new GameObject("NewDirectionalLight", GameObject::Directional);
-		// 		if (ImGui::MenuItem("CreatePoint")) 
-		// 			new GameObject("NewPointLight", GameObject::Point);
-		// 		if (ImGui::MenuItem("CreateSpot")) 
-		// 			new GameObject("NewSpotLight", GameObject::Spot);
-		// 		ImGui::EndMenu();
-		// 	}
-			
-		// 	// 模型创建子菜单
-		// 	if (ImGui::BeginMenu("Model")) {
-		// 		if (ImGui::MenuItem("CreatePerson")) 
-		// 			new GameObject("NewPerson", GameObject::Model);
-		// 		if (ImGui::MenuItem("CreateHouse")) 
-		// 			new GameObject("NewHouse", "东方场景01.obj", "standrand");
-		// 		if (ImGui::MenuItem("CreateRobot")) 
-		// 			new GameObject("NewRobot", "source\\Robot.obj", "standrand");
-		// 		ImGui::EndMenu();
-		// 	}
-		// 	ImGui::EndMenu();
-		// }
-
-		// // 组件添加菜单
-		// if (ImGui::BeginMenu("Component")) {
-		// 	if (ImGui::MenuItem("Camera"))
-		// 		if (selected) selected->AddComponentStart<Camera>();
-			
-		// 	// 光源组件子菜单
-		// 	if (ImGui::BeginMenu("Light")) {
-		// 		if (ImGui::MenuItem("DirectionalLight")) 
-		// 			if (selected) selected->AddComponentStart<LightDirectional>();
-		// 		if (ImGui::MenuItem("PointLight")) 
-		// 			if (selected) selected->AddComponentStart<LightPoint>();
-		// 		if (ImGui::MenuItem("SpotLight")) 
-		// 			if (selected) selected->AddComponentStart<LightSpot>();
-		// 		ImGui::EndMenu();
-		// 	}
-			
-		// 	if (ImGui::MenuItem("Rotate"))
-		// 		if (selected) selected->AddComponentStart<Rotate>();
-			
-		// 	ImGui::EndMenu();
-		// }
-		// #pragma endregion
-
-		// /* 折叠面板区域 */
-		// #pragma region 折叠窗
-		// // 全局设置面板
-		// if (ImGui::CollapsingHeader("Global")) {
-		// 	ImGui::ColorEdit4("ClearColor", (float*)&clear_color); // 颜色选择控件
-		// }
-
-		// // 游戏对象列表
-		// #pragma region MainLoop_OnGUI
-		// static bool camein = false;
-		// if (ImGui::CollapsingHeader("GameObjects")) {
-		// 	for (auto go : *Setting::gameObjects) {
-		// 		// 生成带ID的树节点
-		// 		if (ImGui::TreeNode((go->name + std::to_string(go->id)).c_str())) {
-		// 			camein = true;
-		// 			selected = go;       // 设置当前选中对象
-		// 			go->OnGUI();         // 显示对象属性
-					
-		// 			// 遍历组件显示属性
-		// 			for (auto mb : *(go->scripts)) {
-		// 				if (ImGui::CollapsingHeader(mb->name.c_str())) {
-		// 					mb->OnGUI(); // 显示组件属性
-		// 				}
-		// 			}
-		// 			ImGui::TreePop();    // 关闭树节点
-		// 			ImGui::Spacing();     // 添加间距
-		// 		}
-		// 	}
-		// }
-		// #pragma endregion	
-		
-		// sm.Draw();     // 绘制截图工具界面
-		// ImGui::End();  // 结束属性面板
-		// #pragma endregion
-
-		// // 重置选中状态
-		// if (!camein) selected = nullptr;
 
 		// /* 游戏逻辑更新 */
 		// #pragma region MainLoop_Update
@@ -341,6 +214,12 @@ int main(int argc, char* argv[])
 
 /* 回调函数实现 */
 #pragma region CallBack
+// GLFW错误回调（打印错误信息）
+static void glfw_error_callback(int error, const char* description)
+{
+	fprintf(stderr, "Glfw Error %d: %s\n", error, description);
+}
+
 // 键盘输入处理
 void KeyBoardCallBack(GLFWwindow* window)
 {
@@ -352,7 +231,11 @@ void KeyBoardCallBack(GLFWwindow* window)
 		glfwSetWindowShouldClose(window, true); // ESC退出
 	
 	// WASDQE按键状态记录
-	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) Input::Key[W_] = true;
+	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+	{
+		std::cout<<"1";
+		Input::Key[W_] = true;
+	}
 	else if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) Input::Key[S_] = true;
 	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) Input::Key[A_] = true;
 	else if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) Input::Key[D_] = true;
@@ -405,7 +288,7 @@ void MouseCallBack(GLFWwindow* window, double xPos, double yPos)
 }
 
 // 窗口尺寸变化处理
-void OnSize(GLFWwindow* window, int width, int height)
+void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
 	Setting::pWindowSize = vec2(width, height); // 更新窗口尺寸
 	
@@ -417,142 +300,7 @@ void OnSize(GLFWwindow* window, int width, int height)
 
 /* 工具函数实现 */
 #pragma region Functions
-// 从文件加载2D纹理
-unsigned int TextureFromFile(string filename)
-{
-	unsigned int textureID;
-	glGenTextures(1, &textureID); // 生成纹理对象
 
-	int width, height, nrComponents;
-	unsigned char *data = stbi_load(filename.c_str(), &width, &height, &nrComponents, 0);
-	if (data)
-	{
-		// 确定OpenGL格式
-		GLenum format;
-		if (nrComponents == 1) format = GL_RED;
-		else if (nrComponents == 3) format = GL_RGB;
-		else if (nrComponents == 4) format = GL_RGBA;
 
-		// 绑定并设置纹理
-		glBindTexture(GL_TEXTURE_2D, textureID);
-		glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
-		glGenerateMipmap(GL_TEXTURE_2D);
 
-		// 设置纹理参数
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-		stbi_image_free(data);
-	}
-	else
-	{
-		std::cout << "Texture failed to load " << std::endl;
-		stbi_image_free(data);
-	}
-	return textureID;
-}
-
-// 带目录路径的纹理加载
-unsigned int TextureFromFile(const char *path, const string &directory, bool gamma)
-{
-	string filename = directory + '/' + string(path); // 拼接完整路径
-	unsigned int textureID;
-	glGenTextures(1, &textureID); // 生成纹理对象
-
-	// 加载图像数据（与上一个函数逻辑类似）
-	int width, height, nrComponents;
-	unsigned char *data = stbi_load(filename.c_str(), &width, &height, &nrComponents, 0);
-	if (data)
-	{
-		// 确定格式并绑定纹理
-		GLenum format;
-		if (nrComponents == 1) format = GL_RED;
-		else if (nrComponents == 3) format = GL_RGB;
-		else if (nrComponents == 4) format = GL_RGBA;
-
-		glBindTexture(GL_TEXTURE_2D, textureID);
-		glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
-		glGenerateMipmap(GL_TEXTURE_2D);
-
-		// 设置相同的纹理参数
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-		stbi_image_free(data);
-	}
-	else
-	{
-		std::cout << "Failed to load texture at: " << path << std::endl;
-		stbi_image_free(data);
-	}
-	return textureID;
-}
-
-// 核心纹理加载方法（指定纹理单元）
-unsigned int LoadIamgeToGPU(const char* filename, GLint internalFormat, GLenum format, int textureSlot)
-{
-	unsigned int tex1;
-	glGenTextures(1, &tex1); // 生成纹理对象
-	
-	// 激活指定纹理单元
-	glActiveTexture(GL_TEXTURE0 + textureSlot);
-	glBindTexture(GL_TEXTURE_2D, tex1); // 绑定为2D纹理
-
-	stbi_set_flip_vertically_on_load(true); // 垂直翻转图像
-
-	int weight, height, nrVhannel;
-	unsigned char* data = stbi_load(filename, &weight, &height, &nrVhannel, 0);
-	if (data)
-	{
-		// 上传纹理数据
-		glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, weight, height, 0, format, GL_UNSIGNED_BYTE, data);
-		glGenerateMipmap(GL_TEXTURE_2D); // 生成mipmap
-	}
-	else
-	{
-		printf("no image"); // 加载失败提示
-	}
-	stbi_image_free(data); // 释放图像内存
-	return tex1;
-}
-
-// 加载立方体贴图（天空盒等）
-unsigned int loadCubemap(vector<std::string> faces)
-{
-	unsigned int textureID;
-	glGenTextures(1, &textureID); // 生成纹理对象
-	glBindTexture(GL_TEXTURE_CUBE_MAP, textureID); // 绑定为立方体贴图
-
-	int width, height, nrChannels;
-	// 遍历6个面
-	for (unsigned int i = 0; i < faces.size(); i++)
-	{
-		unsigned char *data = stbi_load(faces[i].c_str(), &width, &height, &nrChannels, 0);
-		if (data)
-		{
-			// 依次设置每个面的纹理数据
-			glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i,
-				0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data
-			);
-			stbi_image_free(data);
-		}
-		else
-		{
-			std::cout << "Failed to load cubemap texture: " << faces[i] << std::endl;
-			stbi_image_free(data);
-		}
-	}
-	// 设置立方体贴图参数
-	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
-
-	return textureID;
-}
 #pragma endregion

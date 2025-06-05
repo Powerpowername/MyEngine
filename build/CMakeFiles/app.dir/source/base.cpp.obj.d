@@ -402,4 +402,5 @@ CMakeFiles/app.dir/source/base.cpp.obj: \
  E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/sstream \
  E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/sstream.tcc \
  E:/GitStore/MyEngine/MyEngine/include/imgui_impl_glfw.h \
- E:/GitStore/MyEngine/MyEngine/include/imgui_impl_opengl3.h
+ E:/GitStore/MyEngine/MyEngine/include/imgui_impl_opengl3.h \
+ E:/GitStore/MyEngine/MyEngine/include/stb_image.h

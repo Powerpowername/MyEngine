@@ -33,12 +33,17 @@ void Transform::OnGUI()
 
 void Transform::Update()
 {
-	Forward.x = cos(Pitch)*sin(Yaw);
-	Forward.y = sin(Pitch);
-	Forward.z = cos(Pitch)*cos(Yaw);
+    float pitchRad = glm::radians(Pitch);
+    float yawRad = glm::radians(Yaw);
+
+    // 正确计算公式（OpenGL右手坐标系，看向-Z方向）
+    Forward.x = cos(yawRad) * cos(pitchRad);
+    Forward.y = sin(pitchRad);
+    Forward.z = sin(yawRad) * cos(pitchRad);
+    
     Forward = glm::normalize(Forward);
-	Right = normalize(cross(Forward, WorldUp));
-	Up = normalize(cross(Forward, Right));
+    Right = glm::normalize(glm::cross(Forward, WorldUp));
+    Up = glm::normalize(glm::cross(Right, Forward));
 }
 void Transform::setParent(Object* Parent)
 {
@@ -64,13 +69,16 @@ Camera::~Camera()
 void Camera::Update()
 {
     transform->Update();
-    glViewport(viewPort.x, viewPort.y, viewPort.z, viewPort.w);//渲染的窗口
+    // glViewport(viewPort.x, viewPort.y, viewPort.z, viewPort.w);//渲染的窗口
+	viewPort = vec4(0,0,Setting::pWindowSize.x,Setting::pWindowSize.y);
     viewMat = lookAt(transform->position, transform->position + transform->Forward, transform->Up);
 	projMat = glm::perspective(radians(Zoom), viewPort.z / viewPort.w, near, far);
 
     //键盘输出控制
     if(Input::GetKey(S_))
-        transform->Translate(-currentSpeed * transform->Forward*Setting::deltaTime);//Translate的参数是矢量
+       { transform->Translate(-currentSpeed * transform->Forward*Setting::deltaTime);//Translate的参数是矢量
+	   std::cout<<"2";
+	   }
 	if (Input::GetKey(W_))
 		transform->Translate(currentSpeed * transform->Forward*Setting::deltaTime);
 	if (Input::GetKey(A_))
@@ -359,7 +367,7 @@ void Shader::checkCompileErrors(GLuint shader, std::string type)
 }
 #pragma endregion
 
-void RenderBox(Shader shader,unsigned int quadVAO,unsigned int quadVBO)
+void RenderBox(Shader shader,unsigned int& quadVAO,unsigned int& quadVBO)
 {
 	if(quadVAO == 0)
 	{
@@ -448,3 +456,53 @@ void RenderBox(Shader shader,unsigned int quadVAO,unsigned int quadVBO)
     glDrawArrays(GL_TRIANGLES, 0, 6);
     glBindVertexArray(0);
 }
+
+
+
+
+
+
+#pragma region 窗口事件及图像处理模块
+/// @brief 
+/// @param path 图片路径
+/// @param reverse 判断是否延x轴翻转
+/// @return 纹理对象的ID
+unsigned int loadTexture(const char*  path,bool reverse)
+{
+    unsigned int textureID;
+    glGenTextures(1,&textureID);
+    int width,height,nrComponents;
+    stbi_set_flip_vertically_on_load(reverse); 
+    unsigned char* data = stbi_load(path,&width,&height,&nrComponents,0);
+    if(data)
+    {
+        GLenum format;
+        if(nrComponents == 1)
+            format = GL_RED;
+        else if(nrComponents == 3)
+            format = GL_RGB;
+        else if(nrComponents == 4)
+            format = GL_RGBA;
+        glBindTexture(GL_TEXTURE_2D,textureID);
+        glTexImage2D(GL_TEXTURE_2D,0,format,width,height,0,format,GL_UNSIGNED_BYTE,data);
+        glGenerateMipmap(GL_TEXTURE_2D);//生成多级渐近纹理
+
+        glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        stbi_image_free(data);
+    }
+    else
+    {
+        std::cout << "Texture failed to load at path: " << path << std::endl;
+        stbi_image_free(data);
+    }
+
+    //此处可以看出纹理对象开辟的内存（glGenTextures）实在堆区开辟的，这个id是在栈区的对象，被return之后就会被销毁，但是这块是传值出去的，所以不要紧
+    return textureID;
+}
+
+
+
+#pragma endregion

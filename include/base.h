@@ -35,6 +35,7 @@
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
+#include <stb_image.h>
 using glm::vec2;using glm::vec3;using glm::vec4;using glm::mat3;using glm::mat4;
 using glm::radians;
 using std::vector;
@@ -93,7 +94,7 @@ public:
 class Camera : public Object
 {
 public:
-    vec4 viewPort;//摄像机视口，渲染到窗口的区域
+    vec4 viewPort = vec4(0,0,800,600);//摄像机视口，渲染到窗口的区域
     float Zoom = 45.0f;//摄像机的视口
     float near = 0.1f;//近平面
     float far = 100.0f;//远平面
@@ -190,8 +191,12 @@ private:
 #pragma endreigon
 
 #pragma region 测试
-void RenderBox(Shader shader,unsigned int quadVAO,unsigned int quadVBO);
+void RenderBox(Shader shader,unsigned int& quadVAO,unsigned int& quadVBO);
 
 #pragma endregion
 
 
+#pragma region 窗口事件及图像处理模块
+unsigned int loadTexture(const char*  path,bool reverse);
+
+#pragma endregion

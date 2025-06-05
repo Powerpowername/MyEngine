@@ -30,6 +30,6 @@ void main()
     vec3 B = normalize(normalMatrix * bitangent);
     vec3 N = normalize(normalMatrix * normal);    
     
-    vs_out.TBN = transpose(mat3(T, B, N));  
+    vs_out.TBN = mat3(T, B, N);  
     vs_out.ViewPos = viewPos;
 }

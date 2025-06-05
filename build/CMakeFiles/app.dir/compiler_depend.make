@@ -679,6 +679,7 @@ CMakeFiles/app.dir/source/base.cpp.obj: E:/GitStore/MyEngine/MyEngine/source/bas
   E:/GitStore/MyEngine/MyEngine/include/imgui_impl_glfw.h \
   E:/GitStore/MyEngine/MyEngine/include/imgui_impl_opengl3.h \
   E:/GitStore/MyEngine/MyEngine/include/json.hpp \
+  E:/GitStore/MyEngine/MyEngine/include/stb_image.h \
   E:/lib_c/glad/include/KHR/khrplatform.h \
   E:/lib_c/glad/include/glad/glad.h \
   E:/lib_c/glfw-3.4/include/GLFW/glfw3.h
