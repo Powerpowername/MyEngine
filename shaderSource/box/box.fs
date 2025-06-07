@@ -92,8 +92,8 @@ void main()
 		// if(lightSpot[i].flag)
 		// 	color+=CalcLightSpot(lightSpot[i],uNormal,dirToCamera);
 	}
-    // FragColor=vec4(color,1.0f);
-    FragColor = texture(material.texture_diffuse0, fs_in.TexCoords);
+    FragColor=vec4(color,1.0f);
+    // FragColor = texture(material.texture_diffuse0, fs_in.TexCoords);
 
 }
 //漫反射不需要考虑半程向量，镜面光才需要，环境光也不需要
