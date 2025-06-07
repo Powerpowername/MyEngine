@@ -22,17 +22,36 @@ mat4 Transform::GetModelMaterix(mat4 world) const
 	return model;
 }
 
+void Transform::Rotate()
+{
+	vec3 axis(0,1,0);
+	//需要限制角度大小
+	mat4 model = mat3(1);
+	position = glm::rotate(model,glm::radians(rotateAngle),axis) * vec4(position,0);//到底更不更新 Update
+    
+	//只有一个转轴
+	Yaw -= rotateAngle;//现在只考虑绕Y轴转
+
+
+	// Pitch = glm::clamp(Pitch, -89.0f, 89.0f); // 限制俯仰角防止万向节锁
+    if (Yaw > 360.0f) Yaw -= 360.0f;
+    if (Yaw < 0.0f) Yaw += 360.0f;
+
+}
+
 void Transform::OnGUI()
 {
 	ImGui::DragFloat3((Parent->name + "_position").c_str(), (float*)&position, 0.5f, -500, 500);
 	ImGui::DragFloat3((Parent->name + "_rotation").c_str(), (float*)&rotation, 0.5f, -500, 500);
 	ImGui::DragFloat3((Parent->name + "_scale").c_str(), (float*)&scale, 0.01f, -100, 100);
-	ImGui::DragFloat((Parent->name + "_Yaw").c_str(), (float*)&Yaw, 0.01f, -180, 180);
+	ImGui::DragFloat((Parent->name + "_Yaw").c_str(), (float*)&Yaw, 0.01f, 0.0f, 360.0f);
 	ImGui::DragFloat((Parent->name + "_Pitch").c_str(), (float*)&Pitch, 0.01f, -89, 89);
+	ImGui::DragFloat((Parent->name + "_rotateAngle").c_str(), (float*)&rotateAngle, 1.0f, -360, 360);
 }
 
 void Transform::Update()
 {
+	Rotate();
     float pitchRad = glm::radians(Pitch);
     float yawRad = glm::radians(Yaw);
 
@@ -76,9 +95,7 @@ void Camera::Update()
 
     //键盘输出控制
     if(Input::GetKey(S_))
-       { transform->Translate(-currentSpeed * transform->Forward*Setting::deltaTime);//Translate的参数是矢量
-	   std::cout<<"2";
-	   }
+       transform->Translate(-currentSpeed * transform->Forward*Setting::deltaTime);//Translate的参数是矢量
 	if (Input::GetKey(W_))
 		transform->Translate(currentSpeed * transform->Forward*Setting::deltaTime);
 	if (Input::GetKey(A_))
@@ -119,6 +136,67 @@ void Camera::OnGUI()
 	ImGui::DragFloat((name +"highSpeed").c_str(), (float*)&highSpeed, 1, 5, 50);
 
 }
+#pragma endregion
+
+#pragma region AbstractLight:Object
+AbstractLight::AbstractLight(vec3 LightColor) : LightColor(LightColor),Object("Light")
+{
+	//派生类需要重置名称
+	transform = std::make_unique<Transform>(this);
+    transform->position = vec3(0,0,0);
+}
+
+void AbstractLight::OnGUI()
+{
+    ImGui::DragFloat3((name + "Position").c_str(),(float*)&(transform->position), 0.5f, -500.0f, 500.0f);
+    ImGui::DragFloat3((name + "Color").c_str(),(float*)&LightColor,0.1,0,1);//暂时未考虑HDR
+    ImGui::DragFloat3((name + "Forward").c_str(),(float*)&(transform->Forward),0.1,0,1);//这是光源的方向向量，目前不打算再光源中加入Transform的Update以减小开销
+
+}
+
+AbstractLight::~AbstractLight()
+{
+
+}
+
+unsigned int DirctionLight::DirctionLightNum = 0;
+DirctionLight::DirctionLight(vec3 LightColor,vec3 Position) : AbstractLight(LightColor)
+{
+    ID = DirctionLightNum;
+    DirctionLightNum++;
+    transform->position = Position;
+}
+DirctionLight::~DirctionLight()
+{
+
+}
+
+void DirctionLight::setShader(Shader shader)
+{
+    //启用光源
+    shader.setBool("DirctionLight[" + std::to_string(ID) + "].flag",1);
+    shader.setVec3("DirctionLight[" + std::to_string(ID) + "].color",LightColor);
+    shader.setVec3("DirctionLight[" + std::to_string(ID) + "].pos",transform->position);
+    shader.setVec3("DirctionLight[" + std::to_string(ID) + "].dirToLight",-transform->Forward);
+}
+
+void DirctionLight::OnGUI()
+{
+    ImGui::Checkbox((name + "Show").c_str(), &ShowGUI);
+    if(ShowGUI)
+    {
+        AbstractLight::OnGUI();
+    }
+    
+}
+unsigned int DirctionLight::showID()
+{
+    return ID;
+}
+// void DirctionLight::Update()
+// {
+
+// }
 #pragma endregion
 
 #pragma region Setting
@@ -367,96 +445,164 @@ void Shader::checkCompileErrors(GLuint shader, std::string type)
 }
 #pragma endregion
 
-void RenderBox(Shader shader,unsigned int& quadVAO,unsigned int& quadVBO)
-{
-	if(quadVAO == 0)
-	{
-		// positions
-        glm::vec3 pos1(-1.0, 1.0, 0.0);
-        glm::vec3 pos2(-1.0, -1.0, 0.0);
-        glm::vec3 pos3(1.0, -1.0, 0.0);
-        glm::vec3 pos4(1.0, 1.0, 0.0);
-		// texture coordinates
-        glm::vec2 uv1(0.0, 1.0);
-        glm::vec2 uv2(0.0, 0.0);
-        glm::vec2 uv3(1.0, 0.0);
-        glm::vec2 uv4(1.0, 1.0);
-        // normal vector
-        glm::vec3 nm(0.0, 0.0, 1.0);
-
-        // calculate tangent/bitangent vectors of both triangles
-        glm::vec3 tangent1, bitangent1;
-        glm::vec3 tangent2, bitangent2;
-        // - triangle 1
-        glm::vec3 edge1 = pos2 - pos1;
-        glm::vec3 edge2 = pos3 - pos1;
-        glm::vec2 deltaUV1 = uv2 - uv1;
-        glm::vec2 deltaUV2 = uv3 - uv1;
-
-        GLfloat f = 1.0f / (deltaUV1.x * deltaUV2.y - deltaUV2.x * deltaUV1.y);
-
-        tangent1.x = f * (deltaUV2.y * edge1.x - deltaUV1.y * edge2.x);
-        tangent1.y = f * (deltaUV2.y * edge1.y - deltaUV1.y * edge2.y);
-        tangent1.z = f * (deltaUV2.y * edge1.z - deltaUV1.y * edge2.z);
-        tangent1 = glm::normalize(tangent1);
-
-        bitangent1.x = f * (-deltaUV2.x * edge1.x + deltaUV1.x * edge2.x);
-        bitangent1.y = f * (-deltaUV2.x * edge1.y + deltaUV1.x * edge2.y);
-        bitangent1.z = f * (-deltaUV2.x * edge1.z + deltaUV1.x * edge2.z);
-        bitangent1 = glm::normalize(bitangent1);
-
-        // - triangle 2
-        edge1 = pos3 - pos1;
-        edge2 = pos4 - pos1;
-        deltaUV1 = uv3 - uv1;
-        deltaUV2 = uv4 - uv1;
-
-        f = 1.0f / (deltaUV1.x * deltaUV2.y - deltaUV2.x * deltaUV1.y);
-
-        tangent2.x = f * (deltaUV2.y * edge1.x - deltaUV1.y * edge2.x);
-        tangent2.y = f * (deltaUV2.y * edge1.y - deltaUV1.y * edge2.y);
-        tangent2.z = f * (deltaUV2.y * edge1.z - deltaUV1.y * edge2.z);
-        tangent2 = glm::normalize(tangent2);
-
-
-        bitangent2.x = f * (-deltaUV2.x * edge1.x + deltaUV1.x * edge2.x);
-        bitangent2.y = f * (-deltaUV2.x * edge1.y + deltaUV1.x * edge2.y);
-        bitangent2.z = f * (-deltaUV2.x * edge1.z + deltaUV1.x * edge2.z);
-        bitangent2 = glm::normalize(bitangent2);
-
-        GLfloat quadVertices[] = {
-            // Positions            // normal         // TexCoords  // Tangent                          // Bitangent
-            pos1.x, pos1.y, pos1.z, nm.x, nm.y, nm.z, uv1.x, uv1.y, tangent1.x, tangent1.y, tangent1.z, bitangent1.x, bitangent1.y, bitangent1.z,
-            pos2.x, pos2.y, pos2.z, nm.x, nm.y, nm.z, uv2.x, uv2.y, tangent1.x, tangent1.y, tangent1.z, bitangent1.x, bitangent1.y, bitangent1.z,
-            pos3.x, pos3.y, pos3.z, nm.x, nm.y, nm.z, uv3.x, uv3.y, tangent1.x, tangent1.y, tangent1.z, bitangent1.x, bitangent1.y, bitangent1.z,
-
-            pos1.x, pos1.y, pos1.z, nm.x, nm.y, nm.z, uv1.x, uv1.y, tangent2.x, tangent2.y, tangent2.z, bitangent2.x, bitangent2.y, bitangent2.z,
-            pos3.x, pos3.y, pos3.z, nm.x, nm.y, nm.z, uv3.x, uv3.y, tangent2.x, tangent2.y, tangent2.z, bitangent2.x, bitangent2.y, bitangent2.z,
-            pos4.x, pos4.y, pos4.z, nm.x, nm.y, nm.z, uv4.x, uv4.y, tangent2.x, tangent2.y, tangent2.z, bitangent2.x, bitangent2.y, bitangent2.z
+void RenderBox(Shader shader, unsigned int& cubeVAO, unsigned int& cubeVBO) {
+    if (cubeVAO == 0) {
+        // 正方体顶点位置（中心在原点，边长2）
+        glm::vec3 positions[] = {
+            // 前面
+            glm::vec3(-1.0f, -1.0f,  1.0f), // 左下前
+            glm::vec3( 1.0f, -1.0f,  1.0f), // 右下前
+            glm::vec3( 1.0f,  1.0f,  1.0f), // 右上前
+            glm::vec3(-1.0f,  1.0f,  1.0f), // 左上前
+            
+            // 后面
+            glm::vec3(-1.0f, -1.0f, -1.0f), // 左下后
+            glm::vec3( 1.0f, -1.0f, -1.0f), // 右下后
+            glm::vec3( 1.0f,  1.0f, -1.0f), // 右上后
+            glm::vec3(-1.0f,  1.0f, -1.0f), // 左上后
         };
 
-		// Setup plane VAO
-        glGenVertexArrays(1, &quadVAO);
-        glGenBuffers(1, &quadVBO);
-        glBindVertexArray(quadVAO);
-        glBindBuffer(GL_ARRAY_BUFFER, quadVBO);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), &quadVertices, GL_STATIC_DRAW);
+        // 每个面的法线方向
+        glm::vec3 normals[] = {
+            glm::vec3( 0.0f,  0.0f,  1.0f), // 前面
+            glm::vec3( 0.0f,  0.0f, -1.0f), // 后面
+            glm::vec3(-1.0f,  0.0f,  0.0f), // 左面
+            glm::vec3( 1.0f,  0.0f,  0.0f), // 右面
+            glm::vec3( 0.0f, -1.0f,  0.0f), // 下面
+            glm::vec3( 0.0f,  1.0f,  0.0f)  // 上面
+        };
+
+        // 纹理坐标（每个面独立）
+        glm::vec2 uvs[] = {
+            glm::vec2(0.0f, 0.0f), // 左下
+            glm::vec2(1.0f, 0.0f), // 右下
+            glm::vec2(1.0f, 1.0f), // 右上
+            glm::vec2(0.0f, 1.0f)  // 左上
+        };
+
+        // 正方体由6个面组成，每个面2个三角形（6个顶点）
+        std::vector<float> cubeVertices;
+        
+        // 定义6个面的顶点索引[9](@ref)
+        unsigned int indices[6][4] = {
+            {0, 1, 2, 3}, // 前面
+            {5, 4, 7, 6}, // 后面
+            {4, 0, 3, 7}, // 左面
+            {1, 5, 6, 2}, // 右面
+            {4, 5, 1, 0}, // 下面
+            {3, 2, 6, 7}  // 上面
+        };
+
+        // 处理每个面
+        for (int face = 0; face < 6; face++) {
+            // 获取当前面的4个顶点
+            glm::vec3 v0 = positions[indices[face][0]];
+            glm::vec3 v1 = positions[indices[face][1]];
+            glm::vec3 v2 = positions[indices[face][2]];
+            glm::vec3 v3 = positions[indices[face][3]];
+            
+            // 当前面的法线
+            glm::vec3 nm = normals[face];
+            
+            // 计算切空间向量（使用第一个三角形）
+            glm::vec3 edge1 = v1 - v0;
+            glm::vec3 edge2 = v2 - v0;
+            glm::vec2 deltaUV1 = uvs[1] - uvs[0];
+            glm::vec2 deltaUV2 = uvs[2] - uvs[0];
+            
+            float f = 1.0f / (deltaUV1.x * deltaUV2.y - deltaUV2.x * deltaUV1.y);
+            
+            glm::vec3 tangent, bitangent;
+            tangent.x = f * (deltaUV2.y * edge1.x - deltaUV1.y * edge2.x);
+            tangent.y = f * (deltaUV2.y * edge1.y - deltaUV1.y * edge2.y);
+            tangent.z = f * (deltaUV2.y * edge1.z - deltaUV1.y * edge2.z);
+            tangent = glm::normalize(tangent);
+            
+            bitangent.x = f * (-deltaUV2.x * edge1.x + deltaUV1.x * edge2.x);
+            bitangent.y = f * (-deltaUV2.x * edge1.y + deltaUV1.x * edge2.y);
+            bitangent.z = f * (-deltaUV2.x * edge1.z + deltaUV1.x * edge2.z);
+            bitangent = glm::normalize(bitangent);
+            
+            // 添加两个三角形（6个顶点）到顶点数组
+            for (int i = 0; i < 4; i++) {
+                // 位置
+                cubeVertices.push_back(positions[indices[face][i]].x);
+                cubeVertices.push_back(positions[indices[face][i]].y);
+                cubeVertices.push_back(positions[indices[face][i]].z);
+                
+                // 法线
+                cubeVertices.push_back(nm.x);
+                cubeVertices.push_back(nm.y);
+                cubeVertices.push_back(nm.z);
+                
+                // 纹理坐标
+                cubeVertices.push_back(uvs[i].x);
+                cubeVertices.push_back(uvs[i].y);
+                
+                // 切线
+                cubeVertices.push_back(tangent.x);
+                cubeVertices.push_back(tangent.y);
+                cubeVertices.push_back(tangent.z);
+                
+                // 副切线
+                cubeVertices.push_back(bitangent.x);
+                cubeVertices.push_back(bitangent.y);
+                cubeVertices.push_back(bitangent.z);
+            }
+            
+            // 添加第二个三角形的额外两个顶点（使用索引2和3）
+            for (int i = 2; i < 4; i++) {
+                // 位置
+                cubeVertices.push_back(positions[indices[face][i]].x);
+                cubeVertices.push_back(positions[indices[face][i]].y);
+                cubeVertices.push_back(positions[indices[face][i]].z);
+                
+                // 法线
+                cubeVertices.push_back(nm.x);
+                cubeVertices.push_back(nm.y);
+                cubeVertices.push_back(nm.z);
+                
+                // 纹理坐标
+                cubeVertices.push_back(uvs[i].x);
+                cubeVertices.push_back(uvs[i].y);
+                
+                // 切线
+                cubeVertices.push_back(tangent.x);
+                cubeVertices.push_back(tangent.y);
+                cubeVertices.push_back(tangent.z);
+                
+                // 副切线
+                cubeVertices.push_back(bitangent.x);
+                cubeVertices.push_back(bitangent.y);
+                cubeVertices.push_back(bitangent.z);
+            }
+        }
+
+        // 设置立方体VAO/VBO
+        glGenVertexArrays(1, &cubeVAO);
+        glGenBuffers(1, &cubeVBO);
+        glBindVertexArray(cubeVAO);
+        glBindBuffer(GL_ARRAY_BUFFER, cubeVBO);
+        glBufferData(GL_ARRAY_BUFFER, cubeVertices.size() * sizeof(float), &cubeVertices[0], GL_STATIC_DRAW);
+        
+        // 顶点属性指针
         glEnableVertexAttribArray(0);
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 14 * sizeof(GLfloat), (GLvoid*)0);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 14 * sizeof(float), (void*)0);
         glEnableVertexAttribArray(1);
-        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 14 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
+        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 14 * sizeof(float), (void*)(3 * sizeof(float)));
         glEnableVertexAttribArray(2);
-        glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 14 * sizeof(GLfloat), (GLvoid*)(6 * sizeof(GLfloat)));
+        glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 14 * sizeof(float), (void*)(6 * sizeof(float)));
         glEnableVertexAttribArray(3);
-        glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, 14 * sizeof(GLfloat), (GLvoid*)(8 * sizeof(GLfloat)));
+        glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, 14 * sizeof(float), (void*)(8 * sizeof(float)));
         glEnableVertexAttribArray(4);
-        glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, 14 * sizeof(GLfloat), (GLvoid*)(11 * sizeof(GLfloat)));
-	}
-	glBindVertexArray(quadVAO);
-    glDrawArrays(GL_TRIANGLES, 0, 6);
+        glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, 14 * sizeof(float), (void*)(11 * sizeof(float)));
+    }
+    
+    // 绘制立方体
+    glBindVertexArray(cubeVAO);
+    glDrawArrays(GL_TRIANGLES, 0, 36); // 6面×6顶点=36
     glBindVertexArray(0);
 }
-
 
 
 

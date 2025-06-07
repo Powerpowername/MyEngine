@@ -73,9 +73,10 @@ public:
     vec3 position = vec3(0,0,3);//对象的位置
     vec3 rotation = vec3(0,0,0);//旋转角度，分别对应x，y，z，暂时是针对光源的变化
     vec3 scale = vec3(1, 1, 1);//对象的缩放比列
-
+    float rotateAngle = 0.f;//旋转角度
     float Pitch = 0.0f;
-	float Yaw = -90.0f;
+	float Yaw = 270.0f;//摆头转到OpenGl世界自带摄像机的位置
+    float Roll = 0.0f;//暂时只有rotate用上了
 
     //对象自身坐标系由Transform::Update()修改
     vec3 Forward = vec3(0,0,1);
@@ -83,6 +84,7 @@ public:
     vec3 Up;
 
     void Translate(vec3 movement);//位移
+    void Rotate();//旋转,默认转轴为Y轴（右手坐标系）
     mat4 GetModelMaterix(mat4 world = mat4(1.0f))const;//获取对象的世界坐标
     void OnGUI();
     void Update();//重新计算自身坐标系
@@ -189,6 +191,40 @@ private:
 
 
 #pragma endreigon
+
+#pragma region AbstractLight:Object
+class AbstractLight : public Object
+{
+public:
+    std::unique_ptr<Transform> transform;//摄像机的坐标变换
+    vec3 LightColor;
+    AbstractLight(vec3 LightColor);
+    virtual void OnGUI();
+    // virtual void Update();//没有涉及到自生坐标系的建立更新，所以暂定取消更新操作
+    virtual ~AbstractLight();
+};
+
+class DirctionLight : public AbstractLight
+{
+private:
+    static unsigned int DirctionLightNum;
+    unsigned int ID;
+public:
+    bool ShowGUI = 0;
+    DirctionLight(vec3 LightColor,vec3 Position = vec3(0,0,0));
+    ~DirctionLight();
+    void setShader(Shader shader);
+    virtual void OnGUI() override;
+    unsigned int showID();
+    // virtual void Update() override;
+
+};
+#pragma endregion
+
+
+
+
+
 
 #pragma region 测试
 void RenderBox(Shader shader,unsigned int& quadVAO,unsigned int& quadVBO);

@@ -1,7 +1,6 @@
 #include"base.h"
 #include"Save.h"
 
-/* 函数前置声明 */
 #pragma region 函数声明
 // 加载立方体贴图（6个面的纹理路径）
 unsigned int loadCubemap(vector<std::string> faces);
@@ -16,8 +15,6 @@ static void glfw_error_callback(int error, const char* description)
 {
 	fprintf(stderr, "Glfw Error %d: %s\n", error, description);
 }
-// 从文件加载2D纹理
-unsigned int TextureFromFile(string filename);
 // 带目录路径的纹理加载（支持gamma校正）
 unsigned int TextureFromFile(const char *path, const string &directory, bool gamma);
 // 核心纹理加载方法（指定内部格式和纹理单元）
@@ -98,7 +95,10 @@ int main(int argc, char* argv[])
 	shader.setInt("material.texture_normal0",1);
 	shader.setFloat("material.shininess",0.03);
 	glm::mat4 model = glm::mat4(1.0f);
-	glm::vec3 lightPos(0.5f,1.0f,0.3);
+	//光源
+	DirctionLight dirlight1(vec3(1,1,1),vec3(0.5f,1.0f,0.3));
+	dirlight1.transform->Forward = vec3(0,0,1);
+	// std::cout<<dirlight1.showID();
 	static GLuint quadVAO = 0;
 	static GLuint quadVBO = 0;
 	std::list<Object*> cameras;
@@ -137,7 +137,6 @@ int main(int argc, char* argv[])
 		ImGui::NewFrame();                    // 创建新帧
 #pragma endregion
 		ImGui::Begin("MyEngine");
-#pragma region Camera
 		if (ImGui::BeginMenu("GameObject"))
 		{
 
@@ -151,18 +150,23 @@ int main(int argc, char* argv[])
 				// new GameObject("NewCamera", GameObject::GameObject_Camera);
 			}
 			Setting::MainCamera->OnGUI();
-		// }
-		// ImGui::EndMenu();
-		// for(auto cameraTemp : Setting::gameObjects[GameObject::GameObject_Camera])
-		// {
-		// 	for(auto cameraTempScript : *(cameraTemp->scripts))
-		// 	{
-		// 		cameraTempScript->OnGUI();
-		// 		cameraTempScript->Update();
-		// 	}
-		// }
-#pragma endregion
+
 		ImGui::End();
+
+		ImGui::Begin("Light");
+		// ImGui::BeginMenu("GameObject");
+		// {
+			if(ImGui::BeginMenu("ShowLight"))
+			{
+				ImGui::EndMenu();
+			}
+
+			dirlight1.OnGUI();
+
+			
+			
+		ImGui::End();
+
 
 		// if(Setting::MainCamera != nullptr)
 		// {
@@ -186,10 +190,11 @@ int main(int argc, char* argv[])
 		shader.setMat4("projection",Setting::MainCamera->projMat);
 		shader.setMat4("view",Setting::MainCamera->viewMat);
 		shader.setMat4("model",model);
-		shader.setBool("lightDirectional[0].flag",1);
-		shader.setVec3("lightDirectional[0].pos", lightPos);
-		shader.setVec3("lightDirectional[0].color", vec3(1,1,1));
-		shader.setVec3("lightDirectional[0].dirToLight", vec3(0,0,1));
+		// shader.setBool("DirctionLight[0].flag",1);
+		// shader.setVec3("DirctionLight[0].pos", dirlight1.transform->position);
+		// shader.setVec3("DirctionLight[0].color", dirlight1.LightColor);
+		// shader.setVec3("DirctionLight[0].dirToLight", dirlight1.transform->Forward);
+		dirlight1.setShader(shader);
 		glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, diffuseMap);
         glActiveTexture(GL_TEXTURE1);
@@ -312,42 +317,7 @@ void OnSize(GLFWwindow* window, int width, int height)
 
 /* 工具函数实现 */
 #pragma region Functions
-// 从文件加载2D纹理
-unsigned int TextureFromFile(string filename)
-{
-	unsigned int textureID;
-	glGenTextures(1, &textureID); // 生成纹理对象
 
-	int width, height, nrComponents;
-	unsigned char *data = stbi_load(filename.c_str(), &width, &height, &nrComponents, 0);
-	if (data)
-	{
-		// 确定OpenGL格式
-		GLenum format;
-		if (nrComponents == 1) format = GL_RED;
-		else if (nrComponents == 3) format = GL_RGB;
-		else if (nrComponents == 4) format = GL_RGBA;
-
-		// 绑定并设置纹理
-		glBindTexture(GL_TEXTURE_2D, textureID);
-		glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
-		glGenerateMipmap(GL_TEXTURE_2D);
-
-		// 设置纹理参数
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-		stbi_image_free(data);
-	}
-	else
-	{
-		std::cout << "Texture failed to load " << std::endl;
-		stbi_image_free(data);
-	}
-	return textureID;
-}
 
 // 带目录路径的纹理加载
 unsigned int TextureFromFile(const char *path, const string &directory, bool gamma)
@@ -452,38 +422,3 @@ unsigned int loadCubemap(vector<std::string> faces)
 }
 #pragma endregion
 
-// unsigned int loadTexture(const char*  path,bool reverse)
-// {
-//     unsigned int textureID;
-//     glGenTextures(1,&textureID);
-//     int width,height,nrComponents;
-//     stbi_set_flip_vertically_on_load(reverse); 
-//     unsigned char* data = stbi_load(path,&width,&height,&nrComponents,0);
-//     if(data)
-//     {
-//         GLenum format;
-//         if(nrComponents == 1)
-//             format = GL_RED;
-//         else if(nrComponents == 3)
-//             format = GL_RGB;
-//         else if(nrComponents == 4)
-//             format = GL_RGBA;
-//         glBindTexture(GL_TEXTURE_2D,textureID);
-//         glTexImage2D(GL_TEXTURE_2D,0,format,width,height,0,format,GL_UNSIGNED_BYTE,data);
-//         glGenerateMipmap(GL_TEXTURE_2D);//生成多级渐近纹理
-
-//         glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_REPEAT);
-//         glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_REPEAT);
-//         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-//         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-//         stbi_image_free(data);
-//     }
-//     else
-//     {
-//         std::cout << "Texture failed to load at path: " << path << std::endl;
-//         stbi_image_free(data);//就是free
-//     }
-
-//     //此处可以看出纹理对象开辟的内存（glGenTextures）实在堆区开辟的，这个id是在栈区的对象，被return之后就会被销毁，但是这块是传值出去的，所以不要紧
-//     return textureID;
-// }

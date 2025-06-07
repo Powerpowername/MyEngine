@@ -45,7 +45,7 @@ struct LightDirectional//平行光
 // };
 
 uniform Material material;
-uniform LightDirectional lightDirectional[NR_POINT_LIGHTS];
+uniform LightDirectional DirctionLight[NR_POINT_LIGHTS];
 // uniform LightPoint lightPoint[NR_POINT_LIGHTS];
 // uniform LightSpot lightSpot[NR_POINT_LIGHTS];
 
@@ -83,8 +83,8 @@ void main()
     vec3 dirToCamera = normalize(fs_in.ViewPos - fs_in.FragPos);
     for(int i = 0;i < NR_POINT_LIGHTS;i++)
 	{
-		if(lightDirectional[i].flag)
-			color+=CalcLightDirectional(lightDirectional[i],uNormal,dirToCamera);
+		if(DirctionLight[i].flag)
+			color+=CalcLightDirectional(DirctionLight[i],uNormal,dirToCamera);
 		
 		// if(lightPoint[i].flag)
 		// 	color+=CalcLightPoint(lightPoint[i],uNormal,dirToCamera);
