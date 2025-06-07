@@ -192,7 +192,8 @@ private:
 
 #pragma endreigon
 
-#pragma region AbstractLight:Object
+#pragma region 光源组
+//抽象光
 class AbstractLight : public Object
 {
 public:
@@ -204,11 +205,12 @@ public:
     virtual ~AbstractLight();
 };
 
+//平行光
 class DirctionLight : public AbstractLight
 {
 private:
     static unsigned int DirctionLightNum;
-    unsigned int ID;
+    unsigned int ID;//主要是用来在传入shader的时候好区分用的
 public:
     bool ShowGUI = 0;
     DirctionLight(vec3 LightColor,vec3 Position = vec3(0,0,0));
@@ -219,6 +221,30 @@ public:
     // virtual void Update() override;
 
 };
+
+//点光源
+class PointLight : public AbstractLight
+{
+private:
+    static unsigned int PotLightNum;
+    unsigned int ID;
+public:
+    //衰减参数
+	float constant = 1.0f;
+	float linear = 0.14;
+	float quadratic = 0.07f;
+
+    bool ShowGUI = 0;
+    PointLight(vec3 LightColor,vec3 Position = vec3(0,0,0));
+    ~PointLight();
+    void setShader(Shader shader);
+    virtual void OnGUI() override;
+    unsigned int showID();
+};
+
+
+//聚光
+class SpotLight;
 #pragma endregion
 
 

@@ -8,7 +8,7 @@ struct Material
     float shininess;
 };
 
-struct LightDirectional//平行光
+struct DirectionLight//平行光
 {
     bool flag;
     vec3 color;
@@ -16,37 +16,37 @@ struct LightDirectional//平行光
 	vec3 dirToLight;//指向光源方向向量
 };
 
-// struct LightSpot//聚光(手电筒)
-// {
-// 	bool flag;
-// 	vec3 pos;
-// 	vec3 dirToLight;
-//     vec3 color;
-//     //衰减参数
-// 	float constant;
-// 	float linear;
-// 	float quadratic;
+struct LightSpot//聚光(手电筒)
+{
+	bool flag;
+	vec3 pos;
+	vec3 dirToLight;
+    vec3 color;
+    //衰减参数
+	float constant;
+	float linear;
+	float quadratic;
 
-//     //聚光范围
-// 	float cosPhyInner;//内圈
-// 	float cosPhyOuter;//外圈
-// };
+    //聚光范围
+	float cosPhyInner;//内圈
+	float cosPhyOuter;//外圈
+};
 
-// struct LightPoint//点光源
-// {
-// 	bool flag; 
-// 	vec3 pos;
-// 	vec3 dirToLight;
-//     vec3 color;
-//     //聚光范围
-// 	float constant;
-// 	float linear;
-// 	float quadratic;
-// };
+struct PointLight//点光源
+{
+	bool flag; 
+	vec3 pos;
+	vec3 dirToLight;
+    vec3 color;
+    //聚光范围
+	float constant;
+	float linear;
+	float quadratic;
+};
 
 uniform Material material;
-uniform LightDirectional DirctionLight[NR_POINT_LIGHTS];
-// uniform LightPoint lightPoint[NR_POINT_LIGHTS];
+uniform DirectionLight directionLight[NR_POINT_LIGHTS];
+// uniform PointLight pointLight[NR_POINT_LIGHTS];
 // uniform LightSpot lightSpot[NR_POINT_LIGHTS];
 
 out vec4 FragColor;
@@ -64,7 +64,7 @@ in VS_OUT {
 //采用在切线空间中计算光照，像素着色器（片段着色器）的开销一般大于顶点着色器，所以将尽可能多的操作交给顶点着色器
 
 
-vec3 CalcLightDirectional(LightDirectional light,vec3 uNormal,vec3 dirToCamera);
+vec3 CalcDirectionLight(DirectionLight light,vec3 uNormal,vec3 dirToCamera);
 // vec3 CalcLightPoint(LightPoint light,vec3 uNormal,vec3 dirToCamera);
 // vec3 CalcLightSpot(LightSpot light,vec3 uNormal,vec3 dirToCamera);
 
@@ -83,8 +83,8 @@ void main()
     vec3 dirToCamera = normalize(fs_in.ViewPos - fs_in.FragPos);
     for(int i = 0;i < NR_POINT_LIGHTS;i++)
 	{
-		if(DirctionLight[i].flag)
-			color+=CalcLightDirectional(DirctionLight[i],uNormal,dirToCamera);
+		if(directionLight[i].flag)
+			color+=CalcDirectionLight(directionLight[i],uNormal,dirToCamera);
 		
 		// if(lightPoint[i].flag)
 		// 	color+=CalcLightPoint(lightPoint[i],uNormal,dirToCamera);
@@ -97,7 +97,7 @@ void main()
 
 }
 //漫反射不需要考虑半程向量，镜面光才需要，环境光也不需要
-vec3 CalcLightDirectional(LightDirectional light,vec3 uNormal,vec3 dirToCamera)
+vec3 CalcDirectionLight(DirectionLight light,vec3 uNormal,vec3 dirToCamera)
 {
     //漫反射
     float diffIntensity = max(0,dot(light.dirToLight ,uNormal));//漫反射强度

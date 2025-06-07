@@ -138,7 +138,8 @@ void Camera::OnGUI()
 }
 #pragma endregion
 
-#pragma region AbstractLight:Object
+#pragma region 光源组
+//-------------------------抽象光---------------------
 AbstractLight::AbstractLight(vec3 LightColor) : LightColor(LightColor),Object("Light")
 {
 	//派生类需要重置名称
@@ -158,12 +159,13 @@ AbstractLight::~AbstractLight()
 {
 
 }
-
+//-------------------------平行光---------------------
 unsigned int DirctionLight::DirctionLightNum = 0;
 DirctionLight::DirctionLight(vec3 LightColor,vec3 Position) : AbstractLight(LightColor)
 {
     ID = DirctionLightNum;
     DirctionLightNum++;
+    name = "DirctionLight" + std::to_string(ID) + "_";
     transform->position = Position;
 }
 DirctionLight::~DirctionLight()
@@ -174,10 +176,10 @@ DirctionLight::~DirctionLight()
 void DirctionLight::setShader(Shader shader)
 {
     //启用光源
-    shader.setBool("DirctionLight[" + std::to_string(ID) + "].flag",1);
-    shader.setVec3("DirctionLight[" + std::to_string(ID) + "].color",LightColor);
-    shader.setVec3("DirctionLight[" + std::to_string(ID) + "].pos",transform->position);
-    shader.setVec3("DirctionLight[" + std::to_string(ID) + "].dirToLight",-transform->Forward);
+    shader.setBool("directionLight[" + std::to_string(ID) + "].flag",1);
+    shader.setVec3("directionLight[" + std::to_string(ID) + "].color",LightColor);
+    shader.setVec3("directionLight[" + std::to_string(ID) + "].pos",transform->position);
+    shader.setVec3("directionLight[" + std::to_string(ID) + "].dirToLight",-transform->Forward);
 }
 
 void DirctionLight::OnGUI()
@@ -187,7 +189,6 @@ void DirctionLight::OnGUI()
     {
         AbstractLight::OnGUI();
     }
-    
 }
 unsigned int DirctionLight::showID()
 {
@@ -197,6 +198,52 @@ unsigned int DirctionLight::showID()
 // {
 
 // }
+//-------------------------点光源---------------------
+unsigned int PointLight::PotLightNum = 0;
+PointLight::PointLight(vec3 LightColor,vec3 Position ) : AbstractLight(LightColor)
+{
+    ID = PotLightNum;
+    PotLightNum++;
+    name = "PointLight" + std::to_string(ID) + "_";
+    transform->position = Position;
+}
+PointLight::~PointLight()
+{
+    ImGui::Checkbox((name + "Show").c_str(), &ShowGUI);
+    if(ShowGUI)
+    {
+        AbstractLight::OnGUI();
+        ImGui::DragFloat((name + "Constant").c_str(),(float*)&constant,0.1f,0.0f,2.0f);
+        ImGui::DragFloat((name + "Linear").c_str(),(float*)&linear,0.01f,0.0f,2.0f);
+        ImGui::DragFloat((name + "Quadratic").c_str(),(float*)&quadratic,0.01f,0.0f,2.0f);
+    }
+}
+void PointLight::setShader(Shader shader)
+{
+    //启用光源
+    shader.setBool("pointLight[" + std::to_string(ID) + "].flag",1);
+    shader.setVec3("pointLight[" + std::to_string(ID) + "].pos",transform->position);
+    shader.setVec3("pointLight[" + std::to_string(ID) + "].dirToLight",-transform->Forward);
+    shader.setVec3("pointLight[" + std::to_string(ID) + "].color",LightColor);
+    shader.setFloat("pointLight[" + std::to_string(ID) + "].constant",constant);
+    shader.setFloat("pointLight[" + std::to_string(ID) + "].linear",linear);
+    shader.setFloat("pointLight[" + std::to_string(ID) + "].quadratic",quadratic);
+}
+
+void PointLight::OnGUI()
+{
+    ImGui::Checkbox((name + "Show").c_str(), &ShowGUI);
+    if(ShowGUI)
+    {
+        AbstractLight::OnGUI();
+
+    }
+}
+
+unsigned int PointLight::showID()
+{
+    return ID;
+}
 #pragma endregion
 
 #pragma region Setting
