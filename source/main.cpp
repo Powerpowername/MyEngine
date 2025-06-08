@@ -98,6 +98,10 @@ int main(int argc, char* argv[])
 	//光源
 	DirctionLight dirlight1(vec3(1,1,1),vec3(0.5f,1.0f,0.3));
 	dirlight1.transform->Forward = vec3(0,0,1);
+	PointLight pointLight1(vec3(1,1,1),vec3(0.5f,1.0f,0.3));
+	pointLight1.transform->Forward = vec3(0,0,1);
+	SpotLight spotLight(vec3(1,1,1),vec3(0.5f,1.0f,0.3));
+	spotLight.transform->Forward = vec3(0,0,1);
 	// std::cout<<dirlight1.showID();
 	static GLuint quadVAO = 0;
 	static GLuint quadVBO = 0;
@@ -161,8 +165,9 @@ int main(int argc, char* argv[])
 				ImGui::EndMenu();
 			}
 
-			dirlight1.OnGUI();
-
+			// pointLight1.OnGUI();
+			// dirlight1.OnGUI();
+			spotLight.OnGUI();
 			
 			
 		ImGui::End();
@@ -194,7 +199,9 @@ int main(int argc, char* argv[])
 		// shader.setVec3("DirctionLight[0].pos", dirlight1.transform->position);
 		// shader.setVec3("DirctionLight[0].color", dirlight1.LightColor);
 		// shader.setVec3("DirctionLight[0].dirToLight", dirlight1.transform->Forward);
-		dirlight1.setShader(shader);
+		// pointLight1.setShader(shader);
+		// dirlight1.setShader(shader);
+		spotLight.setShader(shader);
 		glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, diffuseMap);
         glActiveTexture(GL_TEXTURE1);

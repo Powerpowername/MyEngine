@@ -16,7 +16,19 @@ struct DirectionLight//平行光
 	vec3 dirToLight;//指向光源方向向量
 };
 
-struct LightSpot//聚光(手电筒)
+struct PointLight//点光源
+{
+	bool flag; 
+	vec3 pos;
+	vec3 dirToLight;
+    vec3 color;
+    //衰减参数
+	float constant;
+	float linear;
+	float quadratic;
+};
+
+struct SpotLight//聚光(手电筒)
 {
 	bool flag;
 	vec3 pos;
@@ -32,22 +44,12 @@ struct LightSpot//聚光(手电筒)
 	float cosPhyOuter;//外圈
 };
 
-struct PointLight//点光源
-{
-	bool flag; 
-	vec3 pos;
-	vec3 dirToLight;
-    vec3 color;
-    //聚光范围
-	float constant;
-	float linear;
-	float quadratic;
-};
+
 
 uniform Material material;
 uniform DirectionLight directionLight[NR_POINT_LIGHTS];
-// uniform PointLight pointLight[NR_POINT_LIGHTS];
-// uniform LightSpot lightSpot[NR_POINT_LIGHTS];
+uniform PointLight pointLight[NR_POINT_LIGHTS];
+uniform SpotLight spotLight[NR_POINT_LIGHTS];
 
 out vec4 FragColor;
 
@@ -65,8 +67,8 @@ in VS_OUT {
 
 
 vec3 CalcDirectionLight(DirectionLight light,vec3 uNormal,vec3 dirToCamera);
-// vec3 CalcLightPoint(LightPoint light,vec3 uNormal,vec3 dirToCamera);
-// vec3 CalcLightSpot(LightSpot light,vec3 uNormal,vec3 dirToCamera);
+vec3 CalcPointLight(PointLight light,vec3 uNormal,vec3 dirToCamera);
+vec3 CalcSpotLight(SpotLight light,vec3 uNormal,vec3 dirToCamera);
 
 void main()
 {
@@ -86,11 +88,11 @@ void main()
 		if(directionLight[i].flag)
 			color+=CalcDirectionLight(directionLight[i],uNormal,dirToCamera);
 		
-		// if(lightPoint[i].flag)
-		// 	color+=CalcLightPoint(lightPoint[i],uNormal,dirToCamera);
+		if(pointLight[i].flag)
+			color+=CalcPointLight(pointLight[i],uNormal,dirToCamera);
 		
-		// if(lightSpot[i].flag)
-		// 	color+=CalcLightSpot(lightSpot[i],uNormal,dirToCamera);
+		if(spotLight[i].flag)
+			color+=CalcSpotLight(spotLight[i],uNormal,dirToCamera);
 	}
     FragColor=vec4(color,1.0f);
     // FragColor = texture(material.texture_diffuse0, fs_in.TexCoords);
@@ -112,42 +114,42 @@ vec3 CalcDirectionLight(DirectionLight light,vec3 uNormal,vec3 dirToCamera)
     return diffColor + specularColor;
 }
 
-// //有衰减的点光源
-// vec3 CalcLightPoint(LightPoint light,vec3 uNormal,vec3 dirToCamera)
-// {
-//     float dist = length(light.pos - fs_in.FragPos);
-//     float attenuation = 1.0f/(light.constant + light.linear * dist + light.quadratic*(dist * dist));//衰减系数
+//有衰减的点光源
+vec3 CalcPointLight(PointLight light,vec3 uNormal,vec3 dirToCamera)
+{
+    float dist = length(light.pos - fs_in.FragPos);
+    float attenuation = 1.0f/(light.constant + light.linear * dist + light.quadratic*(dist * dist));//衰减系数
 
-//     //diffuse
-//     float diffIntensity = max(0,dot(light.pos - fs_in.FragPos,uNormal)) * attenuation;
-//     vec3 diffColor = diffIntensity * light.color * texture(material.texture_diffuse0 ,fs_in.TexCoords).rgb;
+    //diffuse
+    float diffIntensity = max(0,dot(light.dirToLight - fs_in.FragPos,uNormal)) * attenuation;
+    vec3 diffColor = diffIntensity * light.color * texture(material.texture_diffuse0 ,fs_in.TexCoords).rgb;
 
-//     //specular
-//     vec3 halfwayDir = normalize(light.dirToLight + dirToCamera);
-//     float specIntensity = pow(max(0,dot(uNormal,halfwayDir)),material.shininess);
-//     vec3 specularColor = specIntensity * light.color * texture(material.texture_specular0,fs_in.TexCoords).rgb * attenuation;
+    //specular
+    vec3 halfwayDir = normalize(light.dirToLight + dirToCamera);
+    float specIntensity = pow(max(0,dot(uNormal,halfwayDir)),material.shininess);
+    vec3 specularColor = specIntensity * light.color * texture(material.texture_specular0,fs_in.TexCoords).rgb * attenuation;
 
 
-//     return diffColor + specularColor;
-// }
+    return diffColor + specularColor;
+}
 
-// //柔和聚光
-// vec3 CalcLightSpot(LightSpot light,vec3 uNormal,vec3 dirToCamera)
-// {
-//     float dist = length(light.pos -fs_in.FragPos);
-//     float attenuation = 1.0f/(light.constant + light.linear * dist + light.quadratic * (dist * dist));
+//柔和聚光
+vec3 CalcSpotLight(SpotLight light,vec3 uNormal,vec3 dirToCamera)
+{
+    float dist = length(light.pos -fs_in.FragPos);
+    float attenuation = 1.0f/(light.constant + light.linear * dist + light.quadratic * (dist * dist));
 
-//     float theta = dot(normalize(fs_in.FragPos - light.pos),-light.dirToLight);
-//     float epsilon = (light.cosPhyInner - light.cosPhyOuter);
-//     float intensity = clamp((theta - light.cosPhyOuter) / epsilon, 0.0, 1.0);//clamp是钳位函数或限幅函数，将值限定在0-1之间
+    float theta = dot(normalize(fs_in.FragPos - light.pos),-light.dirToLight);
+    float epsilon = (light.cosPhyInner - light.cosPhyOuter);
+    float intensity = clamp((theta - light.cosPhyOuter) / epsilon, 0.0, 1.0);//clamp是钳位函数或限幅函数，将值限定在0-1之间
 
-//     //diffuse
-//     float diffIntensity = max(dot(light.dirToLight, uNormal),0) * attenuation * intensity;
-//     vec3 diffColor = diffIntensity * light.color * texture(material.texture_diffuse0,fs_in.TexCoords).rgb;
+    //diffuse
+    float diffIntensity = max(dot(light.dirToLight, uNormal),0) * attenuation * intensity;
+    vec3 diffColor = diffIntensity * light.color * texture(material.texture_diffuse0,fs_in.TexCoords).rgb;
 
-//     //specular
-//     vec3 halfwayDir = normalize(light.dirToLight + dirToCamera);
-//     float specIntensity = pow(max(0,dot(uNormal,halfwayDir)), material.shininess) * intensity;
-//     vec3 specularColor = specIntensity * light.color * texture(material.texture_specular0,fs_in.TexCoords).rgb * attenuation;
-//     return diffColor + specularColor;
-// }
+    //specular
+    vec3 halfwayDir = normalize(light.dirToLight + dirToCamera);
+    float specIntensity = pow(max(0,dot(uNormal,halfwayDir)), material.shininess) * intensity;
+    vec3 specularColor = specIntensity * light.color * texture(material.texture_specular0,fs_in.TexCoords).rgb * attenuation;
+    return diffColor + specularColor;
+}

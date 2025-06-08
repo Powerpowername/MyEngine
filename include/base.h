@@ -35,7 +35,10 @@
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
-#include <stb_image.h>
+#include "stb_image.h"
+#include "assimp/Importer.hpp"
+#include "assimp/scene.h"
+#include "assimp/postprocess.h"
 using glm::vec2;using glm::vec3;using glm::vec4;using glm::mat3;using glm::mat4;
 using glm::radians;
 using std::vector;
@@ -244,13 +247,157 @@ public:
 
 
 //聚光
-class SpotLight;
+class SpotLight : public AbstractLight
+{
+private:
+    static unsigned int SpotLightNum;
+    unsigned int ID;
+public:
+    //衰减参数
+	float constant = 1.0f;
+	float linear = 0.14;
+	float quadratic = 0.07f;
+    //聚光范围
+	float cosPhyInner = 12.5f;//内圈
+	float cosPhyOuter= 20.0f;//外圈
+
+    bool ShowGUI = 0;
+    SpotLight(vec3 LightColor,vec3 Position = vec3(0,0,0));
+    ~SpotLight();
+    void setShader(Shader shader);
+    virtual void OnGUI() override;
+    unsigned int showID();
+};
+#pragma endregion
+
+#pragma region 材质
+class Material : Object
+{
+    
+};
+
+#pragma endregion
+
+#pragma reigon 绘制对象
+//-------------------------立方立体---------------------
+class Cube : Object
+{
+public:
+    float vertices[36 * 8] = {
+        // positions          // normals           // texture coords
+        -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f,  0.0f,
+         0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f,  0.0f,
+         0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f,  1.0f,
+         0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f,  1.0f,
+        -0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f,  1.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f,  0.0f,
+
+        -0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f,  0.0f,
+         0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f,  0.0f,
+         0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f,  1.0f,
+         0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f,  1.0f,
+        -0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f,  1.0f,
+        -0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f,  0.0f,
+
+        -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f,  0.0f,
+        -0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  1.0f,  1.0f,
+        -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f,  1.0f,
+        -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f,  1.0f,
+        -0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  0.0f,  0.0f,
+        -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f,  0.0f,
+
+         0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  1.0f,  0.0f,
+         0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  1.0f,  1.0f,
+         0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  0.0f,  1.0f,
+         0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  0.0f,  1.0f,
+         0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  0.0f,  0.0f,
+         0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  1.0f,  0.0f,
+
+        -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f,  1.0f,
+         0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  1.0f,  1.0f,
+         0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  1.0f,  0.0f,
+         0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  1.0f,  0.0f,
+        -0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  0.0f,  0.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f,  1.0f,
+
+        -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f,  1.0f,
+         0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  1.0f,  1.0f,
+         0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  1.0f,  0.0f,
+         0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  1.0f,  0.0f,
+        -0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  0.0f,  0.0f,
+        -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f,  1.0f
+    };
+
+
+};
 #pragma endregion
 
 
+#pragma region 模型导入
 
+struct Vertex{
+    glm::vec3 Position;
+    glm::vec3 Normal;
+    glm::vec2 TexCoords;
+    glm::vec3 Tangent;
+    glm::vec3 Bitangent;
 
+    //骨骼动画使用的数据，暂时我不使用
 
+	// int m_BoneIDs[MAX_BONE_INFLUENCE];
+	// //weights from each bone
+	// float m_Weights[MAX_BONE_INFLUENCE];
+};
+
+struct Texture {
+    unsigned int id;
+    enum TYPE
+    {
+        texture_diffuse = 0,
+        texture_specular,
+        texture_normal,
+        texture_height
+    } type;
+    string path;
+};
+
+//-------------------------Mesh---------------------
+class Mesh
+{
+public:
+    vector<Vertex> vertices;
+    vector<unsigned int> indices;//给EBO使用的
+    vector<Texture> textures;
+    unsigned int VAO;
+
+    Mesh(std::vector<Vertex> vertices,std::vector<unsigned int> indices,std::vector<Texture> textures);
+    void Draw(Shader & shader);
+
+private:
+    // render data 
+    unsigned int VBO, EBO;
+    void setupMesh();
+};
+#pragma endregion
+
+//-------------------------Model---------------------
+class Model
+{
+public:
+    vector<Texture> textures_loaded;//装载已有纹理，减少开销
+    vector<Mesh>    meshes;
+    string directory;
+    bool gammaCorrection;
+
+    Model(string const &path, bool gamma = false);
+    ~Model();
+    void Draw(Shader &shader);
+private:
+    Mesh processMesh(aiMesh *mesh, const aiScene *scene);
+    void processNode(aiNode *node, const aiScene *scene);
+    void loadModel(string const &path);
+    vector<Texture> loadMaterialTextures(aiMaterial *mat, aiTextureType type, Texture::TYPE type);
+};
 
 #pragma region 测试
 void RenderBox(Shader shader,unsigned int& quadVAO,unsigned int& quadVBO);

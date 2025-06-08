@@ -151,7 +151,7 @@ void AbstractLight::OnGUI()
 {
     ImGui::DragFloat3((name + "Position").c_str(),(float*)&(transform->position), 0.5f, -500.0f, 500.0f);
     ImGui::DragFloat3((name + "Color").c_str(),(float*)&LightColor,0.1,0,1);//暂时未考虑HDR
-    ImGui::DragFloat3((name + "Forward").c_str(),(float*)&(transform->Forward),0.1,0,1);//这是光源的方向向量，目前不打算再光源中加入Transform的Update以减小开销
+    ImGui::DragFloat3((name + "Forward").c_str(),(float*)&(transform->Forward),0.1,-1,1);//这是光源的方向向量，目前不打算再光源中加入Transform的Update以减小开销
 
 }
 
@@ -241,6 +241,52 @@ void PointLight::OnGUI()
 }
 
 unsigned int PointLight::showID()
+{
+    return ID;
+}
+
+//-------------------------聚光源---------------------
+unsigned int SpotLight::SpotLightNum = 0;
+SpotLight::SpotLight(vec3 LightColor,vec3 Position ) : AbstractLight(LightColor)
+{
+    ID = SpotLightNum;
+    SpotLightNum++;
+    name = "SpotLight" + std::to_string(ID) + "_";
+    transform->position = Position;
+}
+SpotLight::~SpotLight()
+{
+
+}
+void SpotLight::setShader(Shader shader)
+{
+    //启用光源
+    shader.setBool("spotLight[" + std::to_string(ID) + "].flag",1);
+    shader.setVec3("spotLight[" + std::to_string(ID) + "].pos",transform->position);
+    shader.setVec3("spotLight[" + std::to_string(ID) + "].dirToLight",-transform->Forward);
+    shader.setVec3("spotLight[" + std::to_string(ID) + "].color",LightColor);
+    shader.setFloat("spotLight[" + std::to_string(ID) + "].constant",constant);
+    shader.setFloat("spotLight[" + std::to_string(ID) + "].linear",linear);
+    shader.setFloat("spotLight[" + std::to_string(ID) + "].quadratic",quadratic);
+    shader.setFloat("spotLight[" + std::to_string(ID) + "].cosPhyInner",glm::cos(glm::radians(cosPhyInner)));
+    shader.setFloat("spotLight[" + std::to_string(ID) + "].quadratic",glm::cos(glm::radians(cosPhyOuter)));
+}
+
+void SpotLight::OnGUI()
+{
+    ImGui::Checkbox((name + "Show").c_str(), &ShowGUI);
+    if(ShowGUI)
+    {
+        AbstractLight::OnGUI();
+        ImGui::DragFloat((name + "Constant").c_str(),(float*)&constant,0.1f,0.0f,2.0f);
+        ImGui::DragFloat((name + "Linear").c_str(),(float*)&linear,0.01f,0.0f,2.0f);
+        ImGui::DragFloat((name + "Quadratic").c_str(),(float*)&quadratic,0.01f,0.0f,2.0f);
+        ImGui::DragFloat((name + "CosPhyInner").c_str(),(float*)&cosPhyInner,1.0f,0,180.0f);
+        ImGui::DragFloat((name + "CosPhyOuter").c_str(),(float*)&cosPhyOuter,1.0f,0,180.0f);
+    }
+}
+
+unsigned int SpotLight::showID()
 {
     return ID;
 }
@@ -698,4 +744,192 @@ unsigned int loadTexture(const char*  path,bool reverse)
 
 
 
+#pragma endregion
+
+#pragma region 模型导入
+//-------------------------Mesh---------------------
+Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures)
+{
+        this->vertices = vertices;
+        this->indices = indices;
+        this->textures = textures;
+
+        // now that we have all the required data, set the vertex buffers and its attribute pointers.
+        setupMesh();
+}
+
+void Mesh::Draw(Shader &shader) // 引用可以减少开销，这样在传参的时候就不会有副本产生
+{
+    unsigned int diffuseNr = 1;
+    unsigned int specularNr = 1;
+    unsigned int normalNr = 1;
+    unsigned int heightNr = 1;
+
+    for (unsigned int i = 0; i < textures.size(); i++)
+    {
+        glActiveTexture(GL_TEXTURE0 + i);
+        string number;
+        if (textures[i].type == Texture::texture_diffuse)
+        {
+            number = std::to_string(diffuseNr++);
+            // 将采样器与纹理单元绑定
+            shader.setInt("texture_diffuse" + number, i);
+        }
+        else if (textures[i].type == Texture::texture_specular)
+        {
+            number = std::to_string(specularNr++);
+            // 将采样器与纹理单元绑定
+            shader.setInt("texture_specular" + number, i);
+        }
+        else if (textures[i].type == Texture::texture_normal)
+        {
+            number = std::to_string(normalNr++);
+            // 将采样器与纹理单元绑定
+            shader.setInt("texture_normal" + number, i);
+        }
+        else if (textures[i].type == Texture::texture_height)
+        {
+            number = std::to_string(heightNr++);
+            // 将采样器与纹理单元绑定
+            shader.setInt("texture_height" + number, i);
+        }
+        // 将纹理单元与纹理绑定
+        glBindTexture(GL_TEXTURE_2D, textures[i].id);
+    }
+    // draw mesh
+    glBindVertexArray(VAO);
+    glDrawElements(GL_TRIANGLES, static_cast<unsigned int>(indices.size()), GL_UNSIGNED_INT, 0);
+    glBindVertexArray(0);
+
+    // always good practice to set everything back to defaults once configured.
+    glActiveTexture(GL_TEXTURE0);
+}
+
+void Mesh::setupMesh()
+{
+    glGenVertexArrays(1,&VAO);
+    glGenBuffers(1,&VBO);
+    glGenBuffers(1,&EBO);
+    glBindVertexArray(VAO);
+    glBindBuffer(GL_ARRAY_BUFFER,VBO);
+    glBufferData(GL_ARRAY_BUFFER,vertices.size() * sizeof(Vertex), &vertices[0],GL_STATIC_DRAW);
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,EBO);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), &indices[0], GL_STATIC_DRAW);
+
+    //vertex Positions
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *)0);
+    // vertex normals
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *)offsetof(Vertex, Normal));
+    // vertex texture coords
+    glEnableVertexAttribArray(2);
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *)offsetof(Vertex, TexCoords));
+    // vertex tangent
+    glEnableVertexAttribArray(3);
+    glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *)offsetof(Vertex, Tangent));
+    // vertex bitangent
+    glEnableVertexAttribArray(4);
+    glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *)offsetof(Vertex, Bitangent));
+
+    /*
+    //骨骼动画暂时用不上
+    // ids
+    glEnableVertexAttribArray(5);
+    glVertexAttribIPointer(5, 4, GL_INT, sizeof(Vertex), (void*)offsetof(Vertex, m_BoneIDs));
+
+    // weights
+    glEnableVertexAttribArray(6);
+    glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, m_Weights));
+    */
+   //进行解绑，防止对后续操作的干扰
+   glBindVertexArray(0);
+}
+
+//-------------------------Model---------------------
+Model::Model(string const &path, bool gamma) : gammaCorrection(gamma)
+{
+    loadModel(path);
+}
+
+Mesh Model::processMesh(aiMesh *mesh, const aiScene *scene)
+{
+    vector<Vertex> vertices;
+    vector<unsigned int> indices;
+    vector<Texture> textures;
+
+    for(unsigned int i = 0; i < mesh->mNumVertices; i++)
+    {
+        Vertex vertex;
+        glm::vec3 vector;
+        // positions
+        vector.x = mesh->mVertices[i].x;
+        vector.y = mesh->mVertices[i].y;
+        vector.z = mesh->mVertices[i].z;
+        vertex.Position = vector;
+
+        // normals
+        if (mesh->HasNormals())
+        {
+            vector.x = mesh->mNormals[i].x;
+            vector.y = mesh->mNormals[i].y;
+            vector.z = mesh->mNormals[i].z;
+            vertex.Normal = vector;
+        }
+        else
+        {
+            std::cout << "mesh中没有法线向量数据" << std::endl;
+            vertex.Normal = vec3(0, 1, 0);
+        }
+        // texture coordinates
+        if (mesh->mTextureCoords[0]) // does the mesh contain texture coordinates?
+        {
+            glm::vec2 vec;
+            // a vertex can contain up to 8 different texture coordinates. We thus make the assumption that we won't
+            // use models where a vertex can have multiple texture coordinates so we always take the first set (0).
+            vec.x = mesh->mTextureCoords[0][i].x;
+            vec.y = mesh->mTextureCoords[0][i].y;
+            vertex.TexCoords = vec;
+            // tangent
+            vector.x = mesh->mTangents[i].x;
+            vector.y = mesh->mTangents[i].y;
+            vector.z = mesh->mTangents[i].z;
+            vertex.Tangent = vector;
+            // bitangent
+            vector.x = mesh->mBitangents[i].x;
+            vector.y = mesh->mBitangents[i].y;
+            vector.z = mesh->mBitangents[i].z;
+            vertex.Bitangent = vector;
+        }
+        else
+        {
+            std::cout << "mesh中没有纹理坐标数据" << std::endl;
+            vertex.TexCoords = glm::vec2(0.0f, 0.0f);
+        }
+        vertices.push_back(vertex);//将顶点保存
+    }
+    //Mesh中保存的Face就是整个模型的某一个部分，这样管理的化就可以将模型拆成一块一块
+    for(unsigned int i = 0;i < mesh->mNumFaces;i++)
+    {
+        aiFace face = mesh->mFaces[i];
+        for(unsigned int j = 0;j < face.mNumIndices;j++)
+            indices.push_back(face.mIndices[j]);  
+    }
+    //开始处理纹理
+    aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex]; 
+
+    
+    return Mesh();
+}
+vector<Texture> Model::loadMaterialTextures(aiMaterial *mat, aiTextureType type, Texture::TYPE textureType)
+{
+    aiString str;
+    vector<Texture> textures;
+    for(unsigned int i = 0; i < textures_loaded.size();i++)
+    {
+        mat->GetTexture(type, i, &str);
+        if(std::strcmp(te))
+    }
+}
 #pragma endregion
