@@ -91,9 +91,9 @@ int main(int argc, char* argv[])
 	// 当前选中游戏对象指针（用于编辑器交互）
 	static Object* selected = nullptr;
 	Shader shader("shader_","E:\\GitStore\\MyEngine\\MyEngine\\shaderSource\\box/box");
-	shader.setInt("material.texture_diffuse0",0);
-	shader.setInt("material.texture_normal0",1);
-	shader.setFloat("material.shininess",0.03);
+	// shader.setInt("material.texture_diffuse0",0);
+	// shader.setInt("material.texture_normal0",1);
+	// shader.setFloat("material.shininess",0.03);
 	glm::mat4 model = glm::mat4(1.0f);
 	//光源
 	DirctionLight dirlight1(vec3(1,1,1),vec3(0.5f,1.0f,0.3));
@@ -111,10 +111,18 @@ int main(int argc, char* argv[])
 	Setting::GloabContorl.push_back(cameras);
 	unsigned int diffuseMap = loadTexture("E:\\LearnOpenGL-master\\resources\\textures\\bricks2.jpg",false);
 	unsigned int normalMap = loadTexture("E:\\LearnOpenGL-master\\resources\\textures\\bricks2_normal.jpg", false);
+	Cube cube;
 	Setting::MainCamera = &MainCamera;
 	Setting::MainCamera->Update();
 	static float lastTime = 0;
 	static float currentTime = 0;
+
+    std::vector<int> vi;
+    // std::vector<double> vd;
+    float f[10];
+    std::cout<<sizeof(vi)<<std::endl;
+    std::cout<<sizeof(f)<<std::endl;
+
 	while (!glfwWindowShouldClose(Setting::window))
 	{
 		// 用于计算帧间隔的时间戳
@@ -154,7 +162,7 @@ int main(int argc, char* argv[])
 				// new GameObject("NewCamera", GameObject::GameObject_Camera);
 			}
 			Setting::MainCamera->OnGUI();
-
+            cube.OnGUI();
 		ImGui::End();
 
 		ImGui::Begin("Light");
@@ -166,7 +174,7 @@ int main(int argc, char* argv[])
 			}
 
 			// pointLight1.OnGUI();
-			// dirlight1.OnGUI();
+			dirlight1.OnGUI();
 			spotLight.OnGUI();
 			
 			
@@ -200,13 +208,16 @@ int main(int argc, char* argv[])
 		// shader.setVec3("DirctionLight[0].color", dirlight1.LightColor);
 		// shader.setVec3("DirctionLight[0].dirToLight", dirlight1.transform->Forward);
 		// pointLight1.setShader(shader);
-		// dirlight1.setShader(shader);
+		dirlight1.setShader(shader);
+		//切线和副切线并没有传入，所以TBN会是0，导致计算不对，后面记得更新切线与副切线
 		spotLight.setShader(shader);
-		glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, diffuseMap);
-        glActiveTexture(GL_TEXTURE1);
-        glBindTexture(GL_TEXTURE_2D, normalMap);
-		RenderBox(shader,quadVAO,quadVBO);
+		cube.DrawInit(diffuseMap,normalMap);
+		cube.Draw(shader);
+		// glActiveTexture(GL_TEXTURE0);
+        // glBindTexture(GL_TEXTURE_2D, diffuseMap);
+        // glActiveTexture(GL_TEXTURE1);
+        // glBindTexture(GL_TEXTURE_2D, normalMap);
+		// RenderBox(shader,quadVAO,quadVBO);
 
 
 
@@ -219,6 +230,7 @@ int main(int argc, char* argv[])
 		// 			if (mb->enable)
 		// 				mb->Update(); // 常规更新逻辑
 		Setting::MainCamera->Update();
+        cube.Update();
 		Input::ClearInputEveryFrame(); // 清空本帧输入
 		lastTime = glfwGetTime();	   // 更新时间戳
 

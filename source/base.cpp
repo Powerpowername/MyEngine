@@ -853,6 +853,10 @@ Model::Model(string const &path, bool gamma) : gammaCorrection(gamma)
     loadModel(path);
 }
 
+Model::~Model()
+{
+}
+
 Mesh Model::processMesh(aiMesh *mesh, const aiScene *scene)
 {
     vector<Vertex> vertices;
@@ -909,7 +913,7 @@ Mesh Model::processMesh(aiMesh *mesh, const aiScene *scene)
         }
         vertices.push_back(vertex);//将顶点保存
     }
-    //Mesh中保存的Face就是整个模型的某一个部分，这样管理的化就可以将模型拆成一块一块
+    //Mesh中保存的Face就是要画的面
     for(unsigned int i = 0;i < mesh->mNumFaces;i++)
     {
         aiFace face = mesh->mFaces[i];
@@ -920,16 +924,196 @@ Mesh Model::processMesh(aiMesh *mesh, const aiScene *scene)
     aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex]; 
 
     
-    return Mesh();
+    // return Mesh();
+}
+void Model::processNode(aiNode *node, const aiScene *scene)
+{
+	//Node就是整个模型的某一个部分，这样管理的化就可以将模型拆成一块一块
+	for(unsigned int i = 0;i < node->mNumMeshes;i++)
+	{
+		aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
+		meshes.push_back(processMesh(mesh,scene));
+	}
+	for(unsigned int i = 0;i < node->mNumChildren;i++)
+	{
+		processNode(node->mChildren[i],scene);
+	}
+}
+void Model::loadModel(string const &path)
+{
+	Assimp::Importer importer;
+	const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
+	if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
+	{
+		std::cout << "ERROR::ASSIMP:: " << importer.GetErrorString() << std::endl;
+		return;
+	}
+	// retrieve the directory path of the filepath
+	directory = path.substr(0, path.find_last_of('/'));
+
+	// process ASSIMP's root node recursively
+	processNode(scene->mRootNode, scene);
+}
+unsigned int Model::TextureFromFile(const char *path, const string &directory, bool gamma)
+{
+    string filename = string(path);
+    filename = directory + '/' + filename;
+
+    unsigned int textureID;
+    glGenTextures(1, &textureID);
+
+    int width, height, nrComponents;
+    unsigned char *data = stbi_load(filename.c_str(), &width, &height, &nrComponents, 0);
+    if (data)
+    {
+        GLenum format;
+        if (nrComponents == 1)
+            format = GL_RED;
+        else if (nrComponents == 3)
+            format = GL_RGB;
+        else if (nrComponents == 4)
+            format = GL_RGBA;
+
+        glBindTexture(GL_TEXTURE_2D, textureID);
+        glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+        glGenerateMipmap(GL_TEXTURE_2D);
+
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+        stbi_image_free(data);
+    }
+    else
+    {
+        std::cout << "Texture failed to load at path: " << path << std::endl;
+        stbi_image_free(data);
+    }
+
+    return textureID;
 }
 vector<Texture> Model::loadMaterialTextures(aiMaterial *mat, aiTextureType type, Texture::TYPE textureType)
 {
-    aiString str;
+    aiString str;//用来装纹理路径的，此处应为相对路径，是哪一个文件的，具体是哪一个还是要根据加载文件里的内容
     vector<Texture> textures;
-    for(unsigned int i = 0; i < textures_loaded.size();i++)
-    {
-        mat->GetTexture(type, i, &str);
-        if(std::strcmp(te))
-    }
+	bool skip = false;
+	//遍历纹理
+	for(unsigned int i = 0; i < mat->GetTextureCount(type); i++)
+	{
+		//遍历已加载纹理，判断是不是已保存的纹理
+		for (unsigned int j = 0; j < textures_loaded.size(); j++)
+		{
+			mat->GetTexture(type, j, &str);
+			//如果是已加载的纹理就不重新加载纹理
+			if (std::strcmp(textures_loaded[j].path.data(),str.C_Str()) == 0)
+			{
+				textures.push_back(textures_loaded[j]);
+				skip = true;
+				break;
+			}
+		}
+		if (!skip)
+		{
+			Texture texture;
+			texture.id = TextureFromFile(str.C_Str(), this->directory, 0); // 不进行伽马矫正，内部其实没有操作
+			texture.type = textureType;
+			texture.path = str.C_Str();
+			textures.push_back(texture);
+			textures_loaded.push_back(texture);
+		}
+	}
+	return textures;
+}
+#pragma endregion
+
+#pragma region 绘制对象
+
+unsigned int Cube::CubeNum = 0;
+Cube::Cube() : Object("Cube")
+{
+	ID = CubeNum;
+	CubeNum++;
+	name = "Cube" + ID;
+	transform = std::make_unique<Transform>(this);
+	transform->position = vec3(0,0,0);//必须为(0,0,0)开始，这样旋转才没有问题
+    transform->Update();
+	
+	
+
+
+}
+Cube::~Cube()
+{
+}
+void Cube::DrawInit(unsigned int diffuseMap,unsigned int normalMap)
+{
+    this->diffuseMap = diffuseMap;
+    this->normalMap = normalMap;
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, diffuseMap);
+    glActiveTexture(GL_TEXTURE1);
+    glBindTexture(GL_TEXTURE_2D, normalMap);
+
+    glGenVertexArrays(1,&VAO);
+    glGenBuffers(1,&VBO);
+    glBindBuffer(GL_ARRAY_BUFFER,VBO);
+    glBufferData(GL_ARRAY_BUFFER,sizeof(vertices),vertices,GL_STATIC_DRAW);
+
+    glBindVertexArray(VAO);
+    glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE,11 * sizeof(float),(void*)0);
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 11 * sizeof(float), (void*)(3 * sizeof(float)));
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 11 * sizeof(float), (void*)(6 * sizeof(float)));
+    glEnableVertexAttribArray(2);
+    //切线
+    glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, 11 * sizeof(float), (void*)(8 * sizeof(float)));
+    glEnableVertexAttribArray(3);
+}
+void Cube::Draw(Shader shader)
+{
+    //配置纹理啥的
+	shader.setInt("material.texture_diffuse0",0);
+	shader.setInt("material.texture_normal0",1);
+	shader.setFloat("material.shininess",0.03);
+    //传入model，proj，vie等
+    shader.setMat4("model",model);
+    shader.setMat4("view",Setting::MainCamera->viewMat);
+    shader.setMat4("projection",Setting::MainCamera->projMat);
+    shader.setVec3("viewPos", Setting::MainCamera->transform->position);
+    glBindVertexArray(VAO);
+    glDrawArrays(GL_TRIANGLES,0,36);
+    glBindVertexArray(0);
+
+}
+void Cube::Update()
+{
+    model = mat4(1);
+    // 计算需要旋转的差值
+    glm::vec3 rotationDelta = targetRotation - currentRotation;
+    // 转换为弧度制
+    rotationDelta = glm::radians(rotationDelta);
+	//必须先旋转，再位移，所以所有物体必须是从(0,0,0)起始的，这样就实现了自转和位移
+	model = glm::rotate(model,rotationDelta.x,vec3(1,0,0));//绕x轴旋转
+	model = glm::rotate(model,rotationDelta.y,vec3(0,1,0));//绕y轴旋转
+	model = glm::rotate(model,rotationDelta.z,vec3(0,0,1));//绕z轴旋转
+    //先转再位移就是自传
+	model = glm::translate(model,displacement);
+	//平移操作时一定要w分量的，旋转操作其实并不需要,
+	transform->position = vec3(model * vec4(vec3(0,0,0),1));
+
+}
+
+void Cube::OnGUI()
+{
+    // ImGui::DragFloat3((name + "_position").c_str(),(float*)&(transform->position),0.5f,-500,500);
+    //这个代码有问题，会导致每一帧都会有
+    ImGui::DragFloat3((name + "_position").c_str(),(float*)&transform->position,0.5f,-100.0f,100.0f);
+    //自传实现由困难
+    ImGui::DragFloat3((name + "_rotate").c_str(),(float*)&targetRotation,0.5f,-180.0f,180.0f);
+    
+    displacement = transform->position;
+
 }
 #pragma endregion

@@ -404,6 +404,39 @@ CMakeFiles/app.dir/source/main.cpp.obj: \
  E:/GitStore/MyEngine/MyEngine/include/imgui_impl_glfw.h \
  E:/GitStore/MyEngine/MyEngine/include/imgui_impl_opengl3.h \
  E:/GitStore/MyEngine/MyEngine/include/stb_image.h \
+ E:/lib_c/assimp-master/include/assimp/Importer.hpp \
+ E:/lib_c/assimp-master/include/assimp/types.h \
+ E:/Compiler/mingw64/x86_64-w64-mingw32/include/sys/types.h \
+ E:/lib_c/assimp-master/include/assimp/defs.h \
+ E:/lib_c/assimp-master/build_mingw64/include/assimp/config.h \
+ E:/lib_c/assimp-master/include/assimp/vector2.h \
+ E:/lib_c/assimp-master/include/assimp/vector3.h \
+ E:/lib_c/assimp-master/include/assimp/color4.h \
+ E:/lib_c/assimp-master/include/assimp/matrix3x3.h \
+ E:/lib_c/assimp-master/include/assimp/matrix4x4.h \
+ E:/lib_c/assimp-master/include/assimp/quaternion.h \
+ E:/lib_c/assimp-master/include/assimp/vector2.inl \
+ E:/lib_c/assimp-master/include/assimp/vector3.inl \
+ E:/lib_c/assimp-master/include/assimp/color4.inl \
+ E:/lib_c/assimp-master/include/assimp/matrix3x3.inl \
+ E:/lib_c/assimp-master/include/assimp/matrix4x4.inl \
+ E:/lib_c/assimp-master/include/assimp/MathFunctions.h \
+ E:/lib_c/assimp-master/include/assimp/quaternion.inl \
+ E:/lib_c/assimp-master/include/assimp/scene.h \
+ E:/lib_c/assimp-master/include/assimp/texture.h \
+ E:/lib_c/assimp-master/include/assimp/Compiler/pushpack1.h \
+ E:/lib_c/assimp-master/include/assimp/Compiler/poppack1.h \
+ E:/lib_c/assimp-master/include/assimp/mesh.h \
+ E:/lib_c/assimp-master/include/assimp/aabb.h \
+ E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/unordered_set \
+ E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/unordered_set.h \
+ E:/lib_c/assimp-master/include/assimp/light.h \
+ E:/lib_c/assimp-master/include/assimp/camera.h \
+ E:/lib_c/assimp-master/include/assimp/material.h \
+ E:/lib_c/assimp-master/include/assimp/material.inl \
+ E:/lib_c/assimp-master/include/assimp/anim.h \
+ E:/lib_c/assimp-master/include/assimp/metadata.h \
+ E:/lib_c/assimp-master/include/assimp/postprocess.h \
  E:/GitStore/MyEngine/MyEngine/include/Save.h \
  E:/GitStore/MyEngine/MyEngine/include/imgui_internal.h \
  E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/math.h \
@@ -506,5 +539,4 @@ CMakeFiles/app.dir/source/main.cpp.obj: \
  E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/prfchwintrin.h \
  E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/keylockerintrin.h \
  E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/amxfp16intrin.h \
- E:/GitStore/MyEngine/MyEngine/include/stb_image.h \
  E:/GitStore/MyEngine/MyEngine/include/stb_image_write.h

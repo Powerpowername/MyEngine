@@ -3,7 +3,7 @@ layout (location = 0) in vec3 position;
 layout (location = 1) in vec3 normal;
 layout (location = 2) in vec2 texCoords;
 layout (location = 3) in vec3 tangent;
-layout (location = 4) in vec3 bitangent;
+// layout (location = 4) in vec3 bitangent;
 
 out VS_OUT {
     vec2 TexCoords;
@@ -27,9 +27,10 @@ void main()
     vs_out.TexCoords = texCoords;
     mat3 normalMatrix = transpose(inverse(mat3(model)));//避免向量在转换到世界坐标系时变形
     vec3 T = normalize(normalMatrix * tangent);
-    vec3 B = normalize(normalMatrix * bitangent);
     vec3 N = normalize(normalMatrix * normal);    
+    vec3 B = normalize(normalMatrix * cross(normal,tangent));
     
+    // vs_out.TBN = transpose(mat3(T, B, N));  
     vs_out.TBN = mat3(T, B, N);  
     vs_out.ViewPos = viewPos;
 }

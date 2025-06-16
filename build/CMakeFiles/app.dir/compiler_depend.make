@@ -381,6 +381,7 @@ CMakeFiles/app.dir/source/base.cpp.obj: E:/GitStore/MyEngine/MyEngine/source/bas
   E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/uniform_int_dist.h \
   E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/unique_ptr.h \
   E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/unordered_map.h \
+  E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/unordered_set.h \
   E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/uses_allocator.h \
   E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/uses_allocator_args.h \
   E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/utility.h \
@@ -461,6 +462,7 @@ CMakeFiles/app.dir/source/base.cpp.obj: E:/GitStore/MyEngine/MyEngine/source/bas
   E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/type_traits \
   E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/typeinfo \
   E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/unordered_map \
+  E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/unordered_set \
   E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/utility \
   E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/valarray \
   E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/vector \
@@ -516,6 +518,7 @@ CMakeFiles/app.dir/source/base.cpp.obj: E:/GitStore/MyEngine/MyEngine/source/bas
   E:/Compiler/mingw64/x86_64-w64-mingw32/include/string.h \
   E:/Compiler/mingw64/x86_64-w64-mingw32/include/swprintf.inl \
   E:/Compiler/mingw64/x86_64-w64-mingw32/include/sys/timeb.h \
+  E:/Compiler/mingw64/x86_64-w64-mingw32/include/sys/types.h \
   E:/Compiler/mingw64/x86_64-w64-mingw32/include/vadefs.h \
   E:/Compiler/mingw64/x86_64-w64-mingw32/include/wchar.h \
   E:/Compiler/mingw64/x86_64-w64-mingw32/include/wctype.h \
@@ -680,6 +683,36 @@ CMakeFiles/app.dir/source/base.cpp.obj: E:/GitStore/MyEngine/MyEngine/source/bas
   E:/GitStore/MyEngine/MyEngine/include/imgui_impl_opengl3.h \
   E:/GitStore/MyEngine/MyEngine/include/json.hpp \
   E:/GitStore/MyEngine/MyEngine/include/stb_image.h \
+  E:/lib_c/assimp-master/build_mingw64/include/assimp/config.h \
+  E:/lib_c/assimp-master/include/assimp/Compiler/poppack1.h \
+  E:/lib_c/assimp-master/include/assimp/Compiler/pushpack1.h \
+  E:/lib_c/assimp-master/include/assimp/Importer.hpp \
+  E:/lib_c/assimp-master/include/assimp/MathFunctions.h \
+  E:/lib_c/assimp-master/include/assimp/aabb.h \
+  E:/lib_c/assimp-master/include/assimp/anim.h \
+  E:/lib_c/assimp-master/include/assimp/camera.h \
+  E:/lib_c/assimp-master/include/assimp/color4.h \
+  E:/lib_c/assimp-master/include/assimp/color4.inl \
+  E:/lib_c/assimp-master/include/assimp/defs.h \
+  E:/lib_c/assimp-master/include/assimp/light.h \
+  E:/lib_c/assimp-master/include/assimp/material.h \
+  E:/lib_c/assimp-master/include/assimp/material.inl \
+  E:/lib_c/assimp-master/include/assimp/matrix3x3.h \
+  E:/lib_c/assimp-master/include/assimp/matrix3x3.inl \
+  E:/lib_c/assimp-master/include/assimp/matrix4x4.h \
+  E:/lib_c/assimp-master/include/assimp/matrix4x4.inl \
+  E:/lib_c/assimp-master/include/assimp/mesh.h \
+  E:/lib_c/assimp-master/include/assimp/metadata.h \
+  E:/lib_c/assimp-master/include/assimp/postprocess.h \
+  E:/lib_c/assimp-master/include/assimp/quaternion.h \
+  E:/lib_c/assimp-master/include/assimp/quaternion.inl \
+  E:/lib_c/assimp-master/include/assimp/scene.h \
+  E:/lib_c/assimp-master/include/assimp/texture.h \
+  E:/lib_c/assimp-master/include/assimp/types.h \
+  E:/lib_c/assimp-master/include/assimp/vector2.h \
+  E:/lib_c/assimp-master/include/assimp/vector2.inl \
+  E:/lib_c/assimp-master/include/assimp/vector3.h \
+  E:/lib_c/assimp-master/include/assimp/vector3.inl \
   E:/lib_c/glad/include/KHR/khrplatform.h \
   E:/lib_c/glad/include/glad/glad.h \
   E:/lib_c/glfw-3.4/include/GLFW/glfw3.h
@@ -2154,6 +2187,7 @@ CMakeFiles/app.dir/source/main.cpp.obj: E:/GitStore/MyEngine/MyEngine/source/mai
   E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/uniform_int_dist.h \
   E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/unique_ptr.h \
   E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/unordered_map.h \
+  E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/unordered_set.h \
   E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/uses_allocator.h \
   E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/uses_allocator_args.h \
   E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/utility.h \
@@ -2235,6 +2269,7 @@ CMakeFiles/app.dir/source/main.cpp.obj: E:/GitStore/MyEngine/MyEngine/source/mai
   E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/type_traits \
   E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/typeinfo \
   E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/unordered_map \
+  E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/unordered_set \
   E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/utility \
   E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/valarray \
   E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/vector \
@@ -2345,6 +2380,7 @@ CMakeFiles/app.dir/source/main.cpp.obj: E:/GitStore/MyEngine/MyEngine/source/mai
   E:/Compiler/mingw64/x86_64-w64-mingw32/include/string.h \
   E:/Compiler/mingw64/x86_64-w64-mingw32/include/swprintf.inl \
   E:/Compiler/mingw64/x86_64-w64-mingw32/include/sys/timeb.h \
+  E:/Compiler/mingw64/x86_64-w64-mingw32/include/sys/types.h \
   E:/Compiler/mingw64/x86_64-w64-mingw32/include/vadefs.h \
   E:/Compiler/mingw64/x86_64-w64-mingw32/include/wchar.h \
   E:/Compiler/mingw64/x86_64-w64-mingw32/include/wctype.h \
@@ -2512,6 +2548,36 @@ CMakeFiles/app.dir/source/main.cpp.obj: E:/GitStore/MyEngine/MyEngine/source/mai
   E:/GitStore/MyEngine/MyEngine/include/json.hpp \
   E:/GitStore/MyEngine/MyEngine/include/stb_image.h \
   E:/GitStore/MyEngine/MyEngine/include/stb_image_write.h \
+  E:/lib_c/assimp-master/build_mingw64/include/assimp/config.h \
+  E:/lib_c/assimp-master/include/assimp/Compiler/poppack1.h \
+  E:/lib_c/assimp-master/include/assimp/Compiler/pushpack1.h \
+  E:/lib_c/assimp-master/include/assimp/Importer.hpp \
+  E:/lib_c/assimp-master/include/assimp/MathFunctions.h \
+  E:/lib_c/assimp-master/include/assimp/aabb.h \
+  E:/lib_c/assimp-master/include/assimp/anim.h \
+  E:/lib_c/assimp-master/include/assimp/camera.h \
+  E:/lib_c/assimp-master/include/assimp/color4.h \
+  E:/lib_c/assimp-master/include/assimp/color4.inl \
+  E:/lib_c/assimp-master/include/assimp/defs.h \
+  E:/lib_c/assimp-master/include/assimp/light.h \
+  E:/lib_c/assimp-master/include/assimp/material.h \
+  E:/lib_c/assimp-master/include/assimp/material.inl \
+  E:/lib_c/assimp-master/include/assimp/matrix3x3.h \
+  E:/lib_c/assimp-master/include/assimp/matrix3x3.inl \
+  E:/lib_c/assimp-master/include/assimp/matrix4x4.h \
+  E:/lib_c/assimp-master/include/assimp/matrix4x4.inl \
+  E:/lib_c/assimp-master/include/assimp/mesh.h \
+  E:/lib_c/assimp-master/include/assimp/metadata.h \
+  E:/lib_c/assimp-master/include/assimp/postprocess.h \
+  E:/lib_c/assimp-master/include/assimp/quaternion.h \
+  E:/lib_c/assimp-master/include/assimp/quaternion.inl \
+  E:/lib_c/assimp-master/include/assimp/scene.h \
+  E:/lib_c/assimp-master/include/assimp/texture.h \
+  E:/lib_c/assimp-master/include/assimp/types.h \
+  E:/lib_c/assimp-master/include/assimp/vector2.h \
+  E:/lib_c/assimp-master/include/assimp/vector2.inl \
+  E:/lib_c/assimp-master/include/assimp/vector3.h \
+  E:/lib_c/assimp-master/include/assimp/vector3.inl \
   E:/lib_c/glad/include/KHR/khrplatform.h \
   E:/lib_c/glad/include/glad/glad.h \
   E:/lib_c/glfw-3.4/include/GLFW/glfw3.h
@@ -2556,6 +2622,8 @@ E:/GitStore/MyEngine/MyEngine/include/glm/ext/matrix_float3x2_precision.hpp:
 E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/limits.h:
 
 E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx512ifmaintrin.h:
+
+E:/lib_c/assimp-master/include/assimp/light.h:
 
 E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/localefwd.h:
 
@@ -2610,6 +2678,8 @@ E:/GitStore/MyEngine/MyEngine/include/glm/ext/matrix_double4x4.hpp:
 E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx5124vnniwintrin.h:
 
 E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx512bf16intrin.h:
+
+E:/lib_c/assimp-master/include/assimp/vector3.h:
 
 E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/clwbintrin.h:
 
@@ -2667,6 +2737,8 @@ E:/Compiler/mingw64/x86_64-w64-mingw32/include/bemapiset.h:
 
 E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx512fp16vlintrin.h:
 
+E:/lib_c/assimp-master/include/assimp/color4.h:
+
 E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avx512pfintrin.h:
 
 E:/Compiler/mingw64/x86_64-w64-mingw32/include/winnetwk.h:
@@ -2723,13 +2795,13 @@ E:/Compiler/mingw64/x86_64-w64-mingw32/include/winreg.h:
 
 E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/cetintrin.h:
 
+E:/GitStore/MyEngine/MyEngine/include/glm/detail/type_mat2x4.inl:
+
 E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/avxvnniint16intrin.h:
 
 E:/Compiler/mingw64/x86_64-w64-mingw32/include/mmsyscom.h:
 
 E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/gslice_array.h:
-
-E:/GitStore/MyEngine/MyEngine/include/glm/detail/type_mat2x4.inl:
 
 E:/Compiler/mingw64/x86_64-w64-mingw32/include/stdio.h:
 
@@ -2941,6 +3013,8 @@ E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/xopintrin.h:
 
 E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/xtestintrin.h:
 
+E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/unordered_set.h:
+
 E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/xsavecintrin.h:
 
 E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/xsavesintrin.h:
@@ -2950,6 +3024,8 @@ E:/Compiler/mingw64/x86_64-w64-mingw32/include/_bsd_types.h:
 E:/Compiler/mingw64/x86_64-w64-mingw32/include/_mingw_stat64.h:
 
 E:/Compiler/mingw64/x86_64-w64-mingw32/include/_mingw.h:
+
+E:/Compiler/mingw64/x86_64-w64-mingw32/include/sys/types.h:
 
 E:/Compiler/mingw64/x86_64-w64-mingw32/include/_mingw_mac.h:
 
@@ -3221,6 +3297,8 @@ E:/GitStore/MyEngine/MyEngine/include/glm/detail/type_mat4x2.inl:
 
 E:/Compiler/mingw64/x86_64-w64-mingw32/include/rpcnterr.h:
 
+E:/lib_c/assimp-master/include/assimp/camera.h:
+
 E:/GitStore/MyEngine/MyEngine/include/glm/ext/matrix_float4x2_precision.hpp:
 
 E:/Compiler/mingw64/x86_64-w64-mingw32/include/rpcsal.h:
@@ -3255,9 +3333,9 @@ E:/Compiler/mingw64/x86_64-w64-mingw32/include/shellapi.h:
 
 E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/valarray_after.h:
 
-E:/Compiler/mingw64/x86_64-w64-mingw32/include/stddef.h:
-
 E:/GitStore/MyEngine/MyEngine/include/glm/detail/type_mat3x2.hpp:
+
+E:/Compiler/mingw64/x86_64-w64-mingw32/include/stddef.h:
 
 E:/GitStore/MyEngine/MyEngine/include/glm/mat4x2.hpp:
 
@@ -3354,6 +3432,8 @@ E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/erase_if.
 E:/Compiler/mingw64/x86_64-w64-mingw32/include/winscard.h:
 
 E:/Compiler/mingw64/x86_64-w64-mingw32/include/winuser.h:
+
+E:/lib_c/assimp-master/include/assimp/texture.h:
 
 E:/Compiler/mingw64/x86_64-w64-mingw32/include/winver.h:
 
@@ -3483,9 +3563,9 @@ E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/sstream.t
 
 E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/std_abs.h:
 
-E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/cerrno:
-
 E:/GitStore/MyEngine/MyEngine/include/glm/detail/type_mat3x2.inl:
+
+E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/cerrno:
 
 E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/bits/std_function.h:
 
@@ -3569,7 +3649,11 @@ E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/debug/debug.h:
 
 E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/ext/aligned_buffer.h:
 
+E:/lib_c/assimp-master/include/assimp/MathFunctions.h:
+
 E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/ext/string_conversions.h:
+
+E:/lib_c/assimp-master/include/assimp/Compiler/poppack1.h:
 
 E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/functional:
 
@@ -3609,11 +3693,21 @@ E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/tr1/poly_lague
 
 E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/type_traits:
 
+E:/GitStore/MyEngine/MyEngine/include/glm/detail/type_mat2x2.hpp:
+
+E:/lib_c/assimp-master/include/assimp/material.h:
+
+E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_uint3.hpp:
+
+E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/unordered_set:
+
 E:/GitStore/MyEngine/MyEngine/include/glm/detail/type_mat3x4.hpp:
 
 E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/x86_64-w64-mingw32/bits/basic_file.h:
 
 E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/x86_64-w64-mingw32/bits/c++config.h:
+
+E:/lib_c/assimp-master/include/assimp/material.inl:
 
 E:/Compiler/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/c++/x86_64-w64-mingw32/bits/c++locale.h:
 
@@ -3654,8 +3748,6 @@ E:/GitStore/MyEngine/MyEngine/include/glm/detail/qualifier.hpp:
 E:/GitStore/MyEngine/MyEngine/include/glm/detail/type_half.hpp:
 
 E:/GitStore/MyEngine/MyEngine/include/glm/detail/type_half.inl:
-
-E:/GitStore/MyEngine/MyEngine/include/glm/detail/type_mat2x2.hpp:
 
 E:/GitStore/MyEngine/MyEngine/include/glm/detail/type_mat3x3.inl:
 
@@ -3773,6 +3865,8 @@ E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_double4_precision.hpp:
 
 E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_float2.hpp:
 
+E:/lib_c/assimp-master/include/assimp/quaternion.inl:
+
 E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_int4_sized.hpp:
 
 E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_float3.hpp:
@@ -3788,8 +3882,6 @@ E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_int3.hpp:
 E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_relational.hpp:
 
 E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_relational.inl:
-
-E:/GitStore/MyEngine/MyEngine/include/glm/ext/vector_uint3.hpp:
 
 E:/GitStore/MyEngine/MyEngine/include/glm/gtc/epsilon.hpp:
 
@@ -3818,6 +3910,46 @@ E:/GitStore/MyEngine/MyEngine/include/glm/vec3.hpp:
 E:/GitStore/MyEngine/MyEngine/include/glm/vec4.hpp:
 
 E:/GitStore/MyEngine/MyEngine/include/glm/vector_relational.hpp:
+
+E:/lib_c/assimp-master/build_mingw64/include/assimp/config.h:
+
+E:/lib_c/assimp-master/include/assimp/Compiler/pushpack1.h:
+
+E:/lib_c/assimp-master/include/assimp/Importer.hpp:
+
+E:/lib_c/assimp-master/include/assimp/aabb.h:
+
+E:/lib_c/assimp-master/include/assimp/anim.h:
+
+E:/lib_c/assimp-master/include/assimp/color4.inl:
+
+E:/lib_c/assimp-master/include/assimp/defs.h:
+
+E:/lib_c/assimp-master/include/assimp/matrix3x3.h:
+
+E:/lib_c/assimp-master/include/assimp/matrix3x3.inl:
+
+E:/lib_c/assimp-master/include/assimp/matrix4x4.h:
+
+E:/lib_c/assimp-master/include/assimp/matrix4x4.inl:
+
+E:/lib_c/assimp-master/include/assimp/mesh.h:
+
+E:/lib_c/assimp-master/include/assimp/metadata.h:
+
+E:/lib_c/assimp-master/include/assimp/postprocess.h:
+
+E:/lib_c/assimp-master/include/assimp/quaternion.h:
+
+E:/lib_c/assimp-master/include/assimp/scene.h:
+
+E:/lib_c/assimp-master/include/assimp/types.h:
+
+E:/lib_c/assimp-master/include/assimp/vector2.h:
+
+E:/lib_c/assimp-master/include/assimp/vector2.inl:
+
+E:/lib_c/assimp-master/include/assimp/vector3.inl:
 
 E:/lib_c/glfw-3.4/include/GLFW/glfw3.h:
 
