@@ -91,6 +91,7 @@ int main(int argc, char* argv[])
 	// 当前选中游戏对象指针（用于编辑器交互）
 	static Object* selected = nullptr;
 	Shader shader("shader_","E:\\GitStore\\MyEngine\\MyEngine\\shaderSource\\box/box");
+	Shader SkyBoxShader("skyBox_shader","E:\\GitStore\\MyEngine\\MyEngine\\shaderSource\\skyBox/skyBox");
 	// shader.setInt("material.texture_diffuse0",0);
 	// shader.setInt("material.texture_normal0",1);
 	// shader.setFloat("material.shininess",0.03);
@@ -102,6 +103,17 @@ int main(int argc, char* argv[])
 	pointLight1.transform->Forward = vec3(0,0,1);
 	SpotLight spotLight(vec3(1,1,1),vec3(0.5f,1.0f,0.3));
 	spotLight.transform->Forward = vec3(0,0,1);
+	std::vector<string> face{
+		"E:\\LearnOpenGL-master\\resources/textures/skybox/right.jpg",
+		"E:\\LearnOpenGL-master\\resources/textures/skybox/left.jpg",
+		"E:\\LearnOpenGL-master\\resources/textures/skybox/top.jpg",
+		"E:\\LearnOpenGL-master\\resources/textures/skybox/bottom.jpg",
+		"E:\\LearnOpenGL-master\\resources/textures/skybox/front.jpg",
+		"E:\\LearnOpenGL-master\\resources/textures/skybox/back.jpg"
+	};
+	SkyBox skybox(face);
+	skybox.loadCubemap();
+
 	// std::cout<<dirlight1.showID();
 	static GLuint quadVAO = 0;
 	static GLuint quadVBO = 0;
@@ -122,7 +134,7 @@ int main(int argc, char* argv[])
     float f[10];
     std::cout<<sizeof(vi)<<std::endl;
     std::cout<<sizeof(f)<<std::endl;
-
+	glEnable(GL_DEPTH_TEST);//开启深度测试
 	while (!glfwWindowShouldClose(Setting::window))
 	{
 		// 用于计算帧间隔的时间戳
@@ -162,7 +174,16 @@ int main(int argc, char* argv[])
 				// new GameObject("NewCamera", GameObject::GameObject_Camera);
 			}
 			Setting::MainCamera->OnGUI();
-            cube.OnGUI();
+		if (ImGui::BeginMenu("SkyBox"))
+		{
+			ImGui::EndMenu();
+		}
+		/*
+		放在while里会很卡
+		skybox.loadCubemap();
+		*/
+		skybox.OnGUI();
+        cube.OnGUI();
 		ImGui::End();
 
 		ImGui::Begin("Light");
@@ -176,52 +197,33 @@ int main(int argc, char* argv[])
 			// pointLight1.OnGUI();
 			dirlight1.OnGUI();
 			spotLight.OnGUI();
-			
+		
+		// if (ImGui::BeginMenu("SkyBox"))
+		// {
+
+		// 	ImGui::EndMenu();
+		// }
 			
 		ImGui::End();
 
 
-		// if(Setting::MainCamera != nullptr)
-		// {
-		// 	//此处后期多添加一个逻辑，处理是不是相关脚本的逻辑，这里就暂时默认只有camera脚本
-		// 	for(auto it : *Setting::MainCamera->scripts)
-		// 	{
-		// 		// std::cout<<"------------"<<typeid(*it).name()<<std::endl;
-		// 		if(typeid(*it) == typeid(Camera))
-		// 		{
-		// 			// std::cout<<"------------"<<typeid(*it).name()<<std::endl;
-		// 			shader.setMat4("projection",static_cast<Camera*>(it)->projMat);
-		// 			shader.setMat4("view",static_cast<Camera*>(it)->viewMat);
-		// 			//model矩阵可以单独拿出来做一个放大缩小的处理
-		// 		}
-		// 	}
-		// }
-
 		mat4 model = mat4(1);
 		shader.use();
-		shader.setVec3("viewPos", Setting::MainCamera->transform->position);
-		shader.setMat4("projection",Setting::MainCamera->projMat);
-		shader.setMat4("view",Setting::MainCamera->viewMat);
-		shader.setMat4("model",model);
-		// shader.setBool("DirctionLight[0].flag",1);
-		// shader.setVec3("DirctionLight[0].pos", dirlight1.transform->position);
-		// shader.setVec3("DirctionLight[0].color", dirlight1.LightColor);
-		// shader.setVec3("DirctionLight[0].dirToLight", dirlight1.transform->Forward);
+
 		// pointLight1.setShader(shader);
 		dirlight1.setShader(shader);
 		//切线和副切线并没有传入，所以TBN会是0，导致计算不对，后面记得更新切线与副切线
 		spotLight.setShader(shader);
 		cube.DrawInit(diffuseMap,normalMap);
 		cube.Draw(shader);
-		// glActiveTexture(GL_TEXTURE0);
-        // glBindTexture(GL_TEXTURE_2D, diffuseMap);
-        // glActiveTexture(GL_TEXTURE1);
-        // glBindTexture(GL_TEXTURE_2D, normalMap);
-		// RenderBox(shader,quadVAO,quadVBO);
+		glDepthFunc(GL_LEQUAL);  
+		skybox.DrawInit();
+		skybox.Draw(SkyBoxShader);
+		glDepthFunc(GL_LESS);
 
 
 
-			Input::GetInput(); // 更新输入状态
+		Input::GetInput(); // 更新输入状态
 
 		// 遍历更新所有组件
 		// for (auto go : *Setting::gameObjects)
@@ -231,6 +233,7 @@ int main(int argc, char* argv[])
 		// 				mb->Update(); // 常规更新逻辑
 		Setting::MainCamera->Update();
         cube.Update();
+		skybox.Update();
 		Input::ClearInputEveryFrame(); // 清空本帧输入
 		lastTime = glfwGetTime();	   // 更新时间戳
 

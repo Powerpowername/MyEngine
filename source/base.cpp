@@ -176,6 +176,7 @@ DirctionLight::~DirctionLight()
 void DirctionLight::setShader(Shader shader)
 {
     //启用光源
+    shader.use();
     shader.setBool("directionLight[" + std::to_string(ID) + "].flag",1);
     shader.setVec3("directionLight[" + std::to_string(ID) + "].color",LightColor);
     shader.setVec3("directionLight[" + std::to_string(ID) + "].pos",transform->position);
@@ -221,6 +222,7 @@ PointLight::~PointLight()
 void PointLight::setShader(Shader shader)
 {
     //启用光源
+    shader.use();
     shader.setBool("pointLight[" + std::to_string(ID) + "].flag",1);
     shader.setVec3("pointLight[" + std::to_string(ID) + "].pos",transform->position);
     shader.setVec3("pointLight[" + std::to_string(ID) + "].dirToLight",-transform->Forward);
@@ -261,6 +263,7 @@ SpotLight::~SpotLight()
 void SpotLight::setShader(Shader shader)
 {
     //启用光源
+    shader.use();
     shader.setBool("spotLight[" + std::to_string(ID) + "].flag",1);
     shader.setVec3("spotLight[" + std::to_string(ID) + "].pos",transform->position);
     shader.setVec3("spotLight[" + std::to_string(ID) + "].dirToLight",-transform->Forward);
@@ -926,6 +929,7 @@ Mesh Model::processMesh(aiMesh *mesh, const aiScene *scene)
     
     // return Mesh();
 }
+
 void Model::processNode(aiNode *node, const aiScene *scene)
 {
 	//Node就是整个模型的某一个部分，这样管理的化就可以将模型拆成一块一块
@@ -939,6 +943,7 @@ void Model::processNode(aiNode *node, const aiScene *scene)
 		processNode(node->mChildren[i],scene);
 	}
 }
+
 void Model::loadModel(string const &path)
 {
 	Assimp::Importer importer;
@@ -954,6 +959,7 @@ void Model::loadModel(string const &path)
 	// process ASSIMP's root node recursively
 	processNode(scene->mRootNode, scene);
 }
+
 unsigned int Model::TextureFromFile(const char *path, const string &directory, bool gamma)
 {
     string filename = string(path);
@@ -993,6 +999,7 @@ unsigned int Model::TextureFromFile(const char *path, const string &directory, b
 
     return textureID;
 }
+
 vector<Texture> Model::loadMaterialTextures(aiMaterial *mat, aiTextureType type, Texture::TYPE textureType)
 {
     aiString str;//用来装纹理路径的，此处应为相对路径，是哪一个文件的，具体是哪一个还是要根据加载文件里的内容
@@ -1039,13 +1046,16 @@ Cube::Cube() : Object("Cube")
 	transform->position = vec3(0,0,0);//必须为(0,0,0)开始，这样旋转才没有问题
     transform->Update();
 	
-	
+	glGenVertexArrays(1,&VAO);
+    glGenBuffers(1,&VBO);
 
 
 }
+
 Cube::~Cube()
 {
 }
+
 void Cube::DrawInit(unsigned int diffuseMap,unsigned int normalMap)
 {
     this->diffuseMap = diffuseMap;
@@ -1055,8 +1065,7 @@ void Cube::DrawInit(unsigned int diffuseMap,unsigned int normalMap)
     glActiveTexture(GL_TEXTURE1);
     glBindTexture(GL_TEXTURE_2D, normalMap);
 
-    glGenVertexArrays(1,&VAO);
-    glGenBuffers(1,&VBO);
+
     glBindBuffer(GL_ARRAY_BUFFER,VBO);
     glBufferData(GL_ARRAY_BUFFER,sizeof(vertices),vertices,GL_STATIC_DRAW);
 
@@ -1071,8 +1080,10 @@ void Cube::DrawInit(unsigned int diffuseMap,unsigned int normalMap)
     glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, 11 * sizeof(float), (void*)(8 * sizeof(float)));
     glEnableVertexAttribArray(3);
 }
+
 void Cube::Draw(Shader shader)
 {
+    shader.use();
     //配置纹理啥的
 	shader.setInt("material.texture_diffuse0",0);
 	shader.setInt("material.texture_normal0",1);
@@ -1087,9 +1098,112 @@ void Cube::Draw(Shader shader)
     glBindVertexArray(0);
 
 }
+
 void Cube::Update()
 {
     model = mat4(1);
+    model = glm::scale(model,scale);
+    // 计算需要旋转的差值
+    glm::vec3 rotationDelta = targetRotation - currentRotation;
+
+    // 转换为弧度制
+    rotationDelta = glm::radians(rotationDelta);
+	//必须先旋转，再位移，所以所有物体必须是从(0,0,0)起始的，这样就实现了自转和位移
+	model = glm::rotate(model,rotationDelta.x,vec3(1,0,0));//绕x轴旋转
+	model = glm::rotate(model,rotationDelta.y,vec3(0,1,0));//绕y轴旋转
+	model = glm::rotate(model,rotationDelta.z,vec3(0,0,1));//绕z轴旋转
+    //先转再位移就是自传
+	model = glm::translate(model,displacement);
+	//平移操作时一定要w分量的，旋转操作其实并不需要,
+	transform->position = vec3(model * vec4(vec3(0,0,0),1));
+    currentRotation = targetRotation;
+}
+
+void Cube::OnGUI()
+{
+    // ImGui::DragFloat3((name + "_position").c_str(),(float*)&(transform->position),0.5f,-500,500);
+
+    ImGui::DragFloat3((name + "_position").c_str(),(float*)&transform->position,0.5f,-100.0f,100.0f);
+    displacement = transform->position;
+    ImGui::DragFloat3((name + "_rotate").c_str(),(float*)&targetRotation,0.5f,-180.0f,180.0f);
+    ImGui::DragFloat3((name + "scale").c_str(),(float*)&scale,0.005f,0.1f,10.0f);
+
+}
+
+//-------------------------天空盒子-------------------------
+unsigned int SkyBox::SkyBoxNum = 0;
+SkyBox::SkyBox(std::vector<string> face) : Object("")
+{   
+    skyBoxID = SkyBoxNum++;
+    // for(unsigned int i = 0;i < face.size();i++)
+    // {
+    //     // loadTexture
+    //     //加载路径
+    //     this->face.push_back(face[i]);
+    // }
+    this->face = face;
+
+    name = "SkyBox" + skyBoxID;
+	transform = std::make_unique<Transform>(this);
+	transform->position = vec3(0,0,0);//必须为(0,0,0)开始，这样旋转才没有问题
+    transform->Update();
+    glGenTextures(1,&textureID);
+    glGenVertexArrays(1,&VAO);
+    glGenBuffers(1,&VBO);
+}
+
+SkyBox::~SkyBox()
+{
+}
+
+void SkyBox::loadCubemap()
+{
+    if (face.empty())
+    {
+        std::cerr << "SkyBox: No faces provided!" << std::endl;
+        return;
+    }
+    glBindTexture(GL_TEXTURE_CUBE_MAP,textureID);
+    int width,height,nrChannels;
+    for(unsigned int i = 0;i <face.size();i++)
+    {
+        unsigned char *data = stbi_load(face[i].c_str(),&width,&height,&nrChannels,0);
+        if(data)
+        {
+            GLenum format = (nrChannels == 4) ? GL_RGBA : GL_RGB;
+            glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+            stbi_image_free(data);
+        }
+        else
+        {
+            std::cout << "Cubemap texture failed to load at path: " << face[i] << std::endl;
+            stbi_image_free(data);
+        }
+    }
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+
+
+}
+
+void SkyBox::DrawInit()
+{
+
+    glBindVertexArray(VAO);
+    glBindBuffer(GL_ARRAY_BUFFER,VBO);
+    glBufferData(GL_ARRAY_BUFFER,sizeof(vertices),vertices,GL_STATIC_DRAW);
+
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+}
+
+void SkyBox::Update()
+{
+    model = mat4(1);
+    model = glm::scale(model,scale);
     // 计算需要旋转的差值
     glm::vec3 rotationDelta = targetRotation - currentRotation;
     // 转换为弧度制
@@ -1102,18 +1216,31 @@ void Cube::Update()
 	model = glm::translate(model,displacement);
 	//平移操作时一定要w分量的，旋转操作其实并不需要,
 	transform->position = vec3(model * vec4(vec3(0,0,0),1));
-
+    currentRotation = targetRotation;
 }
 
-void Cube::OnGUI()
+void SkyBox::OnGUI()
 {
     // ImGui::DragFloat3((name + "_position").c_str(),(float*)&(transform->position),0.5f,-500,500);
-    //这个代码有问题，会导致每一帧都会有
-    ImGui::DragFloat3((name + "_position").c_str(),(float*)&transform->position,0.5f,-100.0f,100.0f);
-    //自传实现由困难
-    ImGui::DragFloat3((name + "_rotate").c_str(),(float*)&targetRotation,0.5f,-180.0f,180.0f);
-    
-    displacement = transform->position;
 
+    ImGui::DragFloat3((name + "_position").c_str(),(float*)&transform->position,0.005f,-100.0f,100.0f);
+    displacement = transform->position;
+    ImGui::DragFloat3((name + "_rotate").c_str(),(float*)&targetRotation,0.5f,-180.0f,180.0f);
+    ImGui::DragFloat3((name + "scale").c_str(),(float*)&scale,0.005f,0.1f,10.0f);
+
+}
+void SkyBox::Draw(Shader shader)
+{
+    shader.use();
+    shader.setInt("skybox", 0);
+    shader.setMat4("model",model);
+    shader.setMat4("view",Setting::MainCamera->viewMat);
+    shader.setMat4("projection",Setting::MainCamera->projMat);
+
+    glBindVertexArray(VAO);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_CUBE_MAP, textureID);
+    glDrawArrays(GL_TRIANGLES, 0, 36);
+    glBindVertexArray(0);
 }
 #pragma endregion

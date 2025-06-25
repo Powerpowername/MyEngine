@@ -377,7 +377,7 @@ public:
     vec3 targetRotation = vec3(0,0,0);//分别对应x,y,z的旋转角度
     vec3 currentRotation = vec3(0,0,0);
     mat4 model = mat4(1);//用来变换物体坐标的
-
+    vec3 scale = vec3(1, 1, 1);//对象的缩放比列
     Cube();
     ~Cube();
     void DrawInit(unsigned int diffuseMap,unsigned int normalMap);//配置VAO，VBO，法线纹理与漫反射纹理
@@ -386,6 +386,80 @@ public:
     void OnGUI();
 
 };
+
+//-------------------------天空盒子-------------------------
+class SkyBox : public Object
+{
+    static unsigned int SkyBoxNum;
+    unsigned int skyBoxID = -1;
+
+public:
+    unsigned int VBO;
+    unsigned int VAO;
+    unsigned int textureID;//天空盒子纹理
+    std::unique_ptr<Transform> transform;
+
+    vec3 displacement = vec3(0,0,0);
+    vec3 targetRotation = vec3(0,0,0);//分别对应x,y,z的旋转角度
+    vec3 currentRotation = vec3(0,0,0);
+    mat4 model = mat4(1);//用来变换物体坐标的
+
+    //立方体贴图是不需要和普通纹理一样添加纹理坐标的，只要在着色器中通过方向向量采样
+    float vertices[18 * 6] = {
+        // positions          
+        -1.0f,  1.0f, -1.0f,
+        -1.0f, -1.0f, -1.0f,
+         1.0f, -1.0f, -1.0f,
+         1.0f, -1.0f, -1.0f,
+         1.0f,  1.0f, -1.0f,
+        -1.0f,  1.0f, -1.0f,
+
+        -1.0f, -1.0f,  1.0f,
+        -1.0f, -1.0f, -1.0f,
+        -1.0f,  1.0f, -1.0f,
+        -1.0f,  1.0f, -1.0f,
+        -1.0f,  1.0f,  1.0f,
+        -1.0f, -1.0f,  1.0f,
+
+         1.0f, -1.0f, -1.0f,
+         1.0f, -1.0f,  1.0f,
+         1.0f,  1.0f,  1.0f,
+         1.0f,  1.0f,  1.0f,
+         1.0f,  1.0f, -1.0f,
+         1.0f, -1.0f, -1.0f,
+
+        -1.0f, -1.0f,  1.0f,
+        -1.0f,  1.0f,  1.0f,
+         1.0f,  1.0f,  1.0f,
+         1.0f,  1.0f,  1.0f,
+         1.0f, -1.0f,  1.0f,
+        -1.0f, -1.0f,  1.0f,
+
+        -1.0f,  1.0f, -1.0f,
+         1.0f,  1.0f, -1.0f,
+         1.0f,  1.0f,  1.0f,
+         1.0f,  1.0f,  1.0f,
+        -1.0f,  1.0f,  1.0f,
+        -1.0f,  1.0f, -1.0f,
+
+        -1.0f, -1.0f, -1.0f,
+        -1.0f, -1.0f,  1.0f,
+         1.0f, -1.0f, -1.0f,
+         1.0f, -1.0f, -1.0f,
+        -1.0f, -1.0f,  1.0f,
+         1.0f, -1.0f,  1.0f
+    };
+    vec3 scale = vec3(1, 1, 1);//对象的缩放比列
+    std::vector<string> face;
+    SkyBox(std::vector<string> face);
+    ~SkyBox();
+    void loadCubemap();//可以考虑优化，例如加入bool变量控制loadCubemap的执行，这样可以减少程序执行
+    void DrawInit();
+    void Update();//更新顶点数据，还有法向量
+    void OnGUI();
+    void Draw(Shader shader);
+};
+
 #pragma endregion
 
 
